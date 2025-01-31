@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/output.css">
+    <title>Public Pastes</title>
+</head>
+<body class="bg-base-200 text-base-content">
+    <noscript>
+        <p>JavaScript is disabled. This website may not function properly. Enable JavaScript in your browser to get full functionality.</p>
+    </noscript>
+   
+    <div class="container mx-auto py-8">
+        <div class="pl-4 pr-4 mb-6 flex justify-start">
+            <button id="back-button" class="text-sm bg-transparent hover:text-blue-300">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M9 15 3 9m0 0 6-6M3 9h12a6 6 0 0 1 0 12h-3" />
+                  </svg>                  
+            </button>
+            
+            <div class="logo text-2xl text-center font-bold w-full">Chiyogami</div>
+                <button onclick="window.location.href='/'" class="text-sm bg-transparent hover:text-blue-300 ml-auto px-3 py-1 ml-6">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="m2.25 12 8.954-8.955c.44-.439 1.152-.439 1.591 0L21.75 12M4.5 9.75v10.125c0 .621.504 1.125 1.125 1.125H9.75v-4.875c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125V21h4.125c.621 0 1.125-.504 1.125-1.125V9.75M8.25 21h8.25" />
+                    </svg>
+                </button>
+        </div>
+        
+        <form class="mb-6 flex justify-center" id="search-form">
+            <input type="text" id="search-input" placeholder="Search pastes..." class="input input-bordered w-full max-w-xs" />
+            <button id="search-button" type="submit" class="btn btn-primary btn-xl ml-2">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z" />
+                  </svg>                  
+            </button>
+        </form>
+        
+        <div class="overflow-x-auto">
+            <ul id="paste-list" class="menu bg-base-100 shadow-lg rounded-box p-4 space-y-2"></ul>
+        </div>
+        <div class="flex justify-center mt-6">
+            <div class="join">
+                <button id="prev-page" class="join-item btn btn-sm">«</button>
+                <button class="join-item btn btn-sm">Page <span id="current-page"></span></button>
+                <button id="next-page" class="join-item btn btn-sm">»</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+        const itemsPerPage = 5;
+        let currentPage = parseInt(new URLSearchParams(window.location.search).get('page')) || 1;
+        let allPastes = [];
+
+        function fetchPastes(query = '', page = 1) {
+            const url = query
+                ? `/pastes?search=${encodeURIComponent(query)}&page=${page}`
+                : `/pastes?page=${page}`;
+            fetch(url)
+                .then(response => response.json())
+                .then(data => {
+                    allPastes = data;
+                    displayPastes(page);
+                })
+                .catch(error => console.error('Error fetching pastes:', error));
+        }
+
+        function displayPastes(page) {
+            const startIndex = (page - 1) * itemsPerPage;
+            const endIndex = startIndex + itemsPerPage;
+            const pastesToDisplay = allPastes.slice(startIndex, endIndex);
+
+            const list = document.getElementById('paste-list');
+            list.innerHTML = pastesToDisplay.length
+                ? pastesToDisplay.map(paste => `
+                    <li class="rounded-lg shadow hover:bg-indigo-500 hover:text-primary-content p-3">
+                        <a href="/paste/${paste.Title}" class="font-semibold text-lg">${paste.Title}</a>
+                        <div class="text-sm">
+                            <p>Created: ${new Date(paste.CreatedAt).toLocaleString()}</p>
+                            <p>Expires: ${paste.expiration ? new Date(paste.expiration).toLocaleString() : "Never"}</p>
+                            <p>Mode: ${paste.Visibility}</p>
+                        </div>
+                    </li>
+                `).join('')
+                : `<li class="rounded-lg shadow p-3 text-center">
+                    <p>${!allPastes.length ? 'No paste(s) found' : 'Page does not exist'}</p>
+                </li>`;
+
+            const totalPages = Math.ceil(allPastes.length / itemsPerPage);
+            document.getElementById('current-page').textContent = page;
+            document.getElementById('prev-page').disabled = page === 1;
+            document.getElementById('next-page').disabled = page === totalPages || totalPages === 0;
+
+            const url = new URL(window.location.href);
+            url.searchParams.set('page', page);
+            window.history.pushState({}, '', url);
+        }
+
+        function handleSearch(event) {
+            event.preventDefault(); 
+            const query = document.getElementById('search-input').value.trim();
+            currentPage = 1;
+            fetchPastes(query, currentPage);
+        }
+
+        document.getElementById('search-form').addEventListener('submit', handleSearch);
+
+        document.getElementById('prev-page').addEventListener('click', () => {
+            if (currentPage > 1) {
+                currentPage--;
+                fetchPastes(document.getElementById('search-input').value.trim(), currentPage);
+            }
+        });
+
+        document.getElementById('next-page').addEventListener('click', () => {
+            if (currentPage < Math.ceil(allPastes.length / itemsPerPage)) {
+                currentPage++;
+                fetchPastes(document.getElementById('search-input').value.trim(), currentPage);
+            }
+        });
+
+        document.getElementById('back-button').addEventListener('click', () => {
+            if (currentPage > 1) {
+                currentPage--;
+                fetchPastes(document.getElementById('search-input').value.trim(), currentPage);
+            } else {
+                window.location.href = '/';
+            }
+        });
+
+        fetchPastes('', currentPage);
+    });
+    </script>
+
+    <footer class="text-gray-600 text-center p-4 mt-8">
+        &copy; <span id="present-year"></span> Chiyogami. All rights reserved. 
+        <a href="/about" class="text-white hover:text-blue-500">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="currentColor" class="size-4 inline-block align-middle">
+                <path fill-rule="evenodd" d="M15 8A7 7 0 1 1 1 8a7 7 0 0 1 14 0ZM9 5a1 1 0 1 1-2 0 1 1 0 0 1 2 0ZM6.75 8a.75.75 0 0 0 0 1.5h.75v1.75a.75.75 0 0 0 1.5 0v-2.5A.75.75 0 0 0 8.25 8h-1.5Z" clip-rule="evenodd" />
+            </svg>          
+        </a>
+    </footer>
+
+    <script>
+        document.getElementById('present-year').textContent = new Date().getFullYear();
+    </script>
+</body>
+</html>

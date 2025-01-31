@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+    <title>Chiyogami</title>
+    <link rel="stylesheet" href="/output.css">
+</head>
+<body>
+    <noscript>
+        <p>JavaScript is disabled. This website may not function properly. Enable JavaScript in your browser to get full functionality.</p>
+    </noscript>
+
+    <header class="flex items-center gap-8 bg-base-100 p-2">
+        <div class="logo text-2xl font-bold pl-6">Chiyogami</div>
+    
+        <div class="absolute left-1/2 transform -translate-x-1/2 flex gap-2">
+            <button class="btn btn-primary btn-sm">
+                <a href="/list" class="text-white">View Pastes</a>
+            </button>
+        </div>
+
+        <button id="toggle-options" class="z-10 text-sm bg-transparent hover:text-blue-300 ml-auto mr-[25px]">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M10.5 6h9.75M10.5 6a1.5 1.5 0 1 1-3 0m3 0a1.5 1.5 0 1 0-3 0M3.75 6H7.5m3 12h9.75m-9.75 0a1.5 1.5 0 0 1-3 0m3 0a1.5 1.5 0 0 0-3 0m-3.75 0H7.5m9-6h3.75m-3.75 0a1.5 1.5 0 0 1-3 0m3 0a1.5 1.5 0 0 0-3 0m-9.75 0h9.75" />
+              </svg>                  
+        </button>
+    </header>
+    
+    <div id="options-container" class="ml-auto mr-[75px] hidden absolute right-0 mt-2 bg-transparent p-4 shadow-lg flex flex-col items-center gap-4 z-20">
+        <div id="auth-buttons" class="flex flex-col items-center gap-2">
+            <button id="login-button" class="text-sm bg-transparent hover:text-blue-300">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M9 8.25H7.5a2.25 2.25 0 0 0-2.25 2.25v9a2.25 2.25 0 0 0 2.25 2.25h9a2.25 2.25 0 0 0 2.25-2.25v-9a2.25 2.25 0 0 0-2.25-2.25H15m0-3-3-3m0 0-3 3m3-3V15" />
+                </svg>
+                <span class="font-bold">LOGIN</span>                
+            </button>
+            <button id="register-button" class="text-sm bg-transparent hover:text-blue-300">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M18 7.5v3m0 0v3m0-3h3m-3 0h-3m-2.25-4.125a3.375 3.375 0 1 1-6.75 0 3.375 3.375 0 0 1 6.75 0ZM3 19.235v-.11a6.375 6.375 0 0 1 12.75 0v.109A12.318 12.318 0 0 1 9.374 21c-2.331 0-4.512-.645-6.374-1.766Z" />
+                </svg>
+                <span class="font-bold">SIGNUP</span>                              
+            </button>
+        </div>
+    
+        <div id="user-info" class="hidden flex flex-col items-center gap-2 z-10">
+            <span id="username-display" class="font-bold text-2xl"></span>
+            <button id="my-pastes-button" class="btn btn-info btn-sm">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M12 7.5h1.5m-1.5 3h1.5m-7.5 3h7.5m-7.5 3h7.5m3-9h3.375c.621 0 1.125.504 1.125 1.125V18a2.25 2.25 0 0 1-2.25 2.25M16.5 7.5V18a2.25 2.25 0 0 0 2.25 2.25M16.5 7.5V4.875c0-.621-.504-1.125-1.125-1.125H4.125C3.504 3.75 3 4.254 3 4.875V18a2.25 2.25 0 0 0 2.25 2.25h13.5M6 7.5h3v3H6v-3Z" />
+                  </svg>                  
+            </button>
+            <div>PASTES</div>
+            <button id="logout-button" class="btn btn-neutral btn-sm">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M8.25 9V5.25A2.25 2.25 0 0 1 10.5 3h6a2.25 2.25 0 0 1 2.25 2.25v13.5A2.25 2.25 0 0 1 16.5 21h-6a2.25 2.25 0 0 1-2.25-2.25V15m-3 0-3-3m0 0 3-3m-3 3H15" />
+                  </svg>                  
+            </button>
+            <div>LOGOUT</div>
+            <button id="delete-account-button" class="btn btn-error btn-sm">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="m14.74 9-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 0 1-2.244 2.077H8.084a2.25 2.25 0 0 1-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 0 0-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 0 1 3.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 0 0-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 0 0-7.5 0" />
+                  </svg>                  
+            </button>
+            <div>DEL</div>
+        </div>
+    </div>
+      
+    <div id="delete-account-modal" class="modal">
+        <div class="modal-box z-10">
+            <h3 class="font-bold text-lg">Delete Account</h3>
+            <p class="py-4">Are you sure you want to delete your account? This action cannot be undone.</p>
+            <div class="modal-action">
+                <button id="confirm-delete-account" class="btn btn-error">Yes, Delete My Account</button>
+                <button id="cancel-delete-account" class="btn">Cancel</button>
+            </div>
+        </div>
+    </div>
+    
+    <div id="backdrop" class="hidden fixed inset-0 bg-slate-800 bg-opacity-70 z-10 backdrop-blur-none"></div>
+
+    <script>
+        const optionsContainer = document.getElementById("options-container");
+        const backdrop = document.getElementById("backdrop");
+        const toggleOptions = document.getElementById("toggle-options");
+
+        toggleOptions.addEventListener("click", function() {
+            const rect = this.getBoundingClientRect();
+            optionsContainer.classList.toggle("hidden");
+            backdrop.classList.toggle("hidden");
+            optionsContainer.style.top = rect.bottom + window.scrollY + "px";
+            optionsContainer.style.left = rect.left + window.scrollX + "px";
+        });
+
+        backdrop.addEventListener("click", () => {
+            optionsContainer.classList.add("hidden");
+            backdrop.classList.add("hidden");
+        });
+    </script>
+    
+    <dialog id="content_modal" class="modal" >
+        <div class="modal-box">
+        <h4 class="font-bold text-lg">Sorry</h3>
+        <p class="py-4">Cannot save empty text box</p>
+        <div class="modal-action">
+            <form method="dialog">            
+            </form>
+        </div>
+        </div>
+    </dialog>
+
+    <div class="flex flex-col md:flex-row gap-8 p-8">
+        <div class="editor flex-grow w-full md:w-3/4">
+            <textarea id="paste-content" class="textarea textarea-bordered w-full h-[calc(100vh-224px)] resize-none" placeholder="Put your text here..."></textarea>
+        </div>
+        <div class="options-panel w-full md:w-1/4 space-y-4">
+            <div>
+                <label for="visibility" class="block mb-2">Visibility:</label>
+                <select id="visibility" class="option-select select select-bordered w-full">
+                    <option>Public</option>
+                    <option>Unlisted</option>
+                    <option>Private</option>
+                </select>
+            </div>
+            <div>
+                <label for="expiration" class="block mb-2">Expiration:</label>
+                <select id="expiration" class="option-select select select-bordered w-full">
+                    <option value="1 day">1 day</option>
+                    <option value="10 minutes">10 minutes</option>
+                    <option value="1 hour">1 hour</option>
+                    <option value="3 days">3 days</option>
+                    <option value="1 week">1 week</option>
+                    <option value="2 weeks">2 weeks</option>
+                    <option value="1 month">1 month</option>
+                    <option value="Never">Never</option>
+                </select>
+            </div>
+            <div>
+                <label for="encryption" class="block mb-2">Encryption:</label>
+                <input type="password" id="encryption" class="input input-bordered w-full" placeholder="Optional: Enter password">
+            </div>            
+        </div>
+    </div>
+
+    <div id="login-modal" class="modal hidden">
+        <div class="modal-box">
+            <h3 class="font-bold text-lg">Login</h3>
+            <form id="login-form" class="space-y-4">
+                <input type="text" id="login-username" class="input input-bordered w-full" placeholder="Username" required>
+                <input type="password" id="login-password" class="input input-bordered w-full" placeholder="Password" required>
+                <button type="submit" class="btn btn-primary w-full">Login</button>
+            </form>
+        </div>
+    </div>
+
+    <div id="register-modal" class="modal hidden">
+        <div class="modal-box">
+            <h3 class="font-bold text-lg">Register</h3>
+            <form id="register-form" class="space-y-4">
+                <input type="text" id="register-username" class="input input-bordered w-full" placeholder="Username" required>
+                <input type="password" id="register-password" class="input input-bordered w-full" placeholder="Password" required>
+                <button type="submit" class="btn btn-primary w-full">Register</button>
+            </form>
+        </div>
+    </div>
+
+    <div id="my-pastes-modal" class="modal">
+        <div class="modal-box">
+            <h3 class="font-bold text-lg">My Pastes</h3>
+            <ul id="my-pastes-list"></ul>
+        </div>
+    </div>
+
+    <footer class="bottom-bar flex justify-center items-center p-4 -mt-8 space-x-12">
+        <button id="create-paste" class="create-button btn btn-sm btn-primary">Create Paste</button>
+        <button class="cancel-button btn btn-sm btn-outline btn-primary">Cancel</button>
+    </footer>
+
+    <footer class="text-gray-600 text-center p-4 mt-8">
+        &copy; <span id="present-year"></span> Chiyogami. All rights reserved. 
+        <a href="/about" class="text-white hover:text-blue-500">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="currentColor" class="size-4 inline-block align-middle">
+                <path fill-rule="evenodd" d="M15 8A7 7 0 1 1 1 8a7 7 0 0 1 14 0ZM9 5a1 1 0 1 1-2 0 1 1 0 0 1 2 0ZM6.75 8a.75.75 0 0 0 0 1.5h.75v1.75a.75.75 0 0 0 1.5 0v-2.5A.75.75 0 0 0 8.25 8h-1.5Z" clip-rule="evenodd" />
+            </svg>          
+        </a>
+    </footer>
+
+    <script>
+        const loginButton = document.getElementById('login-button');
+        const registerButton = document.getElementById('register-button');
+        const loginModal = document.getElementById('login-modal');
+        const registerModal = document.getElementById('register-modal');
+        const loginPasswordField = loginModal.querySelector('input[type="password"]');
+        const registerPasswordField = registerModal.querySelector('input[type="password"]');
+    
+        function disableAutocomplete() {
+            loginPasswordField.setAttribute('autocomplete', 'off');
+            registerPasswordField.setAttribute('autocomplete', 'off');
+        }
+    
+        function enableAutocomplete() {
+            loginPasswordField.removeAttribute('autocomplete');
+            registerPasswordField.removeAttribute('autocomplete');
+        }
+    
+        loginButton.addEventListener('click', () => {
+            loginModal.classList.toggle('hidden');
+            if (!loginModal.classList.contains('hidden')) {
+                enableAutocomplete();
+            } else {
+                disableAutocomplete();
+            }
+            registerModal.classList.add('hidden');
+        });
+    
+        registerButton.addEventListener('click', () => {
+            registerModal.classList.toggle('hidden');
+            if (!registerModal.classList.contains('hidden')) {
+                enableAutocomplete();
+            } else {
+                disableAutocomplete();
+            }
+            loginModal.classList.add('hidden');
+        });
+    
+        document.addEventListener('click', (event) => {
+            if (!loginModal.contains(event.target) && !loginButton.contains(event.target) && !loginModal.classList.contains('hidden')) {
+                loginModal.classList.add('hidden');
+                disableAutocomplete();
+            }
+            if (!registerModal.contains(event.target) && !registerButton.contains(event.target) && !registerModal.classList.contains('hidden')) {
+                registerModal.classList.add('hidden');
+                disableAutocomplete();
+            }
+        });
+    </script>
+
+    <script>
+        const textarea = document.getElementById("paste-content");    
+        textarea.addEventListener("focus", () => {
+        textarea.classList.add("bg-slate-600", "text-white");
+        });
+        textarea.addEventListener("blur", () => {
+        textarea.classList.remove("bg-slate-600", "text-white");
+        });
+    </script>
+
+    
+    <script>
+        document.getElementById('present-year').textContent = new Date().getFullYear();
+    </script>
+    
+    <script src="plugin.js"></script>
+    
+</body>
+</html>
+

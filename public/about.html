@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>About Chiyogami</title>
+    <link rel="stylesheet" href="/output.css">
+</head>
+<body class="text-white">
+    <noscript>
+        <p>JavaScript is disabled. This website may not function properly. Enable JavaScript in your browser to get full functionality.</p>
+    </noscript>
+
+    <header class="text-white p-4">
+        <div class="container mx-auto flex justify-between items-center">
+            <div class="text-2xl font-bold">Chiyogami</div>
+            <button onclick="window.location.href='/'" class="text-sm bg-transparent px-3 py-1 hover:text-blue-300">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="m2.25 12 8.954-8.955c.44-.439 1.152-.439 1.591 0L21.75 12M4.5 9.75v10.125c0 .621.504 1.125 1.125 1.125H9.75v-4.875c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125V21h4.125c.621 0 1.125-.504 1.125-1.125V9.75M8.25 21h8.25" />
+                  </svg>                  
+            </button>
+        </div>
+    </header>
+  
+    <div class="w-full p-4 lg:px-12 py-4">
+        <h1 class="text-2xl font-bold text-center mb-4">About</h1>
+        <div class="about-content text-lg text-center mb-6">
+            Chiyogami is a yet another pastebin. Why? Because I didn't like all the other ones that were out there :) 
+            <p>It's modern with sensible features and the public pastes are easily searchable!</p>
+        </div>
+    </div>
+
+    <footer class="about-metadata text-center text-sm mb-6">
+        <p>Created by Martin Kibera</p>
+        <p>&copy; <span id="present-year"></span> Chiyogami. All rights reserved.</p>
+    </footer>
+
+    <script>
+        document.getElementById('present-year').textContent = new Date().getFullYear();
+    </script>
+</body>
+</html>

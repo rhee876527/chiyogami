@@ -1,5 +1,9 @@
+# Ignore everything
 *
 
+# Except the following:
+#
+# Go exports
 !core
 !core/*.go
 !models
@@ -7,7 +11,17 @@
 !db
 !db/*.go
 
+# Files in root
 !main.go
 !Dockerfile
 !go.*
 !.gitignore
+
+# Public assets
+!public
+!public/*.html
+!public/*.css
+!public/plugin.js
+!public/highlightjs
+!public/highlightjs/v11.9.0
+!public/highlightjs/v11.9.0/*
