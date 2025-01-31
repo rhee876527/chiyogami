@@ -20,7 +20,6 @@
 # Public assets
 !public
 !public/*.html
-!public/*.css
 !public/plugin.js
 !public/highlightjs
 !public/highlightjs/v11.9.0
