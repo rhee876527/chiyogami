@@ -1,0 +1,9 @@
+*
+
+!main.go
+!core/
+!models/
+!db/
+!Dockerfile
+!go.*
+!.gitignore
