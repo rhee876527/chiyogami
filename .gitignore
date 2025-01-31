@@ -24,3 +24,7 @@
 !public/highlightjs
 !public/highlightjs/v11.9.0
 !public/highlightjs/v11.9.0/*
+
+# Node modules
+!frameworks
+!frameworks/*js*
