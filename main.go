@@ -33,5 +33,4 @@ func main() {
 
 	log.Println("Server started on port 8000")
 	log.Fatal(http.ListenAndServe(":8000", r))
-	//log.Fatal(http.ListenAndServeTLS(":8000", "./test/cert.pem", "./test/key.pem", r))
 }
