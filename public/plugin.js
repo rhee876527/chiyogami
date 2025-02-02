@@ -210,7 +210,7 @@ document.addEventListener('DOMContentLoaded', function() {
                     const li = document.createElement("li");
                     li.className = "flex justify-between items-center";
                     li.innerHTML = `
-                        <span>${paste.Title} - ${new Date(paste.CreatedAt).toLocaleString()}</span>
+                        <span>${paste.Title} - ${new Date(paste.CreatedAt).toLocaleString(undefined, { hour12: false })}</span>
                         <div>
                             <a href="/paste/${paste.Title}" class="btn btn-xs btn-primary">View</a>
                             <button class="btn btn-xs btn-error delete-paste" data-id="${paste.Title}">Delete</button>

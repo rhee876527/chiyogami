@@ -1,38 +1,62 @@
-# Start with the official Golang image
-FROM golang:1.23.1-alpine3.20
-
-# Install necessary packages
-RUN apk add --no-cache git
-
-# Set the current working directory inside the container
+# Stage 1: Create Frontend Assets
+FROM node:22-alpine AS frontend
 WORKDIR /app
 
-# Copy go.mod file first and create go.sum inside the container
-COPY go.mod ./
+# Copy npm configs and tailwind config
+COPY frameworks/package.json frameworks/package-lock.json ./
 
-# Initialize Go modules and download dependencies (this will generate go.sum)
+# Set npm start dir
+WORKDIR /app/frameworks
+
+# Install dependencies
+RUN npm ci
+
+# Generate tailwind CSS output
+COPY public /app/public
+COPY frameworks/tailwind.config.js ./
+RUN echo -e "@tailwind base;\n@tailwind components;\n@tailwind utilities;" > /app/public/tailwind.css
+RUN npx tailwindcss -i /app/public/tailwind.css -o /app/public/output.css
+
+# Stage 2: Build Go Application
+FROM golang:1.23-alpine AS build
+WORKDIR /app
+
+# Go files and dependencies
+COPY go.mod go.sum ./
 RUN go mod download
 
-# Copy the remaining source code
+# Copy src
 COPY . .
 
-# Ensure build deps are in place
-RUN go get checksum-calculator
+# Fetch generated Tailwind output
+COPY --from=frontend /app/public/output.css ./public/
 
-#Build the Go app
-RUN CGO_ENABLED=0 GOOS=linux go build -ldflags="-s -w" -o main .
+# Gorm's sqlite requires CGO and additional libraries
+RUN apk add --no-cache gcc musl-dev
 
-# Expose port 8080 to the outside world
-EXPOSE 8080
+# Build Go application
+RUN go build -o main .
 
-# Use non-root user
-RUN addgroup -g 919 appgroup && adduser -u 919 --disabled-password -G appgroup appuser
-RUN chown -R appuser:appgroup /app
+# Stage 3: Run the application
+FROM alpine:3.21
+WORKDIR /app
 
-USER appuser
+# Copy Go binary and assets
+COPY --from=build /app/main .
+COPY --from=build /app/public ./public
 
-# Run in production mode
-#ENV GIN_MODE=release
+# Copy entrypoint
+COPY entrypoint.sh /entrypoint.sh
+RUN chmod +x /entrypoint.sh
 
-# Command to run the executable
-CMD ["./main"]
+# Use su-exec to run as non-root user
+RUN apk add --no-cache su-exec
+
+# Expose port
+EXPOSE 8000
+
+# Tag docker environments
+ENV DOCKER_ENV=1
+
+# Create entrypoint
+ENTRYPOINT ["/entrypoint.sh"]

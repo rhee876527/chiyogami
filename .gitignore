@@ -16,6 +16,8 @@
 !Dockerfile
 !go.*
 !.gitignore
+!docker-compose.yml
+!entrypoint.sh
 
 # Public assets
 !public

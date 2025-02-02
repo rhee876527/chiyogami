@@ -1,0 +1,23 @@
+services:
+  chiyogami:
+    container_name: chiyogami
+    cap_drop:
+      - ALL
+    cap_add:
+      - SETGID
+      - SETUID
+      - CHOWN
+    security_opt:
+      - no-new-privileges
+    image:  ghcr.io/rhee876527/chiyogami
+    volumes:
+      - ./pastes:/pastes
+    environment:
+      #  Keep this secure and unique. 
+      #  Example to generate random string: `openssl rand -base64 32`
+      - SECRET_KEY="$RANDOM-STRING"
+#      - GID=1000
+#      - UID=1000
+    ports:    
+      - 127.0.0.1:8080:8080/tcp
+    restart: unless-stopped
