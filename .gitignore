@@ -30,3 +30,8 @@
 # Node modules
 !frameworks
 !frameworks/*js*
+
+# Github workflows
+!.github/
+!.github/workflows/
+!.github/workflows/*.yml

@@ -127,7 +127,7 @@ func GetPasteHandler(w http.ResponseWriter, r *http.Request) {
 	// Auto manage expired pastes
 	DeleteExpiredPastes()
 
-	// Return existent & non-expired pastes
+	// Return non-deleted & non-expired pastes
 	var paste models.Paste
 	if db.DB.First(&paste, "title = ? AND (expiration IS NULL OR expiration > ?)", title, time.Now()).Error != nil {
 		JsonRespond(w, http.StatusNotFound, "Paste not found or has expired")

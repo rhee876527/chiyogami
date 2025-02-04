@@ -15,7 +15,7 @@ RUN npm ci
 COPY public /app/public
 COPY frameworks/tailwind.config.js ./
 RUN echo -e "@tailwind base;\n@tailwind components;\n@tailwind utilities;" > /app/public/tailwind.css
-RUN npx tailwindcss -i /app/public/tailwind.css -o /app/public/output.css
+RUN npx tailwindcss -i /app/public/tailwind.css -o /app/public/output.css --minify
 
 # Stage 2: Build Go Application
 FROM golang:1.23-alpine AS build

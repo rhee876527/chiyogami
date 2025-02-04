@@ -7,5 +7,5 @@ GID=${GID:-1000}
 # Change ownership of the directory
 chown -R ${UID}:${GID} /pastes
 
-# Execute the main as the specified user
+# Execute as the specified user
 exec su-exec ${UID}:${GID} ./main "$@"
