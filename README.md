@@ -8,29 +8,18 @@ Yet Another Pastebin
 
 ✨ **Features**
 
-✔ Beautiful & Responsive UI — Built with TailwindCSS & DaisyUI for a clean and modern look.
-
-🖍 Syntax Highlighting — Automatic formatting with HighlightJS.
-
-⏳ Configurable Expiry — Set custom expiration times with API.
-
-🔒 Secure & Private — Client-side encryption with WebCrypto for encrypted pastes. No password saved in server.
-
-📡 Powerful API — Create and fetch pastes without leaving the terminal.
-
-🔍 Public Pastes — List & search all public pastes.
-
-🔑 Private Pastes — Only accessible via a unique, unguessable link for enhanced privacy (use encryption on web UI for ultimate privacy).
-
-🗄 Local Storage — Uses SQLite for a lightweight, self-hostable database.
-
-👤 User Accounts — Create & manage your pastes with authentication.
-
-🔗 Easy Sharing — Share paste links or scan a QR code for instant access.
-
-🛡 Built-in Rate Limiting — Protects against spam and abuse with smart request throttling.
-
-🚀 Easy self-host with powerful features!
+- ✔ Beautiful & Responsive UI — Built with TailwindCSS & DaisyUI for a clean and modern look.
+- 🖍 Syntax Highlighting — Automatic formatting with HighlightJS.
+- ⏳ Configurable Expiry — Set custom expiration times with API.
+- 🔒 Secure & Private — Client-side encryption with WebCrypto for encrypted pastes. No password saved in server.
+- 📡 Powerful API — Create and fetch pastes without leaving the terminal.
+- 🔍 Public Pastes — List & search all public pastes.
+- 🔑 Private Pastes — Only accessible via a unique, unguessable link for enhanced privacy (use encryption on web UI for ultimate privacy).
+- 🗄 Local Storage — Uses SQLite for a lightweight, self-hostable database.
+- 👤 User Accounts — Create & manage your pastes with authentication.
+- 🔗 Easy Sharing — Share paste links or scan a QR code for instant access.
+- 🛡 Built-in Rate Limiting — Protects against spam and abuse with smart request throttling.
+- 🚀 Easy self-host with powerful features!
 
 <br><br>
 
@@ -45,7 +34,9 @@ curl -X POST \
   -d '{"content":"Test paste"}'
 {"title":"OkxI"}
 ``
+
 <br>
+
 Note: Pastes are created by default with `Public` `visibility`. They can be accessed from api or website.
 Change this to `Private` or `Unlisted` to make the paste undiscoverable. Pastes also set to expire within 24hrs if expiry is not specified. You can set a default expiry for pastes created with `PASTE_DEFAULT_EXPIRATION`.
 
@@ -76,7 +67,7 @@ Docker. Build it or check [docker-compose](https://github.com/rhee876527/chiyoga
 ![screen-2](https://github.com/user-attachments/assets/0918a641-bf50-4d26-971a-39d7e9876a6d)
 ![screen-3](https://github.com/user-attachments/assets/95532b56-9e2f-447f-8c9c-cdbe4119fa59)
 
-<br><br>
+<br>
 
-#### COPYRIGHT
+##### COPYRIGHT
 This software is free to use in accordance with the [license](https://github.com/rhee876527/chiyogami/blob/main/LICENSE).
