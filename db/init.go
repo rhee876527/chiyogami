@@ -46,12 +46,6 @@ func Init() {
 		}
 	}
 
-	// Open the database connection
-	DB, err = gorm.Open(sqlite.Open(dbPath), &gorm.Config{})
-	if err != nil {
-		log.Fatal("Failed to connect to SQLite database")
-	}
-
 	// Connect to SQLite
 	DB, err = gorm.Open(sqlite.Open(dbPath), &gorm.Config{})
 	if err != nil {
