@@ -77,9 +77,23 @@ func CreatePasteHandler(w http.ResponseWriter, r *http.Request) {
 		IsUserPaste: (userID != 0),
 	}
 
-	// Set default visibility
+	// Enforce visibility params
+	validVisibilities := map[string]bool{
+		"Public":   true,
+		"Unlisted": true,
+		"Private":  true,
+	}
+
+	if pasteRequest.Visibility == "" {
+		pasteRequest.Visibility = "Public" // Default to Public if not set
+	} else if !validVisibilities[pasteRequest.Visibility] {
+		JsonRespond(w, http.StatusBadRequest, "Invalid. Visibility value must be Public, Unlisted, or Private.")
+		return
+	}
+
+	// Set paste visibility if not set
 	if paste.Visibility == "" {
-		paste.Visibility = "Public"
+		paste.Visibility = pasteRequest.Visibility
 	}
 
 	// Paste expiration
