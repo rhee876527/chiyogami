@@ -11,7 +11,7 @@ type Paste struct {
 	Title       string `gorm:"unique;size:4"`
 	Content     string `gorm:"type:text"`
 	Visibility  string
-	Expiration  *time.Time `json:"expiration"`
+	Expiration  *time.Time `json:"Expiration"`
 	IsEncrypted bool
 	UserID      uint
 	IsUserPaste bool

@@ -19,7 +19,9 @@ func GenerateUniqueTitle() string {
 	letters := []rune("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ")
 	for {
 		b := make([]byte, 4)
-		rand.Read(b)
+		if _, err := rand.Read(b); err != nil {
+			return "Error: failed to generate random bytes - " + err.Error()
+		}
 		for i := range b {
 			b[i] = byte(letters[int(b[i])%len(letters)])
 		}
@@ -43,7 +45,9 @@ func GetSessionKey() string {
 
 func GenerateRandomKey() string {
 	key := make([]byte, 32)
-	rand.Read(key)
+	if _, err := rand.Read(key); err != nil {
+		return "Error: failed to generate random key - " + err.Error()
+	}
 	return base64.StdEncoding.EncodeToString(key)
 }
 
