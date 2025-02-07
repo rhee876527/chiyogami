@@ -28,9 +28,6 @@ RUN go mod download
 # Copy src
 COPY . .
 
-# Fetch generated Tailwind output
-COPY --from=frontend /app/public/output.css ./public/
-
 # Gorm's sqlite requires CGO and additional libraries
 RUN apk add --no-cache gcc musl-dev
 
@@ -44,6 +41,9 @@ WORKDIR /app
 # Copy Go binary and assets
 COPY --from=build /app/main .
 COPY --from=build /app/public ./public
+
+# Fetch generated Tailwind output
+COPY --from=frontend /app/public/output.css ./public
 
 # Copy entrypoint
 COPY entrypoint.sh /entrypoint.sh
