@@ -243,7 +243,7 @@ document.addEventListener('DOMContentLoaded', function() {
             try {
                 const response = await fetchWithAuth(`/paste/${title}`, { method: 'DELETE' });
                 if (response.ok) {
-                    const pasteElement = document.querySelector(`[data-id="${title}"]`).closest('li');
+                    const pasteElement = document.querySelector(`[data-id="${title}"]`)?.closest('li');
                     if (pasteElement) pasteElement.remove();
                     showToast('Paste deleted successfully', 'info');
                 } else {
