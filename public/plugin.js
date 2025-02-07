@@ -195,7 +195,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
     myPastesButton.addEventListener("click", async () => {
         try {
-            const response = await fetchWithAuth("/user/pastes");
+            const response = await fetchWithAuth('/user/pastes');
     
             if (!response.ok) throw new Error("Failed to fetch pastes");
     
