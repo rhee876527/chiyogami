@@ -30,14 +30,15 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
+        with:
+          fetch-tags: true
 
-      - name: Prepare
+      - name: Platform env
         run: |
           platform=${{ matrix.platform }}
-          echo "PLATFORM_PAIR=${platform//\//-}" >> $GITHUB_ENV
+          echo "PLATFORM_ARCH=${platform//\//-}" >> $GITHUB_ENV
 
       - name: Get version tag
-        id: version
         run: |
           if [[ "${{ github.ref }}" == refs/tags/* ]]; then
             echo "TAG=${GITHUB_REF#refs/tags/}" >> $GITHUB_ENV
@@ -58,13 +59,31 @@ jobs:
           username: ${{ github.repository_owner }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
+      - name: Get build timestamp
+        run: |
+          if [[ -n "${{ github.event.head_commit.timestamp }}" ]]; then
+            echo "BUILD_TIMESTAMP=${{ github.event.head_commit.timestamp }}" >> $GITHUB_ENV
+          elif [[ -n "${{ github.event.created_at }}" ]]; then
+            echo "BUILD_TIMESTAMP=${{ github.event.created_at }}" >> $GITHUB_ENV
+          else
+            echo "BUILD_TIMESTAMP=$(git log -1 --format=%cI)" >> $GITHUB_ENV
+          fi
+        
       - name: Build and push Docker image
         id: build
         uses: docker/build-push-action@v6
         with:
           platforms: ${{ matrix.platform }}
           context: .
-          labels: org.opencontainers.image.version=${{ env.TAG }}
+          labels: |
+            org.opencontainers.image.version=${{ env.TAG }}
+            org.opencontainers.image.revision=${{ github.sha }}
+            org.opencontainers.image.created=${{ env.BUILD_TIMESTAMP }}
+            org.opencontainers.image.source="https://github.com/rhee876527/chiyogami"
+            org.opencontainers.image.authors="Martin Kibera"
+            org.opencontainers.image.vendor="Martin Kibera"
+            org.opencontainers.image.licenses="BSD 3-Clause"
+            org.opencontainers.image.title="Chiyogami"
           outputs: type=image,name=ghcr.io/${{ github.repository }},push-by-digest=true,name-canonical=true,push=true
 
       - name: Export digest
@@ -76,7 +95,7 @@ jobs:
       - name: Upload digest
         uses: actions/upload-artifact@v4
         with:
-          name: digests-${{ env.PLATFORM_PAIR }}
+          name: digests-${{ env.PLATFORM_ARCH }}
           path: /tmp/digests/*
           if-no-files-found: error
           retention-days: 1
@@ -102,8 +121,12 @@ jobs:
           username: ${{ github.repository_owner }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-tags: true
+
       - name: Get version tag
-        id: version
         run: |
           if [[ "${{ github.ref }}" == refs/tags/* ]]; then
             echo "TAG=${GITHUB_REF#refs/tags/}" >> $GITHUB_ENV
