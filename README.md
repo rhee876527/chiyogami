@@ -19,7 +19,7 @@ Yet Another Pastebin
 - 👤 User Accounts — Create & manage your pastes with authentication.
 - 🔗 Easy Sharing — Share paste links or scan a QR code for instant access.
 - 🛡 Built-in Rate Limiting — Protects against spam and abuse with smart request throttling.
-- 🚀 Easy self-host with powerful features!
+- 🚀 Easy self-host with docker.
 
 <br><br>
 
@@ -27,37 +27,52 @@ Yet Another Pastebin
 Web UI is simple & straightforward. Or use the `API`.
 
 #### Create paste
-``
+```
 curl -X POST \
   http://localhost:8000/paste \
   -H 'Content-Type: application/json' \
   -d '{"content":"Test paste"}'
-{"title":"OkxI"}
-``
+```
+
+<br>
+
+**response:** `{"title":"OkxI"}`
 
 <br>
 
 Note: Pastes are created by default with `Public` `visibility`. They can be accessed from api or website.
-Change this to `Private` or `Unlisted` to make the paste undiscoverable. Pastes also set to expire within 24hrs if expiry is not specified. You can set a default expiry for pastes created with `PASTE_DEFAULT_EXPIRATION`.
+Change this to `Private` or `Unlisted` to make the paste undiscoverable. Pastes are also set to expire within 24hrs if expiry is not specified. You can set a default expiry for new pastes with `PASTE_DEFAULT_EXPIRATION`.
+
+<br>
 
 #### Fetch created paste
-``
+```
 curl -X GET http://localhost:8000/paste/bZTR -H "Accept: application/json"
+```
+<br>
+
+**response:**
+``
 {"ID":22,"CreatedAt":"2025-02-04T19:48:06.747679947Z","UpdatedAt":"2025-02-04T19:48:06.747679947Z","DeletedAt":null,"Title":"bZTR","Content":"test private","Visibility":"Private","expiration":"2025-02-05T19:48:06.747635027Z","IsEncrypted":false,"UserID":0,"IsUserPaste":false}
 ``
+<br><br>
 
 #### Create paste from txt file content
-``
+```
 f=insert*file*name*.ext; jq -Rs '{content: .}' < "$f" | curl -X POST http://localhost:8000/paste -H 'Content-Type: application/json' -d @-
-{"title":"awDI"}
-``
+```
+<br>
+
+**response:** `{"title":"awDI"}`
+
+<br>
 
 The API has even more features. But I'll let you find that out instead of filling up this README page!
 
 <br><br>
 
 ## Installation
-Docker. Build it or check [docker-compose](https://github.com/rhee876527/chiyogami/blob/main/docker-compose.yml) file example for pre-built images.
+Docker. Build it or check [docker-compose](https://github.com/rhee876527/chiyogami/blob/main/docker-compose.yml) file for example with pre-built images.
 
 <br><br>
 
