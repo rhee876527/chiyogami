@@ -79,7 +79,7 @@
                         <a href="/paste/${paste.Title}" class="font-semibold text-lg">${paste.Title}</a>
                         <div class="text-sm">
                             <p>Created: ${new Date(paste.CreatedAt).toLocaleString()}</p>
-                            <p>Expires: ${paste.expiration ? new Date(paste.expiration).toLocaleString() : "Never"}</p>
+                            <p>Expires: ${paste.Expiration ? new Date(paste.Expiration).toLocaleString() : "Never"}</p>
                             <p>Mode: ${paste.Visibility}</p>
                         </div>
                     </li>
