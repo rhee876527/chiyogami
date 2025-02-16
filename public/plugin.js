@@ -10,14 +10,13 @@ function showToast(message, type = 'info') {
     setTimeout(() => toast.remove(), 6000);
 }
 
-
 async function fetchWithAuth(url, options = {}) {
     try {
         const response = await fetch(url, options);
         
         if (response.status === 401) {
             updateAuthUI(null);
-            throw new Error("Unauthorized");
+            return null; //silence unauthorized errors
         }
         
         return response;
@@ -30,22 +29,16 @@ async function fetchWithAuth(url, options = {}) {
 let deleteAccountButton;
 
 async function checkAuthStatus() {
+    if (!localStorage.getItem('username')) return updateAuthUI(null);
+
     const response = await fetchWithAuth('/user/pastes');
-    if (response) {
-        try {
-            const data = await response.json();
-            if (response.ok && data.username) {  
-                const username = data.username;  
-                if (document.readyState === 'complete') {
-                    updateAuthUI(username);
-                } else {
-                    document.addEventListener('DOMContentLoaded', () => updateAuthUI(username));
-                }
-            }
-        } catch (error) {
-            console.error('Auth status check error:', error);
-        }
+    if (!response || !response.ok) {
+        updateAuthUI(null);
+        return;
     }
+
+    const data = await response.json().catch(() => {});
+    if (data?.username) updateAuthUI(data.username);
 }
 
 function updateAuthUI(username) {
@@ -184,6 +177,7 @@ document.addEventListener('DOMContentLoaded', function() {
         try {
             const response = await fetch('/logout', { method: 'POST' });
             if (response.ok) {
+                localStorage.removeItem('username');
                 updateAuthUI(null);
                 showToast('Logout successful', 'info');
             }
