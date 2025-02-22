@@ -13,19 +13,15 @@ var (
 	pasteTimestamps    sync.Map
 	rateLimitPerMinute = 5
 	windowSize         = time.Minute.Nanoseconds()
-	rateLimitMutex     sync.Mutex
 )
 
 func CheckAndRecordRateLimit(identifier string) bool {
 	now := time.Now().UnixNano()
 
-	rateLimitMutex.Lock()
-	defer rateLimitMutex.Unlock()
-
 	existing, _ := pasteTimestamps.Load(identifier)
 	timestamps, _ := existing.([]int64)
 
-	valid := timestamps[:0]
+	var valid []int64
 	for _, ts := range timestamps {
 		if now-ts <= windowSize {
 			valid = append(valid, ts)
