@@ -1,7 +1,5 @@
 ## Chiyogami 
 
-Yet Another Pastebin
-
 #### Chiyogami is a sleek, modern pastebin with encryption, customizable expiry, private pastes, user accounts and an API for developers. 🚀
 
 <br><br>
@@ -19,8 +17,9 @@ Yet Another Pastebin
 
 - ✔ Beautiful & Responsive UI — Built with TailwindCSS & DaisyUI for a clean and modern look.
 - 🖍 Syntax Highlighting — Automatic formatting with HighlightJS.
+- 📝 Markdown Rendering — Automatic formatting with Marked.
 - ⏳ Configurable Expiry — Set custom expiration times with API.
-- 🔒 Secure & Private — Client-side encryption with WebCrypto for encrypted pastes. No password saved in server.
+- 🔒 Secure & Private — Client-side encryption with WebCryptoAPI for encrypted pastes. No password saved in server.
 - 📡 Powerful API — Create and fetch pastes without leaving the terminal.
 - 🔍 Public Pastes — List & search all public pastes.
 - 🔑 Private Pastes — Only accessible via a unique, unguessable link for enhanced privacy (use encryption on web UI for ultimate privacy).
@@ -34,6 +33,16 @@ Yet Another Pastebin
 
 ## Installation
 Docker. Build it or check [docker-compose](https://github.com/rhee876527/chiyogami/blob/main/docker-compose.yml) file for example with pre-built images.
+
+### Quick run
+
+```
+ docker run -d \
+  -v "$(pwd)/pastes:/pastes" \
+  -p 127.0.0.1:8000:8000 \
+  --restart unless-stopped \
+  ghcr.io/rhee876527/chiyogami:latest
+```
 
 <br><br>
 
@@ -59,6 +68,18 @@ Change this to `Private` or `Unlisted` to make the paste undiscoverable. Pastes 
 
 <br>
 
+#### Create private paste with 48h expiry
+
+```
+curl -X POST \
+  http://localhost:8000/paste \
+  -H 'Content-Type: application/json' \
+  -d '{"content":"Test", "visibility":"Private", "expiration":"48h"}'
+```
+**response:** `{"title":"euVa"}`
+
+<br>
+
 #### Fetch created paste
 ```
 curl -X GET http://localhost:8000/paste/bZTR -H "Accept: application/json"
@@ -71,9 +92,13 @@ curl -X GET http://localhost:8000/paste/bZTR -H "Accept: application/json"
 ``
 <br><br>
 
-#### Create paste from txt file content
+#### Create paste from file
 ```
-f=insert*file*name*.ext; jq -Rs '{content: .}' < "$f" | curl -X POST http://localhost:8000/paste -H 'Content-Type: application/json' -d @-
+f=insert*file*name; \
+    jq -Rs '{content: .}' < "$f" | \
+    curl -X POST http://localhost:8000/paste \
+     -H 'Content-Type: application/json' \
+     -d @-
 ```
 <br>
 
@@ -81,7 +106,14 @@ f=insert*file*name*.ext; jq -Rs '{content: .}' < "$f" | curl -X POST http://loca
 
 <br>
 
-The API has even more features. But I'll let you find that out instead of filling up this README page!
+#### Delete owner paste using session (from cookies)
+
+```
+curl -X DELETE http://localhost:8000/paste/EIKq \
+-b "session=MTczNzA2NDI5NXxEWDhFQVFMX2dBQUJFQUVRQUFBZl80QUFBUVp6ZEhKcGJtY01DUUFIZFhObGNsOXBaQVIxYVc1MEJnSUFEQT09fLnhi2OxsN6coY5ZmmBeA0tPXUcsKiii6ECOoJ7yrqNC"
+```
+
+**response:** `{"message":"Paste deleted successfully"}`
 
 <br><br>
 
