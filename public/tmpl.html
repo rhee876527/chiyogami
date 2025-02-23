@@ -6,9 +6,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Paste {{.Title}}</title>
     <link rel="stylesheet" href="/output.css">
-    <script src="/highlightjs/v11.9.0/highlight.min.js" defer></script>
+    <script src="/highlightjs/v11.9.0/highlight.min.js"></script>
     <link rel="stylesheet" href="/highlightjs/v11.9.0/stackoverflow-dark.min.css">
-    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js" defer></script>
+    <script src="/marked/v15.0.7/marked.min.js"></script>
 </head>
 <body class="text-white">
     <noscript>
@@ -26,16 +26,16 @@
                 <button id="shareButton" class="text-sm bg-transparent px-3 py-1 rounded-sm hover:text-blue-300 translate-x-8" aria-label="Share">
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
                         <path stroke-linecap="round" stroke-linejoin="round" d="M13.19 8.688a4.5 4.5 0 0 1 1.242 7.244l-4.5 4.5a4.5 4.5 0 0 1-6.364-6.364l1.757-1.757m13.35-.622 1.757-1.757a4.5 4.5 0 0 0-6.364-6.364l-4.5 4.5a4.5 4.5 0 0 0 1.242 7.244" />
-                    </svg>                      
+                    </svg>
                 </button>
-    
+
                 <button id="generateQR" class="text-sm bg-transparent px-3 py-1 rounded-sm hover:text-blue-300 translate-x-6" aria-label="Generate QR Code">
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
                         <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 4.875c0-.621.504-1.125 1.125-1.125h4.5c.621 0 1.125.504 1.125 1.125v4.5c0 .621-.504 1.125-1.125 1.125h-4.5A1.125 1.125 0 0 1 3.75 9.375v-4.5ZM3.75 14.625c0-.621.504-1.125 1.125-1.125h4.5c.621 0 1.125.504 1.125 1.125v4.5c0 .621-.504 1.125-1.125 1.125h-4.5a1.125 1.125 0 0 1-1.125-1.125v-4.5ZM13.5 4.875c0-.621.504-1.125 1.125-1.125h4.5c.621 0 1.125.504 1.125 1.125v4.5c0 .621-.504 1.125-1.125 1.125h-4.5A1.125 1.125 0 0 1 13.5 9.375v-4.5Z" />
                         <path stroke-linecap="round" stroke-linejoin="round" d="M6.75 6.75h.75v.75h-.75v-.75ZM6.75 16.5h.75v.75h-.75v-.75ZM16.5 6.75h.75v.75h-.75v-.75ZM13.5 13.5h.75v.75h-.75v-.75ZM13.5 19.5h.75v.75h-.75v-.75ZM19.5 13.5h.75v.75h-.75v-.75ZM19.5 19.5h.75v.75h-.75v-.75ZM16.5 16.5h.75v.75h-.75v-.75Z" />
                     </svg>
                 </button>
-    
+
                 <button onclick="window.location.href='/'" class="text-sm bg-transparent px-3 py-1 hover:text-blue-300 ml-6" aria-label="Home">
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
                         <path stroke-linecap="round" stroke-linejoin="round" d="m2.25 12 8.954-8.955c.44-.439 1.152-.439 1.591 0L21.75 12M4.5 9.75v10.125c0 .621.504 1.125 1.125 1.125H9.75v-4.875c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125V21h4.125c.621 0 1.125-.504 1.125-1.125V9.75M8.25 21h8.25" />
@@ -48,8 +48,8 @@
     <div class="w-full p-4 lg:px-12 py-4">
         <h1 class="text-3xl font-bold text-center mb-4">{{.Title}}</h1>
         <div class="paste-metadata text-center text-sm mb-6">
-            <p id="created" class="text-[14px]">Created: {{.CreatedAt}} - Expiry: {{.Expiration}}</p>      
-        </div>       
+            <p id="created" class="text-[14px]">Created: {{.CreatedAt}} - Expiry: {{.Expiration}}</p>
+        </div>
             <div id="qrModal" class="hidden fixed h-screen inset-0 bg-slate-800 bg-opacity-75 flex justify-center items-center z-50">
                 <button id="closeModal" class="absolute ml-64 mb-96 text-white hover:text-red-900 text-2xs" aria-label="Close QR Code">
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="size-6">
@@ -67,7 +67,7 @@
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="size-6">
                     <path d="M7.5 3.375c0-1.036.84-1.875 1.875-1.875h.375a3.75 3.75 0 0 1 3.75 3.75v1.875C13.5 8.161 14.34 9 15.375 9h1.875A3.75 3.75 0 0 1 21 12.75v3.375C21 17.16 20.16 18 19.125 18h-9.75A1.875 1.875 0 0 1 7.5 16.125V3.375Z" />
                     <path d="M15 5.25a5.23 5.23 0 0 0-1.279-3.434 9.768 9.768 0 0 1 6.963 6.963A5.23 5.23 0 0 0 17.25 7.5h-1.875A.375.375 0 0 1 15 7.125V5.25ZM4.875 6H6v10.125A3.375 3.375 0 0 0 9.375 19.5H16.5v1.125c0 1.035-.84 1.875-1.875 1.875h-9.75A1.875 1.875 0 0 1 3 20.625V7.875C3 6.839 3.84 6 4.875 6Z" />
-                  </svg>                  
+                  </svg>
             </button>
         </div>
         {{ if .IsEncrypted }}
@@ -81,46 +81,24 @@
         {{ end }}
     </div>
 
-    <script> // Convert created time to locale
+    <script> // Convert time to locale
         const createdAtElement = document.getElementById('created');
         const createdAtDate = new Date(createdAtElement.textContent.match(/Created: (.+) -/)[1]);
         if (!isNaN(createdAtDate)) createdAtElement.textContent = `Created: ${createdAtDate.toLocaleString()} - ${createdAtElement.textContent.split(' - ')[1]}`;
     </script>
 
-    <script>
+    <script> //Share button
         document.getElementById('shareButton').addEventListener('click', function() {
             const currentUrl = window.location.href;
 
-            // Use Clipboard API
             if (navigator.clipboard && navigator.clipboard.writeText) {
                 navigator.clipboard.writeText(currentUrl).then(function() {
                     showToast('URL copied to clipboard!');
                 }).catch(function() {
-                    fallbackCopyToClipboard(currentUrl);  // Fallback if Clipboard API fails
+                    showManualCopyMessage();
                 });
-            } else {
-                fallbackCopyToClipboard(currentUrl);  // Fallback if Clipboard API is not supported
             }
         });
-
-        function fallbackCopyToClipboard(text) {
-            // Use textarea and document.execCommand 
-            const textarea = document.createElement('textarea');
-            textarea.value = text;
-            document.body.appendChild(textarea);
-            textarea.select();
-            try {
-                const successful = document.execCommand('copy');
-                if (successful) {
-                    showToast('URL copied to clipboard!');
-                } else {
-                    showManualCopyMessage(); // If copying fails, show manual instructions
-                }
-            } catch (err) {
-                showManualCopyMessage(); // If execCommand fails, show manual instructions
-            }
-            document.body.removeChild(textarea);
-        }
 
         function showManualCopyMessage() {
             const toast = document.createElement('div');
@@ -151,7 +129,7 @@
         }
     </script>
 
-    <script>
+    <script> // QR button
         const qrButton = document.getElementById('generateQR');
         const qrModal = document.getElementById('qrModal');
         const closeModal = document.getElementById('closeModal');
@@ -187,8 +165,8 @@
             }
         });
     </script>
-    
-    <script>
+
+    <script> //Content Window Manager
         document.addEventListener('DOMContentLoaded', () => {
         const contentElement = document.getElementById('paste-content');
         const decryptSection = document.getElementById('decrypt-section');
@@ -197,29 +175,29 @@
         const toggleButton = document.getElementById('toggle-highlight');
         const passwordInput = document.getElementById('password');
 
-        // Set up initial state
         let isEncrypted = {{.IsEncrypted}};
         let currentContent = contentElement.textContent.trim();
+        window.currentContent = currentContent;
         let isHighlighted = !isEncrypted;
         let isMarkdownRendered = true;
+        const CODE_TOGGLE_ON = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="size-6"><path fill-rule="evenodd" d="M5.625 1.5c-1.036 0-1.875.84-1.875 1.875v17.25c0 1.035.84 1.875 1.875 1.875h12.75c1.035 0 1.875-.84 1.875-1.875V12.75A3.75 3.75 0 0 0 16.5 9h-1.875a1.875 1.875 0 0 1-1.875-1.875V5.25A3.75 3.75 0 0 0 9 1.5H5.625ZM7.5 15a.75.75 0 0 1 .75-.75h7.5a.75.75 0 0 1 0 1.5h-7.5A.75.75 0 0 1 7.5 15Zm.75 2.25a.75.75 0 0 0 0 1.5H12a.75.75 0 0 0 0-1.5H8.25Z" clip-rule="evenodd" /><path d="M12.971 1.816A5.23 5.23 0 0 1 14.25 5.25v1.875c0 .207.168.375.375.375H16.5a5.23 5.23 0 0 1 3.434 1.279 9.768 9.768 0 0 0-6.963-6.963Z" /></svg>`;
+        const CODE_TOGGLE_OFF = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="size-6"><path fill-rule="evenodd" d="M14.447 3.026a.75.75 0 0 1 .527.921l-4.5 16.5a.75.75 0 0 1-1.448-.394l4.5-16.5a.75.75 0 0 1 .921-.527ZM16.72 6.22a.75.75 0 0 1 1.06 0l5.25 5.25a.75.75 0 0 1 0 1.06l-5.25 5.25a.75.75 0 1 1-1.06-1.06L21.44 12l-4.72-4.72a.75.75 0 0 1 0-1.06Zm-9.44 0a.75.75 0 0 1 0 1.06L2.56 12l4.72 4.72a.75.75 0 0 1-1.06 1.06L.97 12.53a.75.75 0 0 1 0-1.06l5.25-5.25a.75.75 0 0 1 1.06 0Z" clip-rule="evenodd" /></svg>`;
 
-        // icons for the toggle button
         const ICONS = {
-            markdownOn: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="size-6"><path fill-rule="evenodd" d="M5.625 1.5c-1.036 0-1.875.84-1.875 1.875v17.25c0 1.035.84 1.875 1.875 1.875h12.75c1.035 0 1.875-.84 1.875-1.875V12.75A3.75 3.75 0 0 0 16.5 9h-1.875a1.875 1.875 0 0 1-1.875-1.875V5.25A3.75 3.75 0 0 0 9 1.5H5.625ZM7.5 15a.75.75 0 0 1 .75-.75h7.5a.75.75 0 0 1 0 1.5h-7.5A.75.75 0 0 1 7.5 15Zm.75 2.25a.75.75 0 0 0 0 1.5H12a.75.75 0 0 0 0-1.5H8.25Z" clip-rule="evenodd" /><path d="M12.971 1.816A5.23 5.23 0 0 1 14.25 5.25v1.875c0 .207.168.375.375.375H16.5a5.23 5.23 0 0 1 3.434 1.279 9.768 9.768 0 0 0-6.963-6.963Z" /></svg>`,
-            markdownOff: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="size-6"><path fill-rule="evenodd" d="M14.447 3.026a.75.75 0 0 1 .527.921l-4.5 16.5a.75.75 0 0 1-1.448-.394l4.5-16.5a.75.75 0 0 1 .921-.527ZM16.72 6.22a.75.75 0 0 1 1.06 0l5.25 5.25a.75.75 0 0 1 0 1.06l-5.25 5.25a.75.75 0 1 1-1.06-1.06L21.44 12l-4.72-4.72a.75.75 0 0 1 0-1.06Zm-9.44 0a.75.75 0 0 1 0 1.06L2.56 12l4.72 4.72a.75.75 0 0 1-1.06 1.06L.97 12.53a.75.75 0 0 1 0-1.06l5.25-5.25a.75.75 0 0 1 1.06 0Z" clip-rule="evenodd" /></svg>`,
-            highlightOn: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="size-6"><path fill-rule="evenodd" d="M5.625 1.5c-1.036 0-1.875.84-1.875 1.875v17.25c0 1.035.84 1.875 1.875 1.875h12.75c1.035 0 1.875-.84 1.875-1.875V12.75A3.75 3.75 0 0 0 16.5 9h-1.875a1.875 1.875 0 0 1-1.875-1.875V5.25A3.75 3.75 0 0 0 9 1.5H5.625ZM7.5 15a.75.75 0 0 1 .75-.75h7.5a.75.75 0 0 1 0 1.5h-7.5A.75.75 0 0 1 7.5 15Zm.75 2.25a.75.75 0 0 0 0 1.5H12a.75.75 0 0 0 0-1.5H8.25Z" clip-rule="evenodd" /><path d="M12.971 1.816A5.23 5.23 0 0 1 14.25 5.25v1.875c0 .207.168.375.375.375H16.5a5.23 5.23 0 0 1 3.434 1.279 9.768 9.768 0 0 0-6.963-6.963Z" /></svg>`,
-            highlightOff: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="size-6"><path fill-rule="evenodd" d="M14.447 3.026a.75.75 0 0 1 .527.921l-4.5 16.5a.75.75 0 0 1-1.448-.394l4.5-16.5a.75.75 0 0 1 .921-.527ZM16.72 6.22a.75.75 0 0 1 1.06 0l5.25 5.25a.75.75 0 0 1 0 1.06l-5.25 5.25a.75.75 0 1 1-1.06-1.06L21.44 12l-4.72-4.72a.75.75 0 0 1 0-1.06Zm-9.44 0a.75.75 0 0 1 0 1.06L2.56 12l4.72 4.72a.75.75 0 0 1-1.06 1.06L.97 12.53a.75.75 0 0 1 0-1.06l5.25-5.25a.75.75 0 0 1 1.06 0Z" clip-rule="evenodd" /></svg>`
+            markdownOn: CODE_TOGGLE_ON,
+            markdownOff: CODE_TOGGLE_OFF,
+            highlightOn: CODE_TOGGLE_ON,
+            highlightOff: CODE_TOGGLE_OFF
         };
 
-        // Helper to check if content is Markdown
-        const isMarkdown = content => /^#{1,6}\s|[*-]\s|```/m.test(content);
+        const isMarkdown = content => /(^#{1,6}\s)|(^>\s)|(```\s*\w*\s*\n)|(\[.+?\]\(.+?\))/m.test(content);
 
-        // Display/hide elements based on (de)/(en)cypted state
         const showElement = (element, shouldShow) => {
             if (element) element.style.display = shouldShow ? 'block' : 'none';
         };
 
         function displayContent(content) {
+            window.currentContent = content;
             if (isEncrypted) {
                 contentElement.textContent = "This paste is encrypted. Provide the password to view the content.";
                 contentElement.style.padding = '20px';
@@ -228,22 +206,34 @@
 
             const hasMarkdown = isMarkdown(content);
             if (hasMarkdown && isMarkdownRendered) {
-                contentElement.innerHTML = marked.parse(content); 
+                contentElement.innerHTML = marked.parse(content);
+                requestAnimationFrame(() => {
+                    contentElement.querySelectorAll('pre code').forEach(block => {
+                        if (!block.dataset.highlighted) hljs.highlightElement(block);
+                    });
+                });
+                contentElement.style.padding = '20px';
+                contentElement.classList.remove('prose');
+                contentElement.classList.add('leading-tight', 'space-y-2');
+                contentElement.className = '';
+                contentElement.removeAttribute('data-highlighted');
+
                 if (isHighlighted) {
                     contentElement.querySelectorAll('pre code').forEach(block => hljs.highlightElement(block));
                 }
-                styleMarkdown(); 
+                styleMarkdown();
             } else {
                 contentElement.textContent = content;
                 contentElement.style.padding = '20px';
-                contentElement.className = ''; 
-                contentElement.removeAttribute('data-highlighted'); 
+                contentElement.classList.remove('prose');
+                contentElement.classList.add('leading-tight', 'space-y-2');
+                contentElement.className = '';
+                contentElement.removeAttribute('data-highlighted');
                 if (!hasMarkdown && isHighlighted) hljs.highlightElement(contentElement);
             }
             updateToggleButton(hasMarkdown);
         }
 
-        // Style Markdown elements 
         function styleMarkdown() {
             const styles = {
                 'h1': 'text-2xl font-bold mb-3 mt-4',
@@ -267,14 +257,13 @@
         }
 
         function updateToggleButton(hasMarkdown) {
-            const icon = hasMarkdown 
+            const icon = hasMarkdown
                 ? (isMarkdownRendered ? ICONS.markdownOn : ICONS.markdownOff)
                 : (isHighlighted ? ICONS.highlightOn : ICONS.highlightOff);
             toggleButton.innerHTML = icon;
             showElement(toggleButton, !isEncrypted);
         }
 
-        // Toggle between rendered Markdown and plain text, or highlighting for code
         function toggleDisplayMode() {
             const hasMarkdown = isMarkdown(currentContent);
             if (hasMarkdown) {
@@ -285,7 +274,6 @@
             displayContent(currentContent);
         }
 
-        // Handle decryption when the form is submitted
         async function handleDecrypt(event) {
             event.preventDefault();
             if (!isEncrypted) {
@@ -297,21 +285,12 @@
             try {
                 const paddedContent = currentContent.padEnd(currentContent.length + (4 - currentContent.length % 4) % 4, "=");
                 const buffer = new Uint8Array(atob(paddedContent).split('').map(c => c.charCodeAt(0)));
-                const iv = buffer.slice(0, 12);
-                const ciphertext = buffer.slice(12);
-
-                const keyMaterial = await crypto.subtle.importKey(
-                    'raw', new TextEncoder().encode(password), { name: 'PBKDF2' }, false, ['deriveKey']
-                );
-                const key = await crypto.subtle.deriveKey(
-                    { name: 'PBKDF2', salt: iv, iterations: 100000, hash: 'SHA-256' },
-                    keyMaterial,
-                    { name: 'AES-GCM', length: 256 },
-                    false,
-                    ['decrypt']
-                );
+                const [iv, ciphertext] = [buffer.slice(0, 12), buffer.slice(12)];
+                const keyMaterial = await crypto.subtle.importKey('raw', new TextEncoder().encode(password), { name: 'PBKDF2' }, false, ['deriveKey']);
+                const key = await crypto.subtle.deriveKey({ name: 'PBKDF2', salt: iv, iterations: 100000, hash: 'SHA-256' }, keyMaterial, { name: 'AES-GCM', length: 256 }, false, ['decrypt']);
                 const plaintext = await crypto.subtle.decrypt({ name: 'AES-GCM', iv }, key, ciphertext);
                 currentContent = new TextDecoder().decode(plaintext);
+                window.currentContent = currentContent;
                 isEncrypted = false;
                 const hasMarkdown = isMarkdown(currentContent);
                 isHighlighted = !hasMarkdown;
@@ -326,18 +305,17 @@
             }
         }
 
-        // Set up the initial display
         function initialize() {
             showElement(decryptSection, isEncrypted);
             displayContent(currentContent);
             decryptForm?.addEventListener('submit', handleDecrypt);
             toggleButton.addEventListener('click', toggleDisplayMode);
         }
-
         initialize();
     });
     </script>
-    <script>
+
+    <script> // Floating Copy button
         document.addEventListener('DOMContentLoaded', () => {
             const contentElement = document.getElementById('paste-content');
             const copyBtn = document.getElementById('copy-btn');
@@ -380,8 +358,7 @@
 
             copyBtn.addEventListener('click', async () => {
                 try {
-                    const contentText = contentElement.textContent.trim();
-                    await navigator.clipboard.writeText(contentText);
+                    await navigator.clipboard.writeText(window.currentContent);
                     const toast = document.createElement('div');
                     toast.textContent = 'Copied';
                     toast.classList.add('fixed', 'bottom-5', 'left-1/2', 'transform', '-translate-x-1/2', 'text-center', 'px-6', 'py-3', 'bg-gray-800', 'text-white', 'rounded-lg', 'text-sm', 'shadow-lg', 'z-50');
@@ -395,11 +372,11 @@
     </script>
 
     <footer class="text-gray-600 text-center p-4 mt-8">
-        &copy; <span id="present-year"></span> Chiyogami. All rights reserved. 
+        &copy; <span id="present-year"></span> Chiyogami. All rights reserved.
         <a href="/about" class="text-white hover:text-blue-500">
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="currentColor" class="size-4 inline-block align-middle">
                 <path fill-rule="evenodd" d="M15 8A7 7 0 1 1 1 8a7 7 0 0 1 14 0ZM9 5a1 1 0 1 1-2 0 1 1 0 0 1 2 0ZM6.75 8a.75.75 0 0 0 0 1.5h.75v1.75a.75.75 0 0 0 1.5 0v-2.5A.75.75 0 0 0 8.25 8h-1.5Z" clip-rule="evenodd" />
-            </svg>          
+            </svg>
         </a>
     </footer>
 
