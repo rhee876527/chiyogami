@@ -26,6 +26,9 @@
 !public/highlightjs
 !public/highlightjs/v11.9.0
 !public/highlightjs/v11.9.0/*
+!public/marked
+!public/marked/v15.0.7
+!public/marked/v15.0.7/*
 
 # Node modules
 !frameworks
