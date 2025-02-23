@@ -190,7 +190,7 @@
             highlightOff: CODE_TOGGLE_OFF
         };
 
-        const isMarkdown = content => /(^#{1,6}\s)|(^>\s)|(```\s*\w*\s*\n)|(\[.+?\]\(.+?\))/m.test(content);
+        const isMarkdown = content => /(^\s*>\s)|(^\s*```(?:\w+)?\s*\n)|(^\s*\[.*?\]\(.*?\))|(^\s*-\s|\d+\.\s)/m.test(content);
 
         const showElement = (element, shouldShow) => {
             if (element) element.style.display = shouldShow ? 'block' : 'none';
