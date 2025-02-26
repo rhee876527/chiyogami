@@ -211,6 +211,7 @@
                     contentElement.querySelectorAll('pre code').forEach(block => {
                         if (!block.dataset.highlighted) hljs.highlightElement(block);
                     });
+                    styleMarkdown();
                 });
                 contentElement.style.padding = '20px';
                 contentElement.classList.remove('prose');
@@ -242,8 +243,9 @@
                 'p': 'mb-3',
                 'ul': 'list-disc ml-5 mb-3',
                 'ol': 'list-decimal ml-5 mb-3',
-                'pre': 'bg-gray-900 p-3 rounded-md mb-3 text-gray-100 overflow-x-auto',
-                'code:not(pre code)': 'bg-gray-800 px-1.5 py-0.5 rounded text-gray-100 text-sm',
+                'pre': 'bg-gray-900 p-3 rounded-md mb-3 text-gray-100',
+                'pre code': 'p-0 m-0 bg-transparent text-inherit',
+                'code': 'bg-inherit px-1.5 py-0.5 rounded text-slate-400 text-sm',
                 'blockquote': 'border-l-4 border-gray-500 pl-3 my-3 text-gray-600',
                 'a': 'text-blue-500 hover:text-blue-700 underline',
                 'hr': 'my-4 border-t border-gray-300'

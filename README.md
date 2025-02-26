@@ -1,8 +1,9 @@
-## Chiyogami 
+## Chiyogami
 
 #### Chiyogami is a sleek, modern pastebin with encryption, customizable expiry, private pastes, user accounts and an API for developers. 🚀
 
-<br><br>
+
+
 
 ### Screenshots:
 
@@ -10,7 +11,8 @@
 ![screen-2](https://github.com/user-attachments/assets/0918a641-bf50-4d26-971a-39d7e9876a6d)
 ![screen-3](https://github.com/user-attachments/assets/95532b56-9e2f-447f-8c9c-cdbe4119fa59)
 
-<br>
+
+
 
 
 ✨ **Features**
@@ -29,7 +31,8 @@
 - 🛡 Built-in Rate Limiting — Protects against spam and abuse with smart request throttling.
 - 🚀 Easy self-host with docker.
 
-<br><br>
+
+
 
 ## Installation
 Docker. Build it or check [docker-compose](https://github.com/rhee876527/chiyogami/blob/main/docker-compose.yml) file for example with pre-built images.
@@ -44,7 +47,8 @@ Docker. Build it or check [docker-compose](https://github.com/rhee876527/chiyoga
   ghcr.io/rhee876527/chiyogami:latest
 ```
 
-<br><br>
+
+
 
 ## Usage
 Web UI is simple & straightforward. Or use the `API`.
@@ -57,16 +61,20 @@ curl -X POST \
   -d '{"content":"Test paste"}'
 ```
 
-<br>
+
 
 **response:** `{"title":"OkxI"}`
 
-<br>
+
+
 
 Note: Pastes are created by default with `Public` `visibility`. They can be accessed from api or website.
-Change this to `Private` or `Unlisted` to make the paste undiscoverable. Pastes are also set to expire within 24hrs if expiry is not specified. You can set a default expiry for new pastes with `PASTE_DEFAULT_EXPIRATION`.
+Change this to `Private` or `Unlisted` to make the paste undiscoverable. Pastes are also set to expire within 24hrs if expiry is not specified.
 
-<br>
+You can set a default expiry for new pastes with `PASTE_DEFAULT_EXPIRATION`. Valid time units are “ns”, “us” (or “µs”), “ms”, “s”, “m”, “h” or `"Never"`
+
+
+
 
 #### Create private paste with 48h expiry
 
@@ -78,19 +86,22 @@ curl -X POST \
 ```
 **response:** `{"title":"euVa"}`
 
-<br>
+
+
 
 #### Fetch created paste
 ```
 curl -X GET http://localhost:8000/paste/bZTR -H "Accept: application/json"
 ```
-<br>
+
+
 
 **response:**
 ``
 {"ID":22,"CreatedAt":"2025-02-04T19:48:06.747679947Z","UpdatedAt":"2025-02-04T19:48:06.747679947Z","DeletedAt":null,"Title":"bZTR","Content":"test private","Visibility":"Private","expiration":"2025-02-05T19:48:06.747635027Z","IsEncrypted":false,"UserID":0,"IsUserPaste":false}
 ``
-<br><br>
+
+
 
 #### Create paste from file
 ```
@@ -100,11 +111,13 @@ f=insert*file*name; \
      -H 'Content-Type: application/json' \
      -d @-
 ```
-<br>
+
+
 
 **response:** `{"title":"awDI"}`
 
-<br>
+
+
 
 #### Delete owner paste using session (from cookies)
 
@@ -115,7 +128,8 @@ curl -X DELETE http://localhost:8000/paste/EIKq \
 
 **response:** `{"message":"Paste deleted successfully"}`
 
-<br><br>
+
+
 
 ##### COPYRIGHT
 This software is free to use in accordance with the [license](https://github.com/rhee876527/chiyogami/blob/main/LICENSE).
