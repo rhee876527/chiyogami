@@ -10,15 +10,15 @@
     <noscript>
         <p>JavaScript is disabled. This website may not function properly. Enable JavaScript in your browser to get full functionality.</p>
     </noscript>
-   
+
     <div class="container mx-auto py-8">
         <div class="pl-4 pr-4 mb-6 flex justify-start">
             <button id="back-button" class="text-sm bg-transparent hover:text-blue-300">
                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
                     <path stroke-linecap="round" stroke-linejoin="round" d="M9 15 3 9m0 0 6-6M3 9h12a6 6 0 0 1 0 12h-3" />
-                  </svg>                  
+                  </svg>
             </button>
-            
+
             <div class="logo text-2xl text-center font-bold w-full">Chiyogami</div>
                 <button onclick="window.location.href='/'" class="text-sm bg-transparent hover:text-blue-300 ml-auto px-3 py-1 ml-6">
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
@@ -26,16 +26,16 @@
                     </svg>
                 </button>
         </div>
-        
+
         <form class="mb-6 flex justify-center" id="search-form">
             <input type="text" id="search-input" placeholder="Search pastes..." class="input input-bordered w-full max-w-xs" />
             <button id="search-button" type="submit" class="btn btn-primary btn-xl ml-2">
                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
                     <path stroke-linecap="round" stroke-linejoin="round" d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z" />
-                  </svg>                  
+                  </svg>
             </button>
         </form>
-        
+
         <div class="overflow-x-auto">
             <ul id="paste-list" class="menu bg-base-100 shadow-lg rounded-box p-4 space-y-2"></ul>
         </div>
@@ -99,7 +99,7 @@
         }
 
         function handleSearch(event) {
-            event.preventDefault(); 
+            event.preventDefault();
             const query = document.getElementById('search-input').value.trim();
             currentPage = 1;
             fetchPastes(query, currentPage);
@@ -135,11 +135,11 @@
     </script>
 
     <footer class="text-gray-600 text-center p-4 mt-8">
-        &copy; <span id="present-year"></span> Chiyogami. All rights reserved. 
+        &copy; <span id="present-year"></span> Chiyogami. All rights reserved.
         <a href="/about" class="text-white hover:text-blue-500">
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="currentColor" class="size-4 inline-block align-middle">
                 <path fill-rule="evenodd" d="M15 8A7 7 0 1 1 1 8a7 7 0 0 1 14 0ZM9 5a1 1 0 1 1-2 0 1 1 0 0 1 2 0ZM6.75 8a.75.75 0 0 0 0 1.5h.75v1.75a.75.75 0 0 0 1.5 0v-2.5A.75.75 0 0 0 8.25 8h-1.5Z" clip-rule="evenodd" />
-            </svg>          
+            </svg>
         </a>
     </footer>
 

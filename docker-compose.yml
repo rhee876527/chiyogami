@@ -13,13 +13,13 @@ services:
     volumes:
       - ./pastes:/pastes
     environment:
-      #  Keep this secure and unique. 
+      #  Keep this secure and unique.
       #  Example to generate random string: `openssl rand -base64 32`
       - SECRET_KEY=your_random_string_here
       # Run application as preferred user
       # By default runs as user 1000:1000
       #- GID=1000
       #- UID=1000
-    ports:    
+    ports:
       - 127.0.0.1:8000:8000/tcp
     restart: unless-stopped

@@ -13,16 +13,16 @@ function showToast(message, type = 'info') {
 async function fetchWithAuth(url, options = {}) {
     try {
         const response = await fetch(url, options);
-        
+
         if (response.status === 401) {
             updateAuthUI(null);
             return null; //silence unauthorized errors
         }
-        
+
         return response;
     } catch (error) {
         console.error("Fetch error:", error);
-        throw error; 
+        throw error;
     }
 }
 
@@ -45,7 +45,7 @@ function updateAuthUI(username) {
     const authButtons = document.getElementById('auth-buttons');
     const userInfo = document.getElementById('user-info');
     const usernameDisplay = document.getElementById('username-display');
-    
+
     if (username) {
         authButtons.classList.add('hidden');
         userInfo.classList.remove('hidden');
@@ -66,7 +66,7 @@ document.addEventListener('DOMContentLoaded', function() {
     const registerButton = document.getElementById('register-button');
     const logoutButton = document.getElementById('logout-button');
     const myPastesButton = document.getElementById('my-pastes-button');
-    
+
     const loginModal = document.getElementById('login-modal');
     const registerModal = document.getElementById('register-modal');
     const myPastesModal = document.getElementById('my-pastes-modal');
@@ -84,7 +84,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
     confirmDeleteAccount.addEventListener('click', async () => {
         try {
-            const response = await fetch('/delete-account', { 
+            const response = await fetch('/delete-account', {
                 method: 'POST',
                 credentials: 'same-origin'
             });
@@ -126,7 +126,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 },
                 body: JSON.stringify({ username, password }),
             });
-        
+
             if (response.ok) {
                 updateAuthUI(username);
                 localStorage.setItem('username', username);
@@ -143,7 +143,7 @@ document.addEventListener('DOMContentLoaded', function() {
             } else {
                 showToast('An unexpected error occurred', 'error');
             }
-        }        
+        }
     });
 
     registerForm.addEventListener('submit', async (e) => {
@@ -190,13 +190,13 @@ document.addEventListener('DOMContentLoaded', function() {
     myPastesButton.addEventListener("click", async () => {
         try {
             const response = await fetchWithAuth('/user/pastes');
-    
+
             if (!response.ok) throw new Error("Failed to fetch pastes");
-    
+
             const pastes = await response.json();
             const pastesList = document.getElementById("my-pastes-list");
             pastesList.innerHTML = "";
-    
+
             if (!pastes.length) {
                 pastesList.innerHTML = "No pastes available.";
             } else {
@@ -213,9 +213,9 @@ document.addEventListener('DOMContentLoaded', function() {
                     pastesList.appendChild(li);
                 });
             }
-    
+
             showModal(myPastesModal);
-    
+
             document.querySelectorAll(".delete-paste").forEach((button) => {
                 button.addEventListener("click", function () {
                     deletePaste(this.getAttribute("data-id"));
@@ -223,7 +223,7 @@ document.addEventListener('DOMContentLoaded', function() {
             });
         } catch (error) {
             console.error("Fetch pastes error:", error);
-    
+
             if (error.message === "Unauthorized") {
                 showToast("Session expired. Please log in again.", "error");
             } else {
@@ -231,7 +231,7 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         }
     });
-      
+
     async function deletePaste(title) {
         if (confirm('Are you sure you want to delete this paste?')) {
             try {
@@ -255,7 +255,7 @@ document.addEventListener('DOMContentLoaded', function() {
             this.close();
         }
     });
-    
+
     const modals = document.querySelectorAll('[class*="modal"]');
     modals.forEach(function(modal) {
         modal.addEventListener('click', function(e) {
@@ -311,7 +311,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 const data = await response.json();
                 window.location.href = `/paste/${data.title}`;
             } else if (response.status === 429) {
-                const errorRatelimit = await response.json();                
+                const errorRatelimit = await response.json();
                 showToast(`${errorRatelimit.message}`, 'error');
             } else {
                 const errorContent = await response.json();
@@ -332,7 +332,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
 const storedUsername = localStorage.getItem('username');
     if (storedUsername) {
-        updateAuthUI(storedUsername);  
+        updateAuthUI(storedUsername);
     }
     checkAuthStatus();
 

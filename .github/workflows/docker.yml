@@ -68,7 +68,7 @@ jobs:
           else
             echo "BUILD_TIMESTAMP=$(git log -1 --format=%cI)" >> $GITHUB_ENV
           fi
-        
+
       - name: Build and push Docker image
         id: build
         uses: docker/build-push-action@v6
