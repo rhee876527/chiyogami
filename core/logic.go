@@ -9,6 +9,7 @@ import (
 	"log"
 	"net/http"
 	"os"
+	"strconv"
 	"strings"
 	"time"
 
@@ -64,8 +65,14 @@ func CreatePasteHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	if content := strings.TrimSpace(pasteRequest.Content); content == "" || len(content) > 30000 {
-		JsonRespond(w, http.StatusBadRequest, "Content invalid or size exceeds 30000 max chars")
+	maxCharContent := 50000
+	if v := os.Getenv("MAX_CHAR_CONTENT"); v != "" {
+		if n, err := strconv.Atoi(v); err == nil && n > 0 {
+			maxCharContent = n
+		}
+	}
+	if content := strings.TrimSpace(pasteRequest.Content); content == "" || len(content) > maxCharContent {
+		JsonRespond(w, http.StatusBadRequest, "Content invalid or size exceeds "+strconv.Itoa(maxCharContent)+" max chars")
 		return
 	}
 
