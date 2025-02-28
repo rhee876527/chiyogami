@@ -6,8 +6,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Paste {{.Title}}</title>
     <link rel="stylesheet" href="/output.css">
-    <script src="/highlightjs/v11.9.0/highlight.min.js"></script>
-    <link rel="stylesheet" href="/highlightjs/v11.9.0/stackoverflow-dark.min.css">
+    <script src="/highlightjs/v11.11.1/highlight.min.js"></script>
+    <link rel="stylesheet" href="/highlightjs/v11.11.1/stackoverflow-dark.min.css">
     <script src="/marked/v15.0.7/marked.min.js"></script>
 </head>
 <body class="text-white">
@@ -185,7 +185,14 @@
         const CODE_TOGGLE_OFF = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="size-6"><path fill-rule="evenodd" d="M14.447 3.026a.75.75 0 0 1 .527.921l-4.5 16.5a.75.75 0 0 1-1.448-.394l4.5-16.5a.75.75 0 0 1 .921-.527ZM16.72 6.22a.75.75 0 0 1 1.06 0l5.25 5.25a.75.75 0 0 1 0 1.06l-5.25 5.25a.75.75 0 1 1-1.06-1.06L21.44 12l-4.72-4.72a.75.75 0 0 1 0-1.06Zm-9.44 0a.75.75 0 0 1 0 1.06L2.56 12l4.72 4.72a.75.75 0 0 1-1.06 1.06L.97 12.53a.75.75 0 0 1 0-1.06l5.25-5.25a.75.75 0 0 1 1.06 0Z" clip-rule="evenodd" /></svg>`;
         const ICONS = { on: CODE_TOGGLE_ON, off: CODE_TOGGLE_OFF };
 
-        const isMarkdown = content => /(^\s*>\s)|(^\s*```(?:\w+)?\s*\n)|(^\s*\[.*?\]\(.*?\))|(^\s*-\s|\d+\.\s)/m.test(content);
+        // Markdown-like content filter
+        const isMarkdown = content =>
+            /(^\s*>\s)|(^\s*```(?:\w+)?\s*\n)|(^\s*\[.*?\]\(.*?\))|(^\s*-\s|\d+\.\s)/m.test(content) &&
+            !/^(?:\s*[\w\s-]+,|("[^"]*",?)+\s*)$/m.test(content) &&  // CSV
+            !/^(?:\s*\w+\s*:\s*.+)$/m.test(content) &&               // YAML
+            !/^\s*\{[\s\S]*\}\s*$|^\s*\[[\s\S]*\]\s*$/.test(content) && // JSON
+            !/^\s*\w+\s*=\s*.+$/m.test(content) &&                   // INI
+            !/^\s*<\?xml\s+version=.*?>|^\s*<\w+.*?>[\s\S]*<\/\w+>\s*$/.test(content); // XML
 
         const showElement = (element, shouldShow) => {
             if (element) element.style.display = shouldShow ? 'block' : 'none';
@@ -221,7 +228,17 @@
                 contentElement.classList.add('leading-tight', 'space-y-2');
                 contentElement.className = '';
                 contentElement.removeAttribute('data-highlighted');
-                if (!hasMarkdown && isHighlighted) hljs.highlightElement(contentElement);
+                if (!hasMarkdown && isHighlighted) {
+                    hljs.highlightElement(contentElement);
+                    // Plaintext content sometimes gets mistaken for code
+                    const isCodeLike = /(function|var|let|const|\{|\}|\[|\]|\/\/|\#)/g.test(content);
+                    if (!isCodeLike) {
+                        const fadedHighlightClasses = ['hljs-comment', 'hljs-meta', 'hljs-string'];
+                        contentElement.querySelectorAll(fadedHighlightClasses.map(cls => `.${cls}`).join(',')).forEach(el => {
+                            el.className = '';
+                        });
+                    }
+                }
             }
             updateToggleButton(hasMarkdown);
         }
