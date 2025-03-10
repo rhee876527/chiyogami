@@ -224,12 +224,11 @@
             return score >= 3;
         };
 
-
         const showElement = (element, shouldShow) => {
             if (element) element.style.display = shouldShow ? 'block' : 'none';
         };
 
-        function displayContent(content) {
+        function displayContent(content, hasMarkdownParam = null) {
             window.currentContent = content;
             if (isEncrypted) {
                 contentElement.textContent = "This paste is encrypted. Provide the password to view the content.";
@@ -237,7 +236,7 @@
                 return;
             }
 
-            const hasMarkdown = isMarkdown(content);
+            const hasMarkdown = hasMarkdownParam !== null ? hasMarkdownParam : isMarkdown(content);
             if (hasMarkdown && isMarkdownRendered) {
                 contentElement.innerHTML = marked.parse(content);
                 requestAnimationFrame(() => {
@@ -334,7 +333,7 @@
 
                 showElement(decryptSection, false);
                 decryptError.classList.add('hidden');
-                displayContent(currentContent);
+                displayContent(currentContent, hasMarkdown);
             } catch (error) {
                 console.error("Decryption failed:", error);
                 decryptError.classList.remove('hidden');
