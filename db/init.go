@@ -49,7 +49,7 @@ func Init() {
 	// Connect to SQLite
 	DB, err = gorm.Open(sqlite.Open(dbPath), &gorm.Config{})
 	if err != nil {
-		panic("Failed to connect to SQLite database: " + err.Error())
+		log.Fatal("Failed to connect to SQLite database: ", err)
 	}
 
 	// Auto-migrate schema
