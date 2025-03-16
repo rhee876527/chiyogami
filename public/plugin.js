@@ -328,10 +328,9 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 
 const storedUsername = localStorage.getItem('username');
-    if (storedUsername) {
+    if (storedUsername && storedUsername.trim()) {
         updateAuthUI(storedUsername);
     }
-    checkAuthStatus();
 
 if (document.readyState === 'complete') {
     checkAuthStatus();
