@@ -137,12 +137,8 @@ document.addEventListener('DOMContentLoaded', function() {
                 showToast(`Login failed: ${badLogin.message}`, 'error');
             }
         } catch (error) {
-            if (error.response) {
-                const errorLogin = await error.response.json();
-                showToast(`Error Login: ${errorLogin.message}`, 'error');
-            } else {
-                showToast('An unexpected error occurred', 'error');
-            }
+            console.error('Error:', error);
+            showToast('An unexpected error occurred', 'error');
         }
     });
 
@@ -191,7 +187,13 @@ document.addEventListener('DOMContentLoaded', function() {
         try {
             const response = await fetchWithAuth('/user/pastes');
 
-            if (!response.ok) throw new Error("Failed to fetch pastes");
+            if (!response.ok) {
+                if (response.status === 401) {
+                    showToast("Session expired. Please log in again.", "error");
+                    return;
+                }
+                throw new Error("Failed to fetch pastes");
+            }
 
             const pastes = await response.json();
             const pastesList = document.getElementById("my-pastes-list");
@@ -223,12 +225,7 @@ document.addEventListener('DOMContentLoaded', function() {
             });
         } catch (error) {
             console.error("Fetch pastes error:", error);
-
-            if (error.message === "Unauthorized") {
-                showToast("Session expired. Please log in again.", "error");
-            } else {
-                showToast("An error occurred while fetching your pastes. Please try again.", "error");
-            }
+            showToast("An error occurred. Please try again.", "error");
         }
     });
 
