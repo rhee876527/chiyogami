@@ -254,7 +254,7 @@
                 contentElement.textContent = content;
                 contentElement.style.padding = '20px';
                 contentElement.className = 'max-w-full whitespace-pre-wrap break-words font-mono text-base leading-normal p-4';
-                if (isHighlighted) {
+                if (!hasMarkdown && isHighlighted) {
                     // Clear previous highlighting to allow re-highlight
                     delete contentElement.dataset.highlighted;
                     hljs.highlightElement(contentElement);
