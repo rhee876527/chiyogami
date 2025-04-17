@@ -62,7 +62,7 @@
             </div>
 
             <div class="paste-content border border-gray-400 rounded bg-transparent shadow w-full overflow-y-auto overflow-x-auto md:overflow-x-hidden">
-                <code id="paste-content" class="max-w-full">{{.Content | html}}</code>
+                <code id="paste-content" class="max-w-full invisible">{{.Content | html}}</code>
             <button id="copy-btn" class="copy-btn hidden fixed top-44 right-12 rounded-btn p-2 hover:text-blue-500" aria-label="Copy Content">
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="size-6">
                     <path d="M7.5 3.375c0-1.036.84-1.875 1.875-1.875h.375a3.75 3.75 0 0 1 3.75 3.75v1.875C13.5 8.161 14.34 9 15.375 9h1.875A3.75 3.75 0 0 1 21 12.75v3.375C21 17.16 20.16 18 19.125 18h-9.75A1.875 1.875 0 0 1 7.5 16.125V3.375Z" />
@@ -234,6 +234,7 @@
                 contentElement.textContent = "This paste is encrypted. Provide the password to view the content.";
                 contentElement.style.padding = '20px';
                 contentElement.className = 'max-w-full';
+                contentElement.classList.replace('invisible', 'visible');
                 return;
             }
 
@@ -245,6 +246,7 @@
                         if (!block.dataset.highlighted) hljs.highlightElement(block);
                     });
                     styleMarkdown();
+                    contentElement.classList.replace('invisible', 'visible');
                 });
                 contentElement.style.padding = '20px';
                 contentElement.className = 'max-w-full leading-tight space-y-2';
@@ -269,6 +271,7 @@
                     contentElement.removeAttribute('data-highlighted');
                     contentElement.className = 'max-w-full whitespace-pre-wrap break-words font-mono text-base leading-normal p-4';
                 }
+                contentElement.classList.replace('invisible', 'visible');
             }
             updateToggleButton(hasMarkdown);
         }
@@ -406,7 +409,7 @@
         });
     </script>
 
-    <footer class="text-gray-600 text-center p-4 mt-8">
+    <footer id="page-footer" class="text-gray-600 text-center p-4 mt-8 hidden">
         &copy; <span id="present-year"></span> Chiyogami. All rights reserved.
         <a href="/about" class="text-white hover:text-blue-500">
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="currentColor" class="size-4 inline-block align-middle">
@@ -416,7 +419,10 @@
     </footer>
 
     <script>
-        document.getElementById('present-year').textContent = new Date().getFullYear();
+        document.addEventListener('DOMContentLoaded', function() {
+            document.getElementById('present-year').textContent = new Date().getFullYear();
+            document.getElementById('page-footer').classList.remove('hidden');
+        });
     </script>
 
 </body>
