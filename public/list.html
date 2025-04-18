@@ -27,7 +27,7 @@
                 </button>
         </div>
 
-        <form class="mb-6 flex justify-center" id="search-form">
+        <form class="mb-6 flex justify-center hidden" id="search-form">
             <input type="text" id="search-input" placeholder="Search pastes..." class="input input-bordered w-full max-w-xs" />
             <button id="search-button" type="submit" class="btn btn-primary btn-xl ml-2">
                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
@@ -39,7 +39,7 @@
         <div class="overflow-x-auto">
             <ul id="paste-list" class="menu bg-base-100 shadow-lg rounded-box p-4 space-y-2"></ul>
         </div>
-        <div class="flex justify-center mt-6">
+        <div class="flex justify-center mt-6 hidden" id="page-button">
             <div class="join">
                 <button id="prev-page" class="join-item btn btn-sm">«</button>
                 <button class="join-item btn btn-sm">Page <span id="current-page"></span></button>
@@ -134,7 +134,7 @@
     });
     </script>
 
-    <footer class="text-gray-600 text-center p-4 mt-8">
+    <footer class="text-gray-600 text-center p-4 mt-8 hidden" id="page-footer">
         &copy; <span id="present-year"></span> Chiyogami. All rights reserved.
         <a href="/about" class="text-white hover:text-blue-500">
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="currentColor" class="size-4 inline-block align-middle">
@@ -142,6 +142,14 @@
             </svg>
         </a>
     </footer>
+
+    <script>
+        setTimeout(() => {
+            document.getElementById('search-form').classList.remove('hidden');
+            document.getElementById('page-footer').classList.remove('hidden');
+            document.getElementById('page-button').classList.remove('hidden');
+        }, 500);
+    </script>
 
     <script>
         document.getElementById('present-year').textContent = new Date().getFullYear();
