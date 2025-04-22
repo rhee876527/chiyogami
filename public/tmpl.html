@@ -234,7 +234,6 @@
                 contentElement.textContent = "This paste is encrypted. Provide the password to view the content.";
                 contentElement.style.padding = '20px';
                 contentElement.className = 'max-w-full';
-                contentElement.classList.replace('invisible', 'visible');
                 return;
             }
 
@@ -246,7 +245,6 @@
                         if (!block.dataset.highlighted) hljs.highlightElement(block);
                     });
                     styleMarkdown();
-                    contentElement.classList.replace('invisible', 'visible');
                 });
                 contentElement.style.padding = '20px';
                 contentElement.className = 'max-w-full leading-tight space-y-2';
@@ -271,7 +269,6 @@
                     contentElement.removeAttribute('data-highlighted');
                     contentElement.className = 'max-w-full whitespace-pre-wrap break-words font-mono text-base leading-normal p-4';
                 }
-                contentElement.classList.replace('invisible', 'visible');
             }
             updateToggleButton(hasMarkdown);
         }
