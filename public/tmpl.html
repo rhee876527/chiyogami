@@ -306,7 +306,7 @@
             const hasMarkdown = isMarkdown(currentContent);
             if (hasMarkdown) isMarkdownRendered = !isMarkdownRendered;
             else isHighlighted = !isHighlighted;
-            displayContent(currentContent);
+            displayContent(currentContent, hasMarkdown);
         }
 
         async function handleDecrypt(event) {
