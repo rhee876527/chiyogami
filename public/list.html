@@ -13,14 +13,14 @@
 
     <div class="container mx-auto py-8">
         <div class="pl-4 pr-4 mb-6 flex justify-start">
-            <button id="back-button" class="text-sm bg-transparent hover:text-blue-300">
+            <button id="back-button" class="text-sm bg-transparent hover:text-blue-300" aria-label="Back">
                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
                     <path stroke-linecap="round" stroke-linejoin="round" d="M9 15 3 9m0 0 6-6M3 9h12a6 6 0 0 1 0 12h-3" />
                   </svg>
             </button>
 
             <div class="logo text-2xl text-center font-bold w-full">Chiyogami</div>
-                <button onclick="window.location.href='/'" class="text-sm bg-transparent hover:text-blue-300 ml-auto px-3 py-1 ml-6">
+                <button onclick="window.location.href='/'" class="text-sm bg-transparent hover:text-blue-300 ml-auto px-3 py-1 ml-6" aria-label="Home">
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
                         <path stroke-linecap="round" stroke-linejoin="round" d="m2.25 12 8.954-8.955c.44-.439 1.152-.439 1.591 0L21.75 12M4.5 9.75v10.125c0 .621.504 1.125 1.125 1.125H9.75v-4.875c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125V21h4.125c.621 0 1.125-.504 1.125-1.125V9.75M8.25 21h8.25" />
                     </svg>
@@ -29,7 +29,7 @@
 
         <form class="mb-6 flex justify-center hidden" id="search-form">
             <input type="text" id="search-input" placeholder="Search pastes..." class="input input-bordered w-full max-w-xs" />
-            <button id="search-button" type="submit" class="btn btn-primary btn-xl ml-2">
+            <button id="search-button" type="submit" class="btn btn-primary btn-xl ml-2" aria-label="Search">
                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
                     <path stroke-linecap="round" stroke-linejoin="round" d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z" />
                   </svg>
@@ -136,7 +136,7 @@
 
     <footer class="text-gray-600 text-center p-4 mt-8 hidden" id="page-footer">
         &copy; <span id="present-year"></span> Chiyogami. All rights reserved.
-        <a href="/about" class="text-white hover:text-blue-500">
+        <a href="/about" class="text-white hover:text-blue-500" aria-label="About">
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="currentColor" class="size-4 inline-block align-middle">
                 <path fill-rule="evenodd" d="M15 8A7 7 0 1 1 1 8a7 7 0 0 1 14 0ZM9 5a1 1 0 1 1-2 0 1 1 0 0 1 2 0ZM6.75 8a.75.75 0 0 0 0 1.5h.75v1.75a.75.75 0 0 0 1.5 0v-2.5A.75.75 0 0 0 8.25 8h-1.5Z" clip-rule="evenodd" />
             </svg>
