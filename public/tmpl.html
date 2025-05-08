@@ -318,13 +318,32 @@
 
             const password = passwordInput.value;
             try {
-                const paddedContent = currentContent.padEnd(currentContent.length + (4 - currentContent.length % 4) % 4, "=");
-                const buffer = new Uint8Array(atob(paddedContent).split('').map(c => c.charCodeAt(0)));
-                const [iv, ciphertext] = [buffer.slice(0, 12), buffer.slice(12)];
-                const keyMaterial = await crypto.subtle.importKey('raw', new TextEncoder().encode(password), { name: 'PBKDF2' }, false, ['deriveKey']);
-                const key = await crypto.subtle.deriveKey({ name: 'PBKDF2', salt: iv, iterations: 100000, hash: 'SHA-256' }, keyMaterial, { name: 'AES-GCM', length: 256 }, false, ['decrypt']);
-                const plaintext = await crypto.subtle.decrypt({ name: 'AES-GCM', iv }, key, ciphertext);
-                currentContent = new TextDecoder().decode(plaintext);
+                const buffer = new Uint8Array(atob(currentContent).split('').map(c => c.charCodeAt(0)));
+
+                // NEW v2 format (salt 16B + iv 12B + ciphertext)
+                try {
+                    const [salt, iv, ciphertext] = [buffer.slice(0, 16), buffer.slice(16, 28), buffer.slice(28)];
+                    const keyMaterial = await crypto.subtle.importKey('raw', new TextEncoder().encode(password),
+                        { name: 'PBKDF2' }, false, ['deriveKey']);
+                    const key = await crypto.subtle.deriveKey(
+                        { name: 'PBKDF2', salt, iterations: 100000, hash: 'SHA-256' }, keyMaterial,
+                        { name: 'AES-GCM', length: 256 }, false, ['decrypt']
+                    );
+                    const plaintext = await crypto.subtle.decrypt({ name: 'AES-GCM', iv }, key, ciphertext);
+                    currentContent = new TextDecoder().decode(plaintext);
+                } catch (newFormatError) {
+                    // Fallback to v1 format (iv 12B + ciphertext)
+                    const [iv, ciphertext] = [buffer.slice(0, 12), buffer.slice(12)];
+                    const keyMaterial = await crypto.subtle.importKey('raw', new TextEncoder().encode(password),
+                        { name: 'PBKDF2' }, false, ['deriveKey']);
+                    const key = await crypto.subtle.deriveKey(
+                        { name: 'PBKDF2', salt: iv, iterations: 100000, hash: 'SHA-256' }, keyMaterial,
+                        { name: 'AES-GCM', length: 256 }, false, ['decrypt']
+                    );
+                    const plaintext = await crypto.subtle.decrypt({ name: 'AES-GCM', iv }, key, ciphertext);
+                    currentContent = new TextDecoder().decode(plaintext);
+                }
+
                 window.currentContent = currentContent;
                 isEncrypted = false;
                 const hasMarkdown = isMarkdown(currentContent);
