@@ -98,7 +98,7 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         } catch (error) {
             console.error('Delete account error:', error);
-            showToast(`An error occurred while deleting your account: ${error.message}`, 'error');
+            showToast('Unable to connect to server', 'error');
         }
     });
 
@@ -137,8 +137,8 @@ document.addEventListener('DOMContentLoaded', function() {
                 showToast(`Login failed: ${badLogin.message}`, 'error');
             }
         } catch (error) {
-            console.error('Error:', error);
-            showToast('An unexpected error occurred', 'error');
+            console.error('Login Error:', error);
+            showToast('Unable to connect to server', 'error');
         }
     });
 
@@ -165,7 +165,7 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         } catch (error) {
             console.error('Registration error:', error);
-            showToast('An error occurred during registration. Please try again.', 'error');
+            showToast('Unable to connect to server', 'error');
         }
     });
 
@@ -179,7 +179,7 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         } catch (error) {
             console.error('Logout error:', error);
-            showToast('An error occurred during logout. Please try again.', 'error');
+            showToast('Unable to connect to server', 'error');
         }
     });
 
@@ -225,7 +225,7 @@ document.addEventListener('DOMContentLoaded', function() {
             });
         } catch (error) {
             console.error("Fetch pastes error:", error);
-            showToast("An error occurred. Please try again.", "error");
+            showToast('Unable to connect to server', 'error');
         }
     });
 
@@ -242,7 +242,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 }
             } catch (error) {
                 console.error('Delete paste error:', error);
-                showToast('An error occurred while deleting the paste', 'error');
+                showToast('Unable to connect to server', 'error');
             }
         }
     }
@@ -325,7 +325,8 @@ document.addEventListener('DOMContentLoaded', function() {
                 showToast(`${errorContent.message}`, 'error');
             }
         } catch (error) {
-            console.error('Error:', error);
+            console.error('Create Error:', error);
+            showToast('Unable to connect to server', 'error');
         }
         });
 
