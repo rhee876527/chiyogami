@@ -46,9 +46,11 @@ func CreatePasteHandler(w http.ResponseWriter, r *http.Request) {
 	identifier := fmt.Sprintf("%s|%s", sessionIdentifier, ip)
 
 	// Return rate limit status for request
-	if !CheckAndRecordRateLimit(identifier) {
-		JsonRespond(w, http.StatusTooManyRequests, "Rate limit exceeded. Please try again later.")
-		return
+	if os.Getenv("DISABLE_RATE_LIMIT") != "1" {
+		if !CheckAndRecordRateLimit(identifier) {
+			JsonRespond(w, http.StatusTooManyRequests, "Rate limit exceeded. Please try again later.")
+			return
+		}
 	}
 
 	// Begin client input decode
