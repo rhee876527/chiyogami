@@ -103,24 +103,14 @@
             if (navigator.clipboard && navigator.clipboard.writeText) {
                 navigator.clipboard.writeText(currentUrl).then(function() {
                     showToast('URL copied to clipboard!');
-                }).catch(function() {
-                    showManualCopyMessage();
-                });
+                }).catch(showCopyError);
+            } else {
+                showCopyError();
             }
         });
 
-        function showManualCopyMessage() {
-            const toast = document.createElement('div');
-            toast.classList.add('toast', 'toast-top', 'toast-end');
-            toast.innerHTML = `
-                <div class="alert bg-slate-800 text-white">
-                    <span>Unable to copy URL. If on mobile can use interactive long-tap to copy.</span>
-                </div>
-            `;
-            document.body.appendChild(toast);
-            setTimeout(() => {
-                toast.remove();
-            }, 3000);
+        function showCopyError() {
+            alert('Unable to copy URL. Grab the URL from the address bar.');
         }
 
         function showToast(message) {
