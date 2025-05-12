@@ -423,6 +423,7 @@
                     setTimeout(() => toast.remove(), 3000);
                 } catch (err) {
                     console.error('Error copying to clipboard:', err);
+                    alert('Unable to copy text. Check console for more logs');
                 }
             });
         });
