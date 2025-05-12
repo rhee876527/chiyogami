@@ -1,11 +1,11 @@
 ## Chiyogami
 
-#### Chiyogami is a sleek, modern pastebin with encryption, customizable expiry, private pastes, user accounts and an API for developers. 🚀
+#### Chiyogami is a sleek, modern pastebin with encryption, customizable expiry, private pastes, user accounts and an API for developers.
 
 
 
 
-### Screenshots:
+##### Screenshots:
 
 ![screen-1](https://github.com/user-attachments/assets/5985f94d-4e35-4479-bc57-726e7cfb4577)
 ![screen-2](https://github.com/user-attachments/assets/0918a641-bf50-4d26-971a-39d7e9876a6d)
@@ -29,7 +29,7 @@
 - 👤 User Accounts — Create & manage your pastes with authentication.
 - 🔗 Easy Sharing — Share paste links or scan a QR code for instant access.
 - 🛡 Built-in Rate Limiting — Protects against spam and abuse with smart request throttling.
-- 🚀 Easy self-host with docker.
+- 🐳 Easy self-host with docker.
 
 
 
@@ -47,7 +47,16 @@ Docker. Build it or check [docker-compose](https://github.com/rhee876527/chiyoga
   ghcr.io/rhee876527/chiyogami:latest
 ```
 
+### Environment variables
 
+
+| Env     | Default value | Note   |
+|----------|-----|--------------|
+| SECRET_KEY    | None  |  Session key. Keep secure and unique. Recommended example: openssl rand -base64 32.    |
+| PASTE_DEFAULT_EXPIRATION      | 24h  |    Valid time units are “ns”, “us” (or “µs”), “ms”, “s”, “m”, “h” or `"Never"`  |
+| MAX_CHAR_CONTENT  | 50000  | Maximum characters allowed in content body. Larger limits may offer reduced performance     |
+| DISABLE_RATE_LIMIT  | None  | Use `1` to disable rate limit     |
+| DATABASE_PATH  | None  | For local development use. Conflicts with docker volume paths.      |
 
 
 ## Usage
@@ -71,7 +80,7 @@ curl -X POST \
 Note: Pastes are created by default with `Public` `visibility`. They can be accessed from api or website.
 Change this to `Private` or `Unlisted` to make the paste undiscoverable. Pastes are also set to expire within 24hrs if expiry is not specified.
 
-You can set a default expiry for new pastes with `PASTE_DEFAULT_EXPIRATION`. Valid time units are “ns”, “us” (or “µs”), “ms”, “s”, “m”, “h” or `"Never"`
+You can set a default expiry for new pastes with `PASTE_DEFAULT_EXPIRATION`.
 
 
 
