@@ -237,7 +237,9 @@
             }
 
             const hasMarkdown = hasMarkdownParam !== null ? hasMarkdownParam : isMarkdown(content);
-            if (hasMarkdown && isMarkdownRendered) {
+            const isMarkdownMode = hasMarkdown && isMarkdownRendered;
+
+            if (isMarkdownMode) {
                 contentElement.innerHTML = marked.parse(content);
                 requestAnimationFrame(() => {
                     contentElement.querySelectorAll('pre code').forEach(block => {
@@ -245,12 +247,22 @@
                     });
                     styleMarkdown();
                 });
-                contentElement.style.padding = '20px';
-                contentElement.className = 'max-w-full leading-tight space-y-2';
+                if (contentElement.className !== 'max-w-full leading-tight space-y-2') {
+                    contentElement.className = 'max-w-full leading-tight space-y-2';
+                }
+                if (contentElement.style.padding !== '20px') {
+                    contentElement.style.padding = '20px';
+                }
+
             } else {
                 contentElement.textContent = content;
-                contentElement.style.padding = '20px';
-                contentElement.className = 'max-w-full whitespace-pre-wrap break-words font-mono text-base leading-normal p-4';
+                if (contentElement.className !== 'max-w-full whitespace-pre-wrap break-words font-mono text-base leading-normal p-4') {
+                    contentElement.className = 'max-w-full whitespace-pre-wrap break-words font-mono text-base leading-normal p-4';
+                }
+                if (contentElement.style.padding !== '20px') {
+                    contentElement.style.padding = '20px';
+                }
+
                 if (!hasMarkdown && isHighlighted) {
                     // Clear previous highlighting to allow re-highlight
                     delete contentElement.dataset.highlighted;
@@ -266,9 +278,9 @@
                 } else {
                     // Ensure no leftover highlighting styles when turned off
                     contentElement.removeAttribute('data-highlighted');
-                    contentElement.className = 'max-w-full whitespace-pre-wrap break-words font-mono text-base leading-normal p-4';
                 }
             }
+
             updateToggleButton(hasMarkdown);
         }
 
