@@ -32,7 +32,7 @@ async function checkAuthStatus() {
     if (!localStorage.getItem('username')) return updateAuthUI(null);
 
     const response = await fetchWithAuth('/user/pastes');
-    if (!response || !response.ok) {
+    if (!response?.ok) {
         updateAuthUI(null);
         return;
     }
@@ -339,7 +339,7 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 
 const storedUsername = localStorage.getItem('username');
-    if (storedUsername && storedUsername.trim()) {
+    if (storedUsername?.trim()) {
         updateAuthUI(storedUsername);
     }
 
