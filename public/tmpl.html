@@ -137,7 +137,11 @@
         qrButton.addEventListener('click', function () {
             const currentUrl = window.location.href;
 
-            fetch(`/generate-qr?url=${encodeURIComponent(currentUrl)}`)
+                fetch(`/generate-qr?url=${encodeURIComponent(currentUrl)}`, {
+                    headers: {
+                        'X-Requested-By': 'qr-allowed'
+                    }
+                })
                 .then(response => {
                     if (response.ok) {
                         return response.blob();

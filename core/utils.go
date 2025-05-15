@@ -53,6 +53,12 @@ func GenerateRandomKey() string {
 
 // Generate QR png
 func GenerateQR(w http.ResponseWriter, r *http.Request) {
+	// Only allow requests with custom header
+	if r.Header.Get("X-Requested-By") != "qr-allowed" {
+		JsonRespond(w, http.StatusForbidden, "Forbidden")
+		return
+	}
+
 	url := r.URL.Query().Get("url")
 	if url == "" {
 		JsonRespond(w, http.StatusBadRequest, "Missing 'url' query parameter")
