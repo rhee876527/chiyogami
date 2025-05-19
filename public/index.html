@@ -11,19 +11,6 @@
         <p>JavaScript is disabled. This website may not function properly. Enable JavaScript in your browser to get full functionality.</p>
     </noscript>
 
-    <svg style="display: none;">
-        <symbol id="icon-eye-off" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-            <path stroke-linecap="round" stroke-linejoin="round"
-            d="M3.98 8.223A10.477 10.477 0 0 0 1.934 12C3.226 16.338 7.244 19.5
-                12 19.5c.993 0 1.953-.138 2.863-.395M6.228 6.228A10.451
-                10.451 0 0 1 12 4.5c4.756 0 8.773 3.162 10.065
-                7.498a10.522 10.522 0 0 1-4.293 5.774M6.228 6.228 3
-                3m3.228 3.228 3.65 3.65m7.894 7.894L21
-                21m-3.228-3.228-3.65-3.65m0 0a3 3 0 1
-                0-4.243-4.243m4.242 4.242L9.88 9.88" />
-        </symbol>
-    </svg>
-
     <header class="flex items-center gap-8 bg-base-100 p-2">
         <div class="logo text-2xl font-bold pl-6">Chiyogami</div>
 
@@ -32,23 +19,23 @@
         </div>
 
         <button id="toggle-options" class="z-10 text-sm bg-transparent hover:text-blue-300 ml-auto mr-[25px]" aria-label="Menu">
-            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
-                <path stroke-linecap="round" stroke-linejoin="round" d="M10.5 6h9.75M10.5 6a1.5 1.5 0 1 1-3 0m3 0a1.5 1.5 0 1 0-3 0M3.75 6H7.5m3 12h9.75m-9.75 0a1.5 1.5 0 0 1-3 0m3 0a1.5 1.5 0 0 0-3 0m-3.75 0H7.5m9-6h3.75m-3.75 0a1.5 1.5 0 0 1-3 0m3 0a1.5 1.5 0 0 0-3 0m-9.75 0h9.75" />
-              </svg>
+            <svg class="size-6">
+                <use href="/heroicons.svg#icon-menu"/>
+            </svg>
         </button>
     </header>
 
     <div id="options-container" class="ml-auto mr-[75px] hidden absolute right-0 mt-2 p-4 flex flex-col items-center gap-4 z-20">
         <div id="auth-buttons" class="flex flex-col items-center gap-2">
             <button id="login-button" class="text-sm bg-transparent hover:text-blue-300" aria-label="Login">
-                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
-                    <path stroke-linecap="round" stroke-linejoin="round" d="M9 8.25H7.5a2.25 2.25 0 0 0-2.25 2.25v9a2.25 2.25 0 0 0 2.25 2.25h9a2.25 2.25 0 0 0 2.25-2.25v-9a2.25 2.25 0 0 0-2.25-2.25H15m0-3-3-3m0 0-3 3m3-3V15" />
+               <svg class="size-6">
+                    <use href="/heroicons.svg#icon-login"/>
                 </svg>
                 <span class="font-bold">LOGIN</span>
             </button>
             <button id="register-button" class="text-sm bg-transparent hover:text-blue-300" aria-label="Register">
-                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
-                    <path stroke-linecap="round" stroke-linejoin="round" d="M18 7.5v3m0 0v3m0-3h3m-3 0h-3m-2.25-4.125a3.375 3.375 0 1 1-6.75 0 3.375 3.375 0 0 1 6.75 0ZM3 19.235v-.11a6.375 6.375 0 0 1 12.75 0v.109A12.318 12.318 0 0 1 9.374 21c-2.331 0-4.512-.645-6.374-1.766Z" />
+                <svg class="size-6">
+                    <use href="/heroicons.svg#icon-signup"/>
                 </svg>
                 <span class="font-bold">SIGNUP</span>
             </button>
@@ -57,21 +44,21 @@
         <div id="user-info" class="hidden flex flex-col items-center gap-2 z-10">
             <span id="username-display" class="font-bold text-2xl"></span>
             <button id="my-pastes-button" class="btn btn-info btn-sm" aria-label="MyPastes">
-                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
-                    <path stroke-linecap="round" stroke-linejoin="round" d="M12 7.5h1.5m-1.5 3h1.5m-7.5 3h7.5m-7.5 3h7.5m3-9h3.375c.621 0 1.125.504 1.125 1.125V18a2.25 2.25 0 0 1-2.25 2.25M16.5 7.5V18a2.25 2.25 0 0 0 2.25 2.25M16.5 7.5V4.875c0-.621-.504-1.125-1.125-1.125H4.125C3.504 3.75 3 4.254 3 4.875V18a2.25 2.25 0 0 0 2.25 2.25h13.5M6 7.5h3v3H6v-3Z" />
-                  </svg>
+                <svg class="size-6">
+                    <use href="/heroicons.svg#icon-mypastes"/>
+                </svg>
             </button>
             <div>CREATED</div>
             <button id="logout-button" class="btn btn-neutral btn-sm" aria-label="Logout">
-                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
-                    <path stroke-linecap="round" stroke-linejoin="round" d="M8.25 9V5.25A2.25 2.25 0 0 1 10.5 3h6a2.25 2.25 0 0 1 2.25 2.25v13.5A2.25 2.25 0 0 1 16.5 21h-6a2.25 2.25 0 0 1-2.25-2.25V15m-3 0-3-3m0 0 3-3m-3 3H15" />
-                  </svg>
+                <svg class="size-6">
+                    <use href="/heroicons.svg#icon-logout"/>
+                </svg>
             </button>
             <div>LOGOUT</div>
             <button id="delete-account-button" class="btn btn-error btn-sm" aria-label="DeleteAccount">
-                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
-                    <path stroke-linecap="round" stroke-linejoin="round" d="m14.74 9-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 0 1-2.244 2.077H8.084a2.25 2.25 0 0 1-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 0 0-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 0 1 3.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 0 0-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 0 0-7.5 0" />
-                  </svg>
+                <svg class="size-6">
+                    <use href="/heroicons.svg#icon-delete"/>
+                </svg>
             </button>
             <div>DEL</div>
         </div>
@@ -151,8 +138,8 @@
                 <div class="relative w-full">
                     <input type="password" id="encryption" class="input input-bordered w-full" placeholder="Optional: Enter password">
                         <button type="button" onclick="this.previousElementSibling.type = this.previousElementSibling.type === 'password' ? 'text' : 'password'" class="absolute right-2 top-1/2 -translate-y-1/2 text-lg">
-                            <svg class="size-6">
-                                <use href="#icon-eye-off"></use>
+                          <svg class="size-6">
+                              <use href="/heroicons.svg#icon-eye"/>
                             </svg>
                         </button>
                 </div>
@@ -169,7 +156,7 @@
                     <input type="password" id="login-password" class="input input-bordered w-full" placeholder="Password" required>
                     <button type="button" onclick="this.previousElementSibling.type = this.previousElementSibling.type === 'password' ? 'text' : 'password'" class="absolute right-2 top-1/2 -translate-y-1/2 text-lg">
                         <svg class="size-6">
-                            <use href="#icon-eye-off"></use>
+                            <use href="/heroicons.svg#icon-eye"/>
                         </svg>
                     </button>
                 </div>
@@ -186,9 +173,9 @@
                 <div class="relative w-full">
                     <input type="password" id="register-password" class="input input-bordered w-full" placeholder="Password" required>
                     <button type="button" onclick="this.previousElementSibling.type = this.previousElementSibling.type === 'password' ? 'text' : 'password'" class="absolute right-2 top-1/2 -translate-y-1/2 text-lg">
-                        <svg class="size-6">
-                            <use href="#icon-eye-off"></use>
-                        </svg>
+                          <svg class="size-6">
+                              <use href="/heroicons.svg#icon-eye"/>
+                            </svg>
                     </button>
                 </div>
                 <button type="submit" class="btn btn-primary w-full">Register</button>
@@ -211,9 +198,9 @@
     <footer class="text-gray-600 text-center p-4 mt-8">
         &copy; <span id="present-year"></span> Chiyogami. All rights reserved.
         <a href="/about" class="text-white hover:text-blue-500" aria-label="About">
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="currentColor" class="size-4 inline-block align-middle">
-                <path fill-rule="evenodd" d="M15 8A7 7 0 1 1 1 8a7 7 0 0 1 14 0ZM9 5a1 1 0 1 1-2 0 1 1 0 0 1 2 0ZM6.75 8a.75.75 0 0 0 0 1.5h.75v1.75a.75.75 0 0 0 1.5 0v-2.5A.75.75 0 0 0 8.25 8h-1.5Z" clip-rule="evenodd" />
-            </svg>
+          <svg class="size-4 inline-block align-middle">
+            <use href="/heroicons.svg#icon-info"/>
+          </svg>
         </a>
     </footer>
 
