@@ -6,6 +6,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"html/template"
+	"io"
 	"log"
 	"net/http"
 	"os"
@@ -61,18 +62,33 @@ func CreatePasteHandler(w http.ResponseWriter, r *http.Request) {
 		IsEncrypted bool   `json:"isEncrypted"`
 	}
 
-	// Reject invalid inputs
-	if err := json.NewDecoder(r.Body).Decode(&pasteRequest); err != nil {
-		JsonRespond(w, http.StatusBadRequest, "Smelly! Request body not compatible JSON format")
-		return
-	}
-
+	// Set max content size
 	maxCharContent := 50000
 	if v := os.Getenv("MAX_CHAR_CONTENT"); v != "" {
 		if n, err := strconv.Atoi(v); err == nil && n > 0 {
 			maxCharContent = n
 		}
 	}
+
+	// Catch excessive io request before decode
+	r.Body = http.MaxBytesReader(w, r.Body, int64(maxCharContent*2)+1024)
+
+	// Accepted inputs (FILE/JSON)
+	ct := r.Header.Get("Content-Type")
+	if ct == "" || strings.HasPrefix(ct, "text/plain") {
+		body, err := io.ReadAll(r.Body)
+		if err != nil || len(body) == 0 {
+			JsonRespond(w, http.StatusBadRequest, "Empty or unreadable request body")
+			return
+		}
+		pasteRequest.Content = string(body)
+	} else {
+		if err := json.NewDecoder(r.Body).Decode(&pasteRequest); err != nil {
+			JsonRespond(w, http.StatusBadRequest, "Smelly! Request body not compatible JSON format")
+			return
+		}
+	}
+
 	if content := strings.TrimSpace(pasteRequest.Content); content == "" || len(content) > maxCharContent {
 		JsonRespond(w, http.StatusBadRequest, "Content invalid or size exceeds "+strconv.Itoa(maxCharContent)+" max chars")
 		return

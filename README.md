@@ -63,12 +63,18 @@ Docker. Build it or check [docker-compose](https://github.com/rhee876527/chiyoga
 Web UI is simple & straightforward. Or use the `API`.
 
 #### Create paste
+***FILE***
+```
+curl http://localhost:8000/paste -T sample.txt
+```
+or **JSON**
 ```
 curl -X POST \
   http://localhost:8000/paste \
   -H 'Content-Type: application/json' \
   -d '{"content":"Test paste"}'
 ```
+
 
 
 

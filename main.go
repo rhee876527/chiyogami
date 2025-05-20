@@ -13,7 +13,7 @@ func main() {
 	db.Init()
 
 	r := mux.NewRouter()
-	r.HandleFunc("/paste", core.CreatePasteHandler).Methods("POST")
+	r.HandleFunc("/paste", core.CreatePasteHandler).Methods("POST", "PUT")
 	r.HandleFunc("/paste/{title}", core.GetPasteHandler).Methods("GET")
 	r.HandleFunc("/paste/{title}", core.DeletePasteHandler).Methods("DELETE")
 	r.HandleFunc("/pastes", core.ListPastesHandler).Methods("GET")
