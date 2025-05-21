@@ -272,6 +272,14 @@
                     // Clear previous highlighting to allow re-highlight
                     delete contentElement.dataset.highlighted;
                     hljs.highlightElement(contentElement);
+                    // Plaintext content sometimes gets mistaken for code
+                    const isCodeLike = /(function|var|let|const|\{|\}|\[|\]|\/\/|\#)/g.test(content);
+                    if (!isCodeLike) {
+                        const fadedHighlightClasses = ['hljs-comment', 'hljs-meta', 'hljs-string'];
+                        contentElement.querySelectorAll(fadedHighlightClasses.map(cls => `.${cls}`).join(',')).forEach(el => {
+                            el.className = '';
+                        });
+                    }
                 } else {
                     // Ensure no leftover highlighting styles when turned off
                     contentElement.removeAttribute('data-highlighted');
