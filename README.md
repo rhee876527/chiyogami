@@ -117,21 +117,16 @@ curl -X GET http://localhost:8000/paste/bZTR -H "Accept: application/json"
 ``
 
 
+#### Create user account
 
-#### Create paste from file
 ```
-f=insert*file*name; \
-    jq -Rs '{content: .}' < "$f" | \
-    curl -X POST http://localhost:8000/paste \
-     -H 'Content-Type: application/json' \
-     -d @-
+curl -X POST \
+  http://localhost:8000/register \
+  -H 'Content-Type: application/json' \
+  -d '{"username":"test", "Password":"test"}'
 ```
 
-
-
-**response:** `{"title":"awDI"}`
-
-
+**response:** `{"message":"User registered successfully"}`
 
 
 #### Delete owner paste using session (from cookies)
