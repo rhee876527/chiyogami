@@ -71,17 +71,23 @@ func CreatePasteHandler(w http.ResponseWriter, r *http.Request) {
 	}
 
 	// Catch excessive io request before decode
-	r.Body = http.MaxBytesReader(w, r.Body, int64(maxCharContent*2)+1024)
+	r.Body = http.MaxBytesReader(w, r.Body, int64(maxCharContent*5))
 
 	// Accepted inputs (FILE/JSON)
 	ct := r.Header.Get("Content-Type")
 	if ct == "" || strings.HasPrefix(ct, "text/plain") {
 		body, err := io.ReadAll(r.Body)
-		if err != nil || len(body) == 0 {
-			JsonRespond(w, http.StatusBadRequest, "Empty or unreadable request body")
-			return
+		if err != nil {
+			if strings.Contains(err.Error(), "request body too large") {
+				JsonRespond(w, http.StatusBadRequest, "Content invalid or size exceeds "+strconv.Itoa(maxCharContent)+" max chars")
+				return
+			} else {
+				JsonRespond(w, http.StatusBadRequest, "Unreadable request body")
+				return
+			}
 		}
 		pasteRequest.Content = string(body)
+
 	} else {
 		if err := json.NewDecoder(r.Body).Decode(&pasteRequest); err != nil {
 			JsonRespond(w, http.StatusBadRequest, "Smelly! Request body not compatible JSON format")
