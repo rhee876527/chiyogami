@@ -317,9 +317,6 @@ document.addEventListener('DOMContentLoaded', function() {
             if (response.ok) {
                 const data = await response.json();
                 window.location.href = `/paste/${data.title}`;
-            } else if (response.status === 429) {
-                const errorRatelimit = await response.json();
-                showToast(`${errorRatelimit.message}`, 'error');
             } else {
                 const errorContent = await response.json();
                 showToast(`${errorContent.message}`, 'error');
