@@ -2,6 +2,8 @@ package core
 
 import (
 	"net/http"
+	"os"
+	"strconv"
 	"strings"
 	"sync"
 	"time"
@@ -11,9 +13,22 @@ import (
 
 var (
 	pasteTimestamps    sync.Map
-	rateLimitPerMinute = 5
+	rateLimitPerMinute = getRateLimit()
 	windowSize         = time.Minute.Nanoseconds()
 )
+
+func getRateLimit() int {
+	const defaultRate = 5
+	r := os.Getenv("CREATE_PER_MIN")
+	if r == "" {
+		return defaultRate
+	}
+	rate, err := strconv.Atoi(r)
+	if err != nil || rate < 1 {
+		return defaultRate
+	}
+	return rate
+}
 
 func CheckAndRecordRateLimit(identifier string) bool {
 	now := time.Now().UnixNano()
