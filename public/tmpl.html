@@ -228,6 +228,103 @@
             return score >= 3;
         };
 
+
+    const whichProgrammingLanguage = (content) => {
+        // Language patterns with scores
+        const langPatterns = [
+            // Shebangs (score +2)
+            { lang: 'bash', pattern: /^#!.*\/(bash|sh|zsh)\b/m, score: 2 },
+            { lang: 'python', pattern: /^#!.*\bpython[23]?\b/m, score: 2 },
+            { lang: 'ruby', pattern: /^#!.*\bruby\b/m, score: 2 },
+            { lang: 'perl', pattern: /^#!.*\bperl\b/m, score: 2 },
+            { lang: 'javascript', pattern: /^#!.*\bnode\b/m, score: 2 },
+            { lang: 'php', pattern: /^#!.*\bphp\b/m, score: 2 },
+            { lang: 'awk', pattern: /^#!.*\bawk\b/m, score: 2 },
+
+            // Language-specific unique markers (score +1)
+            { lang: 'python', pattern: /^\s*def \w+\(.*\):\s*$|\n\s*class \w+\(?.*\)?:\s*$/m, score: 1 },
+            { lang: 'ruby', pattern: /^\s*def \w+\s*(\n|\(.*\)\s*\n)/m, score: 1 },
+            { lang: 'java', pattern: /^\s*package [\w.]+;|public class \w+\s*\{/m, score: 1 },
+            { lang: 'kotlin', pattern: /^\s*fun main\(.*\)\s*\{|class \w+\s*[:(]/m, score: 1 },
+            { lang: 'go', pattern: /^\s*package \w+$|func \w+\(.*\)\s*\{/m, score: 1 },
+            { lang: 'csharp', pattern: /^\s*using [\w.]+;|namespace \w+\s*\{/m, score: 1 },
+            { lang: 'c', pattern: /^\s*#include\s*<stdio\.h>|#include\s*<stdlib\.h>|printf\s*\(|scanf\s*\(/m, score: 1 },
+            { lang: 'cpp', pattern: /^\s*#include <\w+>|using namespace \w+;/m, score: 1 },
+            { lang: 'rust', pattern: /^\s*fn main\(\)|let \w+: \w+ =/m, score: 1 },
+            { lang: 'haskell', pattern: /^\s*module \w+ where|:: \w+ -> \w+/m, score: 1 },
+            { lang: 'lua', pattern: /^\s*function \w+\(.*\)$|local \w+ =/m, score: 1 },
+            { lang: 'r', pattern: /^\s*[\w.]+ <- function\(.*\)|library\([\w]+\)/m, score: 1 },
+            { lang: 'php', pattern: /<\?php|\$this->\w+/m, score: 1 },
+            { lang: 'perl', pattern: /^\s*my \$\w+ =|use \w+;/m, score: 1 },
+            { lang: 'bash', pattern: /^\s*if \[ \[ .* \] \]|for \w+ in .*; do/m, score: 1 },
+            { lang: 'html', pattern: /<\s*html|<!DOCTYPE html|<\s*head|<\s*body/m, score: 1 },
+            { lang: 'javascript', pattern: /^\s*(const\s+\w+\s*=|let\s+\w+\s*=|var\s+\w+\s*=|function\s+\w+\s*\(|\([\w\s,]*\)\s*=>)/m, score: 1 },
+            { lang: 'powershell', pattern: /^\s*function \w+-|Write-Host /m, score: 1 },
+            { lang: 'elixir', pattern: /^\s*defmodule \w+ do|defp \w+\(.*\) do/m, score: 1 },
+            { lang: 'clojure', pattern: /\(defn \w+|\(ns \w+/m, score: 1 },
+            { lang: 'erlang', pattern: /^-module\([\w]+\)\.|->/m, score: 1 },
+            { lang: 'ocaml', pattern: /^\s*let rec \w+ |match \w+ with/m, score: 1 },
+            { lang: 'swift', pattern: /^\s*import Swift|func \w+\(.*\) -> \w+ \{/m, score: 1 },
+            { lang: 'dart', pattern: /^\s*void main\(\)|=> \w+\(.*\);/m, score: 1 },
+            { lang: 'scala', pattern: /^\s*object \w+ extends App|val \w+ =/m, score: 1 },
+            { lang: 'fsharp', pattern: /^\s*let \w+ \w+ =|type \w+ =/m, score: 1 },
+            { lang: 'zig', pattern: /^\s*pub fn \w+\(|@import\(/m, score: 1 },
+            { lang: 'nim', pattern: /^\s*proc \w+\(.*\): \w+ =/m, score: 1 },
+            { lang: 'sql', pattern: /^\s*SELECT .* FROM |INSERT INTO \w+ \(/m, score: 1 },
+            { lang: 'xml', pattern: /^<\?xml\s+version="1\.0"/m, score: 1 }
+            ];
+
+            // Common code patterns (score +0.5)
+            const genericCodePatterns = [
+                '(^|\\n)\\s*(function|class|def|fn|interface|struct|module|package|namespace|',
+                'public|private|protected|static|async|await|import|from|include|using|var|let|const|',
+                'new|try|catch|if|else|for|while|switch|case|return|throws|throw|override|extends|',
+                'implements)\\b',
+                '|[{()}[\\];]|=>|::|->',
+                '|#include\\s+<[^>]+>|^\\s*#\\w+'
+            ].join('');
+
+            const genericCodeRegex = new RegExp(genericCodePatterns, 'm');
+
+            // Track scores for each language
+            const scores = {};
+            let isCode = false;
+            const threshold = 3;
+
+            // Check language-specific patterns
+            for (const { lang, pattern, score } of langPatterns) {
+                if (pattern.test(content)) {
+                    scores[lang] = (scores[lang] || 0) + score;
+                    isCode = true;
+                }
+            }
+
+            // Find the highest scoring language
+            const topLanguage = Object.entries(scores).sort((a, b) => b[1] - a[1])[0];
+
+            // Return clear winner once threshold is met
+            if (topLanguage && topLanguage[1] >= threshold) {
+                console.log(`Detected language: ${topLanguage[0]}`);
+                return { isCode: true, language: topLanguage[0] };
+            }
+
+            // Even with no language detected this cast net avoids plaintext detection
+            if (genericCodeRegex.test(content)) {
+                isCode = true;
+            }
+
+            if (isCode) {
+                if (topLanguage) {
+                    console.log(`Some code detected, possible language: ${topLanguage[0]}`);
+                } else {
+                    console.log('Some code detected but language could not be determined');
+                }
+                return { isCode: true, language: topLanguage ? topLanguage[0] : null };
+            }
+
+            return { isCode: false, language: null };
+        };
+
         const showElement = (element, shouldShow) => {
             if (element) element.style.display = shouldShow ? 'block' : 'none';
         };
@@ -268,18 +365,17 @@
                     contentElement.style.padding = '20px';
                 }
 
-                if (!hasMarkdown && isHighlighted) {
+                const { isCode, language } = !hasMarkdown ? whichProgrammingLanguage(content) : { isCode: false, language: null };
+                if (!hasMarkdown && isCode && isHighlighted) {
                     // Clear previous highlighting to allow re-highlight
                     delete contentElement.dataset.highlighted;
-                    hljs.highlightElement(contentElement);
-                    // Plaintext content sometimes gets mistaken for code
-                    const isCodeLike = /(function|var|let|const|\{|\}|\[|\]|\/\/|\#)/g.test(content);
-                    if (!isCodeLike) {
-                        const fadedHighlightClasses = ['hljs-comment', 'hljs-meta', 'hljs-string'];
-                        contentElement.querySelectorAll(fadedHighlightClasses.map(cls => `.${cls}`).join(',')).forEach(el => {
-                            el.className = '';
-                        });
+                    // Assign detected language for accurate syntax highlighting
+                    if (language && hljs.getLanguage(language)) {
+                        const className = `language-${language}`;
+                        contentElement.classList.add(...className.split(' '));
                     }
+                    // Fallback to auto highlighting if no specific language detected
+                    hljs.highlightElement(contentElement);
                 } else {
                     // Ensure no leftover highlighting styles when turned off
                     contentElement.removeAttribute('data-highlighted');
