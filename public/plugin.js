@@ -204,7 +204,7 @@ document.addEventListener('DOMContentLoaded', function() {
             } else {
                 pastes.reverse().forEach((paste) => {
                     const li = document.createElement("li");
-                    li.className = "flex justify-between items-center";
+                    li.className = "flex justify-between items-center mb-1.5";
                     li.innerHTML = `
                         <span>${paste.Title} - ${new Date(paste.CreatedAt).toLocaleString(undefined, { hour12: false })}</span>
                         <div>
