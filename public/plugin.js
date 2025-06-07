@@ -230,7 +230,7 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 
     async function deletePaste(title) {
-        if (confirm('Are you sure you want to delete this paste?')) {
+        if (confirm(`Are you sure you want to delete: ${title}?`)) {
             try {
                 const response = await fetchWithAuth(`/paste/${title}`, { method: 'DELETE' });
                 if (response.ok) {
