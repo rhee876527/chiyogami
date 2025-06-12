@@ -320,6 +320,7 @@ func ListPastesHandler(w http.ResponseWriter, r *http.Request) {
 
 // Pastes created by user
 func ListUserPastesHandler(w http.ResponseWriter, r *http.Request) {
+	DeleteExpiredPastes()
 	session, _ := store.Get(r, "session")
 	userID, ok := session.Values["user_id"].(uint)
 	if !ok {
