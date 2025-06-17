@@ -161,7 +161,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 hideModal(registerModal);
             } else {
                 const errorData = await response.json();
-                showToast(`Registration failed: ${errorData.message}`, 'error');
+                showToast(errorData.message.includes('UNIQUE constraint failed') ? 'Username already taken' : `${errorData.message}`, 'error');
             }
         } catch (error) {
             console.error('Registration error:', error);
