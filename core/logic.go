@@ -31,6 +31,18 @@ func JsonRespond(w http.ResponseWriter, statusCode int, message string) {
 	}
 }
 
+// Rate limit handler
+func RateLimit(w http.ResponseWriter, identifier string) bool {
+	if os.Getenv("DISABLE_RATE_LIMIT") == "1" {
+		return true
+	}
+	if !CheckAndRecordRateLimit(identifier) {
+		JsonRespond(w, http.StatusTooManyRequests, "Rate limit exceeded. Please try again later.")
+		return false
+	}
+	return true
+}
+
 // Create paste
 func CreatePasteHandler(w http.ResponseWriter, r *http.Request) {
 	session, _ := store.Get(r, "session")
@@ -47,11 +59,8 @@ func CreatePasteHandler(w http.ResponseWriter, r *http.Request) {
 	identifier := fmt.Sprintf("%s|%s", sessionIdentifier, ip)
 
 	// Return rate limit status for request
-	if os.Getenv("DISABLE_RATE_LIMIT") != "1" {
-		if !CheckAndRecordRateLimit(identifier) {
-			JsonRespond(w, http.StatusTooManyRequests, "Rate limit exceeded. Please try again later.")
-			return
-		}
+	if !RateLimit(w, identifier) {
+		return
 	}
 
 	// Begin client input decode
@@ -221,8 +230,7 @@ func RegisterHandler(w http.ResponseWriter, r *http.Request) {
 	// Rate limit requests
 	ip := GetIPAddress(r)
 	identifier := "register|" + ip
-	if !CheckAndRecordRateLimit(identifier) {
-		JsonRespond(w, http.StatusTooManyRequests, "Rate limit exceeded. Please try again later.")
+	if !RateLimit(w, identifier) {
 		return
 	}
 
@@ -259,8 +267,7 @@ func LoginHandler(w http.ResponseWriter, r *http.Request) {
 	// Rate limit requests
 	ip := GetIPAddress(r)
 	identifier := "login|" + ip
-	if !CheckAndRecordRateLimit(identifier) {
-		JsonRespond(w, http.StatusTooManyRequests, "Rate limit exceeded. Please try again later.")
+	if !RateLimit(w, identifier) {
 		return
 	}
 
@@ -357,8 +364,7 @@ func DeleteAccountHandler(w http.ResponseWriter, r *http.Request) {
 	// Rate limit requests
 	ip := GetIPAddress(r)
 	identifier := "delete-account|" + ip
-	if !CheckAndRecordRateLimit(identifier) {
-		JsonRespond(w, http.StatusTooManyRequests, "Rate limit exceeded. Please try again later.")
+	if !RateLimit(w, identifier) {
 		return
 	}
 
@@ -408,8 +414,7 @@ func DeletePasteHandler(w http.ResponseWriter, r *http.Request) {
 	// Rate limit requests
 	ip := GetIPAddress(r)
 	identifier := "delete-pastes|" + ip
-	if !CheckAndRecordRateLimit(identifier) {
-		JsonRespond(w, http.StatusTooManyRequests, "Rate limit exceeded. Please try again later.")
+	if !RateLimit(w, identifier) {
 		return
 	}
 
