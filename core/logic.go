@@ -218,6 +218,14 @@ func GetPasteHandler(w http.ResponseWriter, r *http.Request) {
 
 // Register user
 func RegisterHandler(w http.ResponseWriter, r *http.Request) {
+	// Rate limit requests
+	ip := GetIPAddress(r)
+	identifier := "register|" + ip
+	if !CheckAndRecordRateLimit(identifier) {
+		JsonRespond(w, http.StatusTooManyRequests, "Rate limit exceeded. Please try again later.")
+		return
+	}
+
 	var user models.User
 
 	if err := json.NewDecoder(r.Body).Decode(&user); err != nil {
@@ -248,6 +256,14 @@ func RegisterHandler(w http.ResponseWriter, r *http.Request) {
 
 // Login user
 func LoginHandler(w http.ResponseWriter, r *http.Request) {
+	// Rate limit requests
+	ip := GetIPAddress(r)
+	identifier := "login|" + ip
+	if !CheckAndRecordRateLimit(identifier) {
+		JsonRespond(w, http.StatusTooManyRequests, "Rate limit exceeded. Please try again later.")
+		return
+	}
+
 	var loginData struct {
 		Username string `json:"username"`
 		Password string `json:"password"`
@@ -338,6 +354,14 @@ func ListUserPastesHandler(w http.ResponseWriter, r *http.Request) {
 
 // Delete user account
 func DeleteAccountHandler(w http.ResponseWriter, r *http.Request) {
+	// Rate limit requests
+	ip := GetIPAddress(r)
+	identifier := "delete-account|" + ip
+	if !CheckAndRecordRateLimit(identifier) {
+		JsonRespond(w, http.StatusTooManyRequests, "Rate limit exceeded. Please try again later.")
+		return
+	}
+
 	session, err := store.Get(r, "session")
 	if err != nil {
 		JsonRespond(w, http.StatusInternalServerError, "Failed to get session")
@@ -381,6 +405,14 @@ func DeleteExpiredPastes() {
 
 // Delete pastes using session
 func DeletePasteHandler(w http.ResponseWriter, r *http.Request) {
+	// Rate limit requests
+	ip := GetIPAddress(r)
+	identifier := "delete-pastes|" + ip
+	if !CheckAndRecordRateLimit(identifier) {
+		JsonRespond(w, http.StatusTooManyRequests, "Rate limit exceeded. Please try again later.")
+		return
+	}
+
 	session, _ := store.Get(r, "session")
 	userID, ok := session.Values["user_id"].(uint)
 	if !ok || userID == 0 {
