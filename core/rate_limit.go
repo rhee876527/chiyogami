@@ -18,7 +18,7 @@ var (
 )
 
 func getRateLimit() int {
-	const defaultRate = 5
+	const defaultRate = 10 // Default rate limit of 10 requests per minute
 	r := os.Getenv("CREATE_PER_MIN")
 	if r == "" {
 		return defaultRate

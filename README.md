@@ -56,7 +56,7 @@ Docker. Build it or check [docker-compose](https://github.com/rhee876527/chiyoga
 | PASTE_DEFAULT_EXPIRATION      | 24h  |    Valid time units are “ns”, “us” (or “µs”), “ms”, “s”, “m”, “h” or `"Never"`  |
 | MAX_CHAR_CONTENT  | 50000  | Maximum characters allowed in content body. Larger limits may offer reduced performance     |
 | DISABLE_RATE_LIMIT  | None  | Use `1` to disable rate limit     |
-| CREATE_PER_MIN  | 5  | No of paste creation, register, login, delete account & delete paste requests allowed per minute     |
+| CREATE_PER_MIN  | 10  | No of paste creation, register, login, delete account & delete paste requests allowed per minute     |
 | DATABASE_PATH  | None  | For local development use. Conflicts with docker volume paths.      |
 
 
