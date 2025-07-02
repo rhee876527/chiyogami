@@ -28,8 +28,8 @@
 !public/highlightjs/v11.11.1
 !public/highlightjs/v11.11.1/*
 !public/marked
-!public/marked/v15.0.7
-!public/marked/v15.0.7/*
+!public/marked/v16.0.0
+!public/marked/v16.0.0/*
 
 # Node modules
 !frameworks
