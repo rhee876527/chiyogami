@@ -21,7 +21,7 @@ func main() {
 	r.HandleFunc("/register", core.RegisterHandler).Methods("POST")
 	r.HandleFunc("/login", core.LoginHandler).Methods("POST")
 	r.HandleFunc("/logout", core.LogoutHandler).Methods("POST")
-	r.HandleFunc("/delete-account", core.DeleteAccountHandler).Methods("POST")
+	r.HandleFunc("/delete-account", core.DeleteAccountHandler).Methods("DELETE")
 	r.HandleFunc("/generate-qr", core.GenerateQR).Methods("GET")
 	r.HandleFunc("/list", func(w http.ResponseWriter, r *http.Request) {
 		http.ServeFile(w, r, "./public/list.html")

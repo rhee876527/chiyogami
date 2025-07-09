@@ -387,7 +387,17 @@ func DeleteAccountHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	if err := db.DB.Delete(&models.User{}, userID).Error; err != nil {
+	var user models.User
+	if err := db.DB.First(&user, userID).Error; err != nil {
+		if strings.Contains(err.Error(), "record not found") {
+			JsonRespond(w, http.StatusNotFound, "User not found")
+			return
+		}
+		JsonRespond(w, http.StatusInternalServerError, "Failed to fetch user")
+		return
+	}
+
+	if err := db.DB.Delete(&user).Error; err != nil {
 		log.Printf("Error deleting user: %v", err)
 		JsonRespond(w, http.StatusInternalServerError, "Failed to delete account")
 		return
@@ -400,8 +410,9 @@ func DeleteAccountHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	log.Printf("Successfully deleted account for user ID: %d", userID)
-	w.WriteHeader(http.StatusOK)
+	msg := fmt.Sprintf("Successfully deleted account for user ID: %d", userID)
+	log.Println(msg)
+	JsonRespond(w, http.StatusOK, msg)
 }
 
 // Delete invalid pastes

@@ -85,7 +85,7 @@ document.addEventListener('DOMContentLoaded', function() {
     confirmDeleteAccount.addEventListener('click', async () => {
         try {
             const response = await fetch('/delete-account', {
-                method: 'POST',
+                method: 'DELETE',
                 credentials: 'same-origin'
             });
             if (response.ok) {
