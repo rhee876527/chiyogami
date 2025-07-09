@@ -134,7 +134,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 showToast('Login successful', 'info');
             } else {
                 const badLogin = await response.json();
-                showToast(`Login failed: ${badLogin.message}`, 'error');
+                showToast(`${badLogin.message}`, 'error');
             }
         } catch (error) {
             console.error('Login Error:', error);
