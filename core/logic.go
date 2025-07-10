@@ -380,13 +380,7 @@ func DeleteAccountHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	// Delete pastes when user deletes account
-	if err := db.DB.Where("user_id = ?", userID).Delete(&models.Paste{}).Error; err != nil {
-		log.Printf("Error deleting user's pastes: %v", err)
-		JsonRespond(w, http.StatusInternalServerError, "Failed to delete user pastes")
-		return
-	}
-
+	// Check user exists
 	var user models.User
 	if err := db.DB.First(&user, userID).Error; err != nil {
 		if strings.Contains(err.Error(), "record not found") {
@@ -403,6 +397,14 @@ func DeleteAccountHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	// Delete pastes when user deletes account
+	if err := db.DB.Where("user_id = ?", userID).Delete(&models.Paste{}).Error; err != nil {
+		log.Printf("Error deleting user's pastes: %v", err)
+		JsonRespond(w, http.StatusInternalServerError, "Failed to delete user pastes")
+		return
+	}
+
+	// Clear session
 	session.Values["user_id"] = nil
 	if err := session.Save(r, w); err != nil {
 		log.Printf("Error clearing session: %v", err)
