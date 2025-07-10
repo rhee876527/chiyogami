@@ -171,7 +171,7 @@ func CreatePasteHandler(w http.ResponseWriter, r *http.Request) {
 
 	// Return created title
 	if err := json.NewEncoder(w).Encode(map[string]string{"title": paste.Title}); err != nil {
-		http.Error(w, "Failed to return title", http.StatusInternalServerError)
+		JsonRespond(w, http.StatusInternalServerError, "Failed to return title")
 	}
 }
 
@@ -195,7 +195,7 @@ func GetPasteHandler(w http.ResponseWriter, r *http.Request) {
 	// Make responses api
 	if r.Header.Get("Accept") == "application/json" {
 		if err := json.NewEncoder(w).Encode(paste); err != nil {
-			http.Error(w, err.Error(), http.StatusInternalServerError)
+			JsonRespond(w, http.StatusInternalServerError, err.Error())
 			return
 		}
 		return
@@ -277,7 +277,7 @@ func LoginHandler(w http.ResponseWriter, r *http.Request) {
 	}
 
 	if err := json.NewDecoder(r.Body).Decode(&loginData); err != nil {
-		http.Error(w, err.Error(), http.StatusBadRequest)
+		JsonRespond(w, http.StatusBadRequest, err.Error())
 		return
 	}
 
@@ -295,7 +295,7 @@ func LoginHandler(w http.ResponseWriter, r *http.Request) {
 	session, _ := store.Get(r, "session")
 	session.Values["user_id"] = user.ID
 	if err := session.Save(r, w); err != nil {
-		http.Error(w, err.Error(), http.StatusInternalServerError)
+		JsonRespond(w, http.StatusBadRequest, err.Error())
 		return
 	}
 	w.WriteHeader(http.StatusOK)
@@ -306,7 +306,7 @@ func LogoutHandler(w http.ResponseWriter, r *http.Request) {
 	session, _ := store.Get(r, "session")
 	session.Values["user_id"] = nil
 	if err := session.Save(r, w); err != nil {
-		http.Error(w, err.Error(), http.StatusInternalServerError)
+		JsonRespond(w, http.StatusInternalServerError, err.Error())
 		return
 	}
 	w.WriteHeader(http.StatusOK)
@@ -354,7 +354,7 @@ func ListUserPastesHandler(w http.ResponseWriter, r *http.Request) {
 	db.DB.Where("user_id = ? AND is_user_paste = ?", userID, true).Find(&userPastes)
 
 	if err := json.NewEncoder(w).Encode(userPastes); err != nil {
-		http.Error(w, err.Error(), http.StatusBadRequest)
+		JsonRespond(w, http.StatusBadRequest, err.Error())
 		return
 	}
 }
@@ -457,10 +457,5 @@ func DeletePasteHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	w.WriteHeader(http.StatusOK)
-
-	if err := json.NewEncoder(w).Encode(map[string]string{"message": "Paste deleted successfully"}); err != nil {
-		http.Error(w, err.Error(), http.StatusInternalServerError)
-		return
-	}
+	JsonRespond(w, http.StatusOK, "Paste deleted successfully")
 }
