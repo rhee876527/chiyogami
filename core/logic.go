@@ -84,7 +84,7 @@ func CreatePasteHandler(w http.ResponseWriter, r *http.Request) {
 
 	// Accepted inputs (FILE/JSON)
 	ct := r.Header.Get("Content-Type")
-	if ct == "" || strings.HasPrefix(ct, "text/plain") {
+	if ct == "" || strings.HasPrefix(ct, "text/") {
 		body, err := io.ReadAll(r.Body)
 		if err != nil {
 			if strings.Contains(err.Error(), "request body too large") {
