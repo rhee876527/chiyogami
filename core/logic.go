@@ -99,7 +99,11 @@ func CreatePasteHandler(w http.ResponseWriter, r *http.Request) {
 
 	} else {
 		if err := json.NewDecoder(r.Body).Decode(&pasteRequest); err != nil {
-			JsonRespond(w, http.StatusBadRequest, "Smelly! Request body not compatible JSON format")
+			if strings.Contains(err.Error(), "request body too large") {
+				JsonRespond(w, http.StatusBadRequest, "Content invalid or size exceeds "+strconv.Itoa(maxCharContent)+" max chars")
+			} else {
+				JsonRespond(w, http.StatusBadRequest, "Smelly! Request body not compatible JSON format")
+			}
 			return
 		}
 	}
