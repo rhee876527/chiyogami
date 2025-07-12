@@ -207,11 +207,17 @@ document.addEventListener('DOMContentLoaded', function() {
                     li.className = "flex justify-between items-center mb-1.5";
                     li.innerHTML = `
                         <span>${paste.Title} - ${new Date(paste.CreatedAt).toLocaleString(undefined, { hour12: false })}</span>
-                        <div>
-                            <a href="/paste/${paste.Title}" class="btn btn-xs btn-primary">View</a>
+                        <div class="relative">
+                            <div class="inline-block group">
+                                <a href="/paste/${paste.Title}" class="btn btn-xs btn-primary">View</a>
+                                <div class="absolute z-10 hidden group-hover:block bg-gray-700 text-white text-md p-2 rounded shadow-lg max-w-[min(36rem,90vw)] text-wrap break-words top-full left-3 -translate-x-1/2 mt-1">
+                                    ${paste.Content.slice(0, 200).replace(/</g, "&lt;").replace(/>/g, "&gt;")}${paste.Content.length > 200 ? "..." : ""}
+                                </div>
+                            </div>
                             <button class="btn btn-xs btn-error delete-paste" data-id="${paste.Title}">Delete</button>
                         </div>
                     `;
+                    li.classList.add('dark:hover:bg-slate-600', 'transition-colors', 'duration-200', 'rounded');
                     pastesList.appendChild(li);
                 });
             }
