@@ -21,7 +21,7 @@
 - 🖍 Syntax Highlighting — Automatic formatting with HighlightJS.
 - 📝 Markdown Rendering — Automatic formatting with Marked.
 - ⏳ Configurable Expiry — Set custom expiration times with API.
-- 🔒 Secure & Private — Client-side encryption with WebCryptoAPI for encrypted pastes. No password saved in server.
+- 🔒 Secure & Private — Client-side encryption with WebCrypto API for encrypted pastes. No password saved in server.
 - 📡 Powerful API — Create and fetch pastes without leaving the terminal.
 - 🔍 Public Pastes — List & search all public pastes.
 - 🔑 Private Pastes — Only accessible via a unique, unguessable link for enhanced privacy (use encryption on web UI for ultimate privacy).
@@ -114,7 +114,7 @@ curl -X GET http://localhost:8000/paste/bZTR -H "Accept: application/json"
 
 **response:**
 ``
-{"ID":22,"CreatedAt":"2025-02-04T19:48:06.747679947Z","UpdatedAt":"2025-02-04T19:48:06.747679947Z","DeletedAt":null,"Title":"bZTR","Content":"test private","Visibility":"Private","expiration":"2025-02-05T19:48:06.747635027Z","IsEncrypted":false,"UserID":0,"IsUserPaste":false}
+{"ID":22,"CreatedAt":"2025-02-04T19:48:06.747679947Z","UpdatedAt":"2025-02-04T19:48:06.747679947Z","DeletedAt":null,"Title":"bZTR","Content":"test private","Visibility":"Private","Expiration":"2025-02-05T19:48:06.747635027Z","IsEncrypted":false,"UserID":0,"IsUserPaste":false}
 ``
 
 
@@ -124,7 +124,7 @@ curl -X GET http://localhost:8000/paste/bZTR -H "Accept: application/json"
 curl -X POST \
   http://localhost:8000/register \
   -H 'Content-Type: application/json' \
-  -d '{"username":"test", "Password":"test"}'
+  -d '{"username":"test", "password":"test"}'
 ```
 
 **response:** `{"message":"User registered successfully"}`
