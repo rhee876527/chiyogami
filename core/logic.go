@@ -245,6 +245,12 @@ func RegisterHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	// Validate user inputs
+	if user.Username == "" || user.Password == "" {
+		JsonRespond(w, http.StatusBadRequest, "Username and password are required")
+		return
+	}
+
 	if len(user.Username) > 8 {
 		JsonRespond(w, http.StatusBadRequest, "Username must be at most 8 characters")
 		return
