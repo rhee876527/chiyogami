@@ -4,7 +4,7 @@ function showToast(message, type = 'info') {
         existingToast.remove();
     }
     const toast = document.createElement('div');
-    toast.className = `z-50 toast fixed bottom-4 right-4 p-4 rounded-md text-white ${type === 'error' ? 'bg-red-500' : 'bg-green-500'}`;
+    toast.className = `z-[999] toast fixed bottom-4 right-4 p-4 rounded-md text-white ${type === 'error' ? 'bg-red-500' : 'bg-green-500'}`;
     toast.textContent = message;
     document.body.appendChild(toast);
     setTimeout(() => toast.remove(), 6000);
