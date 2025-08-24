@@ -108,3 +108,24 @@ func TimeUntilExpiration(expiration *time.Time) string {
 	}
 	return ""
 }
+
+// Application health check
+func HealthCheck(w http.ResponseWriter, r *http.Request) {
+	statusCode := http.StatusOK
+	status, dbStatus := "ok", "ok"
+
+	sqlDB, err := db.DB.DB()
+	if err != nil {
+		statusCode = http.StatusInternalServerError
+		status = "error"
+		dbStatus = "connection_error"
+	} else if err := sqlDB.Ping(); err != nil {
+		statusCode = http.StatusInternalServerError
+		status = "error"
+		dbStatus = "unreachable"
+	}
+
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(statusCode)
+	fmt.Fprintf(w, `{"status":"%s","db_status":"%s"}`, status, dbStatus)
+}

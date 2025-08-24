@@ -58,5 +58,9 @@ EXPOSE 8000
 # Tag docker environments
 ENV DOCKER_ENV=1
 
+# Healthcheck
+HEALTHCHECK --interval=30s --timeout=3s --start-period=5s --retries=3 \
+  CMD wget -q -O - http://localhost:8000/health | grep -q '"status":"ok".*"db_status":"ok"' || exit 1
+
 # Create entrypoint
 ENTRYPOINT ["/entrypoint.sh"]
