@@ -245,9 +245,9 @@
             // Language-specific unique markers (score +1)
             { lang: 'python', pattern: /^\s*def \w+\(.*\):\s*$|\n\s*class \w+\(?.*\)?:\s*$/m, score: 1 },
             { lang: 'ruby', pattern: /^\s*def \w+\s*(\n|\(.*\)\s*\n)/m, score: 1 },
+            { lang: 'go', pattern: /^\s*package \w+$|func \w+\(.*\)\s*\{/m, score: 1 },
             { lang: 'java', pattern: /(package [\w.]+;|import [\w.*]+;|public (class|interface|enum) \w+|@\w+|public\s+static\s+void\s+main\s*\([^)]*\)|System\.(out|err)\.println|var \w+ =|->)/m, score: 1 },
             { lang: 'kotlin', pattern: /^\s*fun main\(.*\)\s*\{|class \w+\s*[:(]/m, score: 1 },
-            { lang: 'go', pattern: /^\s*package \w+$|func \w+\(.*\)\s*\{/m, score: 1 },
             { lang: 'csharp', pattern: /^\s*using [\w.]+;|namespace \w+\s*\{/m, score: 1 },
             { lang: 'c', pattern: /^\s*#include\s*<stdio\.h>|#include\s*<stdlib\.h>|printf\s*\(|scanf\s*\(/m, score: 1 },
             { lang: 'cpp', pattern: /^\s*#include <\w+>|using namespace \w+;/m, score: 1 },
