@@ -12,6 +12,8 @@ import (
 	"time"
 
 	"github.com/skip2/go-qrcode"
+	"gorm.io/driver/sqlite"
+	"gorm.io/gorm"
 )
 
 // Make unique titles
@@ -114,15 +116,33 @@ func HealthCheck(w http.ResponseWriter, r *http.Request) {
 	statusCode := http.StatusOK
 	status, dbStatus := "ok", "ok"
 
-	sqlDB, err := db.DB.DB()
-	if err != nil {
+	if db.DB == nil {
+		// DB not initialized
 		statusCode = http.StatusInternalServerError
 		status = "error"
-		dbStatus = "connection_error"
-	} else if err := sqlDB.Ping(); err != nil {
-		statusCode = http.StatusInternalServerError
-		status = "error"
-		dbStatus = "unreachable"
+		dbStatus = "missing_file"
+	} else {
+		// Check DB file exists
+		if _, err := os.Stat(db.DBPath); os.IsNotExist(err) {
+			statusCode = http.StatusInternalServerError
+			status = "error"
+			dbStatus = "missing_file"
+		} else {
+			// Open a new connection to check integrity
+			tmpDB, err := gorm.Open(sqlite.Open(db.DBPath), &gorm.Config{})
+			if err != nil {
+				statusCode = http.StatusInternalServerError
+				status = "error"
+				dbStatus = "corrupted"
+			} else {
+				var result string
+				if err := tmpDB.Raw("PRAGMA quick_check").Scan(&result).Error; err != nil || result != "ok" {
+					statusCode = http.StatusInternalServerError
+					status = "error"
+					dbStatus = "corrupted"
+				}
+			}
+		}
 	}
 
 	w.Header().Set("Content-Type", "application/json")

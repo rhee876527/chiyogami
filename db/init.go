@@ -12,6 +12,7 @@ import (
 )
 
 var DB *gorm.DB
+var DBPath string
 
 func Init() {
 	var err error
@@ -60,4 +61,7 @@ func Init() {
 
 	// Silence verbose GORM logs
 	DB.Logger = logger.Default.LogMode(logger.Silent)
+
+	// Check file for health checks
+	DBPath = dbPath
 }
