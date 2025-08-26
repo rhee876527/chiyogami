@@ -141,6 +141,11 @@ func HealthCheck(w http.ResponseWriter, r *http.Request) {
 					status = "error"
 					dbStatus = "corrupted"
 				}
+
+				// Close underlying connection pool to avoid memory leaks
+				if sqlDB, err := tmpDB.DB(); err == nil {
+					sqlDB.Close()
+				}
 			}
 		}
 	}
