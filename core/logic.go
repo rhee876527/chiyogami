@@ -8,6 +8,7 @@ import (
 	"html/template"
 	"io"
 	"log"
+	"math/rand"
 	"net/http"
 	"os"
 	"strconv"
@@ -438,7 +439,10 @@ func DeleteExpiredPastes() {
 			retention = v
 		}
 		threshold := time.Now().AddDate(0, 0, -retention)
-		db.DB.Unscoped().Where("deleted_at IS NOT NULL AND deleted_at < ?", threshold).Delete(&models.Paste{})
+		result := db.DB.Unscoped().Where("deleted_at IS NOT NULL AND deleted_at < ?", threshold).Delete(&models.Paste{})
+		if result.RowsAffected > 0 && rand.Intn(5) == 0 { // random sampling 20% chance
+			db.DB.Exec("VACUUM;")
+		}
 	}()
 }
 
