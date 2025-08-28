@@ -430,6 +430,16 @@ func DeleteAccountHandler(w http.ResponseWriter, r *http.Request) {
 // Delete invalid pastes
 func DeleteExpiredPastes() {
 	db.DB.Where("expiration IS NOT NULL AND expiration < ?", time.Now()).Delete(&models.Paste{})
+
+	// purge old soft-deleted pastes
+	go func() {
+		retention := 90 // default 90 days
+		if v, err := strconv.Atoi(os.Getenv("DELETE_RETENTION")); err == nil && v > 0 {
+			retention = v
+		}
+		threshold := time.Now().AddDate(0, 0, -retention)
+		db.DB.Unscoped().Where("deleted_at IS NOT NULL AND deleted_at < ?", threshold).Delete(&models.Paste{})
+	}()
 }
 
 // Delete pastes using session

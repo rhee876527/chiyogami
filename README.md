@@ -58,6 +58,7 @@ Docker. Build it or check [docker-compose](https://github.com/rhee876527/chiyoga
 | DISABLE_RATE_LIMIT  | None  | Use `1` to disable rate limit     |
 | CREATE_PER_MIN  | 10  | No of paste creation, register, login, delete account & delete paste requests allowed per minute     |
 | DATABASE_PATH  | None  | For local development use. Conflicts with docker volume paths.      |
+| DELETE_RETENTION | 90 | Number of days to keep soft-deleted pastes |
 
 
 ## Usage
