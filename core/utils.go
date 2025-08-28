@@ -140,11 +140,11 @@ func HealthCheck(w http.ResponseWriter, r *http.Request) {
 				status = "error"
 				dbStatus = "corrupted"
 			} else {
-				var result string
-				if err := tmpDB.Raw("PRAGMA quick_check").Scan(&result).Error; err != nil || result != "ok" {
+				var result int
+				if err := tmpDB.Raw("SELECT 1").Scan(&result).Error; err != nil || result != 1 {
 					statusCode = http.StatusInternalServerError
 					status = "error"
-					dbStatus = "corrupted"
+					dbStatus = "unreachable"
 				}
 
 				// Close underlying connection pool to avoid memory leaks
