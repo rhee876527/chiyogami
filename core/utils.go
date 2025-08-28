@@ -123,10 +123,15 @@ func HealthCheck(w http.ResponseWriter, r *http.Request) {
 		dbStatus = "missing_file"
 	} else {
 		// Check DB file exists
-		if _, err := os.Stat(db.DBPath); os.IsNotExist(err) {
+		if info, err := os.Stat(db.DBPath); os.IsNotExist(err) {
 			statusCode = http.StatusInternalServerError
 			status = "error"
 			dbStatus = "missing_file"
+		} else if info.Size() < 100 {
+			// File too small to be valid sqlite
+			statusCode = http.StatusInternalServerError
+			status = "error"
+			dbStatus = "corrupted"
 		} else {
 			// Open a new connection to check integrity
 			tmpDB, err := gorm.Open(sqlite.Open(db.DBPath), &gorm.Config{})
