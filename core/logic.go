@@ -8,7 +8,6 @@ import (
 	"html/template"
 	"io"
 	"log"
-	"math/rand"
 	"net/http"
 	"os"
 	"strconv"
@@ -429,6 +428,7 @@ func DeleteAccountHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 // Delete invalid pastes
+var vacuumCounter int // Track no of deletions to trigger VACUUM
 func DeleteExpiredPastes() {
 	db.DB.Where("expiration IS NOT NULL AND expiration < ?", time.Now()).Delete(&models.Paste{})
 
@@ -440,8 +440,12 @@ func DeleteExpiredPastes() {
 		}
 		threshold := time.Now().AddDate(0, 0, -retention)
 		result := db.DB.Unscoped().Where("deleted_at IS NOT NULL AND deleted_at < ?", threshold).Delete(&models.Paste{})
-		if result.RowsAffected > 0 && rand.Intn(5) == 0 { // random sampling 20% chance
-			db.DB.Exec("VACUUM;")
+		if result.RowsAffected > 0 {
+			vacuumCounter++
+			if vacuumCounter >= 5 { // every 5 deletions
+				db.DB.Exec("VACUUM;")
+				vacuumCounter = 0
+			}
 		}
 	}()
 }
