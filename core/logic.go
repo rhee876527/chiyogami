@@ -435,7 +435,7 @@ func DeleteExpiredPastes() {
 	// purge old soft-deleted pastes
 	go func() {
 		retention := 90 // default 90 days
-		if v, err := strconv.Atoi(os.Getenv("DELETE_RETENTION")); err == nil && v > 0 {
+		if v, err := strconv.Atoi(os.Getenv("DELETE_RETENTION")); err == nil && v > 0 && v < 100 {
 			retention = v
 		}
 		threshold := time.Now().AddDate(0, 0, -retention)
