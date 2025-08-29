@@ -60,6 +60,20 @@ Docker. Build it or check [docker-compose](https://github.com/rhee876527/chiyoga
 | DATABASE_PATH  | None  | For local development use. Conflicts with docker volume paths.      |
 | DELETE_RETENTION | 90 | Number of days to keep soft-deleted pastes. Valid values: `1-99` |
 
+#### Note about exposing /health to public
+Since v1.4.3 this `healthcheck` endpoint was created to actively monitor state of application's database. It has potential for abuse WHEN exposed publicly. Caution is hereby given to protect endpoint (http://localhost:8000/health) from external access as necessary.
+
+If using `Traefik` as reverse proxy this can be done in the `docker-compose` file by adding the following middleware:
+```
+...
+services:
+  chiyogami:
+    labels:
+      - "traefik.http.routers.chiyogami.middlewares=localonly-health"
+      - "traefik.http.middlewares.localonly-health.replacepathregex.regex=^/health$"
+      - "traefik.http.middlewares.localonly-health.replacepathregex.replacement=/nonexistent-path"
+...
+```
 
 ## Usage
 Web UI is simple & straightforward. Or use the `API`.
