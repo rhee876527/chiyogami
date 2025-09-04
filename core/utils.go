@@ -9,6 +9,7 @@ import (
 	"log"
 	"net/http"
 	"os"
+	"sync"
 	"time"
 
 	"github.com/skip2/go-qrcode"
@@ -111,6 +112,16 @@ func TimeUntilExpiration(expiration *time.Time) string {
 	return ""
 }
 
+var (
+	lastStatusCode int
+	lastStatus     string
+	lastDBStatus   string
+	lastModTime    time.Time
+	lastSize       int64
+	cacheMu        sync.RWMutex
+	cacheInit      bool
+)
+
 // Application health check
 func HealthCheck(w http.ResponseWriter, r *http.Request) {
 	statusCode := http.StatusOK
@@ -123,34 +134,63 @@ func HealthCheck(w http.ResponseWriter, r *http.Request) {
 		dbStatus = "missing_file"
 	} else {
 		// Check DB file exists
-		if info, err := os.Stat(db.DBPath); os.IsNotExist(err) {
+		info, err := os.Stat(db.DBPath)
+		if os.IsNotExist(err) {
 			statusCode = http.StatusInternalServerError
 			status = "error"
 			dbStatus = "missing_file"
-		} else if info.Size() < 100 {
-			// File too small to be valid sqlite
+		} else if err != nil {
 			statusCode = http.StatusInternalServerError
 			status = "error"
-			dbStatus = "corrupted"
+			dbStatus = "unreachable"
 		} else {
-			// Open a new connection to check integrity
-			tmpDB, err := gorm.Open(sqlite.Open(db.DBPath), &gorm.Config{})
-			if err != nil {
-				statusCode = http.StatusInternalServerError
-				status = "error"
-				dbStatus = "corrupted"
-			} else {
-				var result int
-				if err := tmpDB.Raw("SELECT 1").Scan(&result).Error; err != nil || result != 1 {
+			// Only re-check if cache initialized and file unchanged
+			cacheMu.RLock()
+			cached := cacheInit && info.ModTime().Equal(lastModTime) && info.Size() == lastSize
+			if cached {
+				statusCode = lastStatusCode
+				status = lastStatus
+				dbStatus = lastDBStatus
+			}
+			cacheMu.RUnlock()
+
+			if !cached {
+				if info.Size() < 100 {
+					// File too small to be valid sqlite
 					statusCode = http.StatusInternalServerError
 					status = "error"
-					dbStatus = "unreachable"
+					dbStatus = "corrupted"
+				} else {
+					// Open a new connection to check integrity
+					tmpDB, err := gorm.Open(sqlite.Open(db.DBPath), &gorm.Config{})
+					if err != nil {
+						statusCode = http.StatusInternalServerError
+						status = "error"
+						dbStatus = "corrupted"
+					} else {
+						var result int
+						if err := tmpDB.Raw("SELECT 1").Scan(&result).Error; err != nil || result != 1 {
+							statusCode = http.StatusInternalServerError
+							status = "error"
+							dbStatus = "unreachable"
+						}
+
+						// Close underlying connection pool to avoid memory leaks
+						if sqlDB, err := tmpDB.DB(); err == nil {
+							sqlDB.Close()
+						}
+					}
 				}
 
-				// Close underlying connection pool to avoid memory leaks
-				if sqlDB, err := tmpDB.DB(); err == nil {
-					sqlDB.Close()
-				}
+				// Update cache after full check
+				cacheMu.Lock()
+				lastStatusCode = statusCode
+				lastStatus = status
+				lastDBStatus = dbStatus
+				lastModTime = info.ModTime()
+				lastSize = info.Size()
+				cacheInit = true
+				cacheMu.Unlock()
 			}
 		}
 	}
