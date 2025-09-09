@@ -38,6 +38,9 @@ RUN go build -o main .
 FROM alpine:3.21
 WORKDIR /app
 
+# Include license
+COPY LICENSE .
+
 # Copy Go binary and assets
 COPY --from=build /app/main .
 COPY --from=build /app/public ./public
