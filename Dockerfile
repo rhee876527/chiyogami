@@ -18,7 +18,7 @@ RUN echo -e "@tailwind base;\n@tailwind components;\n@tailwind utilities;" > /ap
 RUN npx tailwindcss -i /app/public/tailwind.css -o /app/public/output.css --minify
 
 # Stage 2: Build Go Application
-FROM golang:1.23-alpine AS build
+FROM golang:1.25-alpine AS build
 WORKDIR /app
 
 # Go files and dependencies
@@ -35,7 +35,7 @@ RUN apk add --no-cache gcc musl-dev
 RUN go build -o main .
 
 # Stage 3: Run the application
-FROM alpine:3.21
+FROM alpine:3.22
 WORKDIR /app
 
 # Include license
