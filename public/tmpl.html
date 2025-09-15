@@ -259,7 +259,7 @@
             { lang: 'perl', pattern: /^\s*my \$\w+ =|use \w+;/m, score: 1 },
             { lang: 'html', pattern: /<\s*html|<!DOCTYPE html|<\s*head|<\s*body/m, score: 1 },
             { lang: 'javascript', pattern: /^\s*(console\.log|document\.querySelector|import\s+.*\s+from\s+['"][^'"]+['"]|export\s+(default|const|function|class)|async\s+function|\([\w\s,]*\)\s*=>)/m, score: 1 },
-            { lang: 'yaml', pattern: /^(?:---|\.\.\.)\s*$|^\s*[\w-]+:\s*(?:$|[^"'\s].*)|^\s*-\s+\S|^\s*[|>][>-]?\s*$|^\s*&\w+|^\s*\*\w+|^\s*![-\w]+/m, score: 1 },
+            { lang: 'yaml', pattern: /^(?:---|\.\.\.)\s*$|^\s*-\s+[^:=\s]|^\s*[|>][>-]?\s*$|^\s*&\w+|^\s*\*\w+|^\s*![-\w]+/m, score: 1 },
             { lang: 'bash', pattern:/\${[^}]+}|\$\([^)]+\)|<<<?\s+\w+|\bdeclare\s+\w+|\bexport\s+\w+=|\w+\[\d+\]=|&>/, score: 1 },
             { lang: 'powershell', pattern: /^\s*function \w+-|Write-Host /m, score: 1 },
             { lang: 'dockerfile', pattern: /^\s*(FROM|RUN|CMD|EXPOSE|ENV|COPY|WORKDIR) /mi, score: 1 },
