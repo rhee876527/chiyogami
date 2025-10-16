@@ -243,7 +243,7 @@
             { lang: 'awk', pattern: /^#!.*\bawk\b/m, score: 2 },
 
             // Language-specific unique markers (score +1)
-            { lang: 'python', pattern: /^\s*def \w+\(.*\):\s*$|\n\s*class \w+\(?.*\)?:\s*$/m, score: 1 },
+            { lang: 'python', pattern: /^\s*(?:async\s+)?def\s+\w+\s*\(.*\)\s*(?:->.*)?\s*:|^\s*class\s+\w+\s*(?:\([\w\s,]*\))?\s*:|^\s*@\w+(?:\.\w+)*\s*$/m, score: 1 },
             { lang: 'ruby', pattern: /^\s*def \w+\s*(\n|\(.*\)\s*\n)/m, score: 1 },
             { lang: 'go', pattern: /^\s*package \w+$|func \w+\(.*\)\s*\{/m, score: 1 },
             { lang: 'java', pattern: /(package\s+[a-zA-Z_]\w*(?:\.[a-zA-Z_]\w*)*;|^\s*import\s+[a-zA-Z_]\w*(?:\.[a-zA-Z_]\w*)*(?:\.\*)?;|public\s+(class|interface|enum)\s+\w+|^@\s*[A-Z][A-Za-z_]\w*|public\s+static\s+void\s+main\s*\([^)]*\)|System\.(out|err)\.println|^\s*var\s+\w+\s*=\s*new\s+[A-Z]\w*|\\([^)]*\\)\s*->)/m, score: 1 },
