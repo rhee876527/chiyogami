@@ -262,7 +262,7 @@
             { lang: 'yaml', pattern: /^(?:---|\.\.\.)\s*$|^\s*-\s+[^:=\s]|^\s*[|>][>-]?\s*$|^\s*&\w+|^\s*\*\w+|^\s*![-\w]+/m, score: 1 },
             { lang: 'bash', pattern:/\${[^}]+}|\$\([^)]+\)|<<<?\s+\w+|\bdeclare\s+\w+|\bexport\s+\w+=|\w+\[\d+\]=|&>/, score: 1 },
             { lang: 'powershell', pattern: /^\s*function \w+-|Write-Host /m, score: 1 },
-            { lang: 'dockerfile', pattern: /^\s*(FROM|RUN|CMD|EXPOSE|ENV|COPY|WORKDIR) /mi, score: 1 },
+            { lang: 'dockerfile', pattern: /^\s*(FROM|RUN|CMD|EXPOSE|ENV|COPY|WORKDIR) /m, score: 1 },
             { lang: 'elixir', pattern: /^\s*(defmodule \w+ do|defp? \w+\(.*\) do|@\w+|.+\|>.+)/m, score: 1 },
             { lang: 'julia', pattern: /^\s*(function \w+\(.*\)|@time \w+|using \w+|println\(|\w+ = |\bend\s*$)/m, score: 1 },
             { lang: 'clojure', pattern: /\(defn \w+|\(ns \w+/m, score: 1 },
