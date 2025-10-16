@@ -284,7 +284,9 @@
                 'new|try|catch|if|else|for|while|switch|case|return|throws|throw|override|extends|',
                 'implements)\\b',
                 '|[{()}[\\];]|=>|::|->',
-                '|#include\\s+<[^>]+>|^\\s*#\\w+'
+                '|#include\\s+<[^>]+>|^\\s*#\\w+',
+                '|^\\s*[\\w-]+:\\s*.*',
+                '|"\w+"\\s*:'
             ].join(''), 'gm');
 
             const genericCodeRegex = new RegExp(genericCodePatterns, 'gm');
