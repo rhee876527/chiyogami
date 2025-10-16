@@ -8,4 +8,4 @@ GID=${GID:-1000}
 chown -R ${UID}:${GID} /pastes
 
 # Execute as the specified user
-exec su-exec ${UID}:${GID} ./main "$@"
+exec su-exec ${UID}:${GID} ./chiyogami "$@"

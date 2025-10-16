@@ -32,7 +32,7 @@ COPY . .
 RUN apk add --no-cache gcc musl-dev
 
 # Build Go application
-RUN go build -o main .
+RUN go build -o chiyogami .
 
 # Stage 3: Run the application
 FROM alpine:3.22
@@ -42,7 +42,7 @@ WORKDIR /app
 COPY LICENSE .
 
 # Copy Go binary and assets
-COPY --from=build /app/main .
+COPY --from=build /app/chiyogami .
 COPY --from=build /app/public ./public
 
 # Fetch generated Tailwind output
