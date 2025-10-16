@@ -278,51 +278,50 @@
             ];
 
             // Common code patterns (score +0.5)
-            const genericCodePatterns = [
+            const genericCodePatterns = new RegExp([
                 '(^|\\n)\\s*(function|class|def|fn|interface|struct|module|package|namespace|',
                 'public|private|protected|static|async|await|import|from|include|using|var|let|const|',
                 'new|try|catch|if|else|for|while|switch|case|return|throws|throw|override|extends|',
                 'implements)\\b',
                 '|[{()}[\\];]|=>|::|->',
                 '|#include\\s+<[^>]+>|^\\s*#\\w+'
-            ].join('');
+            ].join(''), 'gm');
 
-            const genericCodeRegex = new RegExp(genericCodePatterns, 'm');
+            const genericCodeRegex = new RegExp(genericCodePatterns, 'gm');
 
             // Track scores for each language
             const scores = {};
-            let isCode = false;
             const threshold = 3;
 
             // Check language-specific patterns
             for (const { lang, pattern, score } of langPatterns) {
                 if (pattern.test(content)) {
                     scores[lang] = (scores[lang] || 0) + score;
-                    isCode = true;
                 }
             }
 
             // Find the highest scoring language
             const topLanguage = Object.entries(scores).sort((a, b) => b[1] - a[1])[0];
 
+            // Count how many times the generic pattern appears
+            const genericMatches = content.match(genericCodeRegex);
+            const genericMatch = genericMatches && genericMatches.length >= 3;
+
             // Return clear winner once threshold is met
-            if (topLanguage && topLanguage[1] >= threshold) {
+            if (topLanguage && topLanguage[1] >= threshold && genericMatch) {
                 console.log(`Detected language: ${topLanguage[0]}`);
                 return { isCode: true, language: topLanguage[0] };
             }
 
-            // Even with no language detected this cast net avoids plaintext detection
-            if (genericCodeRegex.test(content)) {
-                isCode = true;
+            // Separate generic code pattern matches from winner
+            if (genericMatch && topLanguage) {
+                console.log(`Some code detected, possible language: ${topLanguage[0]}`);
+                return { isCode: true, language: topLanguage[0] };
             }
 
-            if (isCode) {
-                if (topLanguage) {
-                    console.log(`Some code detected, possible language: ${topLanguage[0]}`);
-                } else {
-                    console.log('Some code detected but language could not be determined');
-                }
-                return { isCode: true, language: topLanguage ? topLanguage[0] : null };
+            if (genericMatch) {
+                console.log('Some code detected but language could not be determined');
+                return { isCode: true, language: null };
             }
 
             return { isCode: false, language: null };
