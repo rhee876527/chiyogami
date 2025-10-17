@@ -18,6 +18,7 @@
 !.gitignore
 !docker-compose.yml
 !entrypoint.sh
+!line-numbers.patch
 
 # Public assets
 !public

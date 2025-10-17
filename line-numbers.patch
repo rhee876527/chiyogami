@@ -1,0 +1,20 @@
+diff --git a/public/tmpl.html b/public/tmpl.html
+index f238925..56a40be 100644
+--- a/public/tmpl.html
++++ b/public/tmpl.html
+@@ -7,6 +7,7 @@
+     <title>Paste {{.Title}}</title>
+     <link rel="stylesheet" href="/output.css">
+     <script src="/highlightjs/v11.11.1/highlight.min.js"></script>
++    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlightjs-line-numbers.js/2.9.0/highlightjs-line-numbers.min.js"></script>
+     <link rel="stylesheet" href="/highlightjs/v11.11.1/stackoverflow-dark.min.css">
+     <script src="/marked/v16.2.1/marked.umd.js"></script>
+ </head>
+@@ -379,6 +380,7 @@
+                     }
+                     // Fallback to auto highlighting if no specific language detected
+                     hljs.highlightElement(contentElement);
++                    hljs.lineNumbersBlock(contentElement);
+                 } else {
+                     // Ensure no leftover highlighting styles when turned off
+                     contentElement.removeAttribute('data-highlighted');
