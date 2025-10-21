@@ -32,6 +32,9 @@ func main() {
 	})
 	r.PathPrefix("/").Handler(http.StripPrefix("/", http.FileServer(http.Dir("./public/"))))
 
+	// Apply CSRF protection middleware
+	csrfProtectedRouter := (&http.CrossOriginProtection{}).Handler(r)
+
 	log.Println("Server started on port 8000")
-	log.Fatal(http.ListenAndServe(":8000", r))
+	log.Fatal(http.ListenAndServe(":8000", csrfProtectedRouter))
 }
