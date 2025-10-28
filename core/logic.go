@@ -224,7 +224,7 @@ func GetPasteHandler(w http.ResponseWriter, r *http.Request) {
 		IsEncrypted: paste.IsEncrypted,
 		Expiration:  TimeUntilExpiration(paste.Expiration),
 	}); err != nil {
-		http.Error(w, err.Error(), http.StatusInternalServerError)
+		JsonRespond(w, http.StatusInternalServerError, "Internal Server Error")
 		return
 	}
 }
