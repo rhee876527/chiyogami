@@ -48,9 +48,7 @@ func GetSessionKey() string {
 
 func GenerateRandomKey() string {
 	key := make([]byte, 32)
-	if _, err := rand.Read(key); err != nil {
-		return "Error: failed to generate random key - " + err.Error()
-	}
+	rand.Read(key)
 	return base64.StdEncoding.EncodeToString(key)
 }
 
