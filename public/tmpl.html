@@ -8,7 +8,8 @@
     <link rel="stylesheet" href="/output.css">
     <script src="/highlightjs/v11.11.1/highlight.min.js"></script>
     <link rel="stylesheet" href="/highlightjs/v11.11.1/stackoverflow-dark.min.css">
-    <script src="/marked/v16.2.1/marked.umd.js"></script>
+    <script src="/marked/v17.0.1/marked.umd.js"></script>
+    <script src="/dompurify/v3.3.0/purify.min.js"></script>
 </head>
 <body class="text-white">
     <noscript>
@@ -346,7 +347,8 @@
             const isMarkdownMode = hasMarkdown && isMarkdownRendered;
 
             if (isMarkdownMode) {
-                contentElement.innerHTML = marked.parse(content);
+                const rawHTML = marked.parse(content);
+                contentElement.innerHTML = DOMPurify.sanitize(rawHTML);
                 requestAnimationFrame(() => {
                     contentElement.querySelectorAll('pre code').forEach(block => {
                         if (!block.dataset.highlighted) hljs.highlightElement(block);
