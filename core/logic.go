@@ -10,6 +10,7 @@ import (
 	"log"
 	"net/http"
 	"os"
+	"regexp"
 	"strconv"
 	"strings"
 	"time"
@@ -248,6 +249,17 @@ func RegisterHandler(w http.ResponseWriter, r *http.Request) {
 	// Validate user inputs
 	if user.Username == "" || user.Password == "" {
 		JsonRespond(w, http.StatusBadRequest, "Username and password are required")
+		return
+	}
+
+	complexpass := os.Getenv("COMPLEX_PASSWORD") == "1"
+
+	if complexpass && (len(user.Password) < 8 ||
+		!regexp.MustCompile(`[a-z]`).MatchString(user.Password) ||
+		!regexp.MustCompile(`[A-Z]`).MatchString(user.Password) ||
+		!regexp.MustCompile(`[0-9]`).MatchString(user.Password) ||
+		!regexp.MustCompile(`[^a-zA-Z0-9]`).MatchString(user.Password)) {
+		JsonRespond(w, http.StatusBadRequest, "Password does not meet complexity requirements")
 		return
 	}
 

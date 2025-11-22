@@ -59,6 +59,7 @@ Docker. Build it or check [docker-compose](https://github.com/rhee876527/chiyoga
 | CREATE_PER_MIN  | 10  | No of paste creation, register, login, delete account & delete paste requests allowed per minute     |
 | DATABASE_PATH  | None  | For local development use. Conflicts with docker volume paths.      |
 | DELETE_RETENTION | 90 | Number of days to keep soft-deleted pastes. Valid values: `1-99` |
+| COMPLEX_PASSWORD | None | Use `1` to activate. Requires complex password on user registration. Valid password: `Minimum 8 characters, including at least 1 lowercase, 1 uppercase, 1 number and 1 symbol.` |
 
 #### Note about exposing /health to public
 Since v1.4.3 this `healthcheck` endpoint was created to actively monitor state of application's database. It has potential for abuse WHEN exposed publicly. Caution is hereby given to protect endpoint (http://localhost:8000/health) from external access as necessary.
