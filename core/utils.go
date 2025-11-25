@@ -5,10 +5,13 @@ import (
 	"chiyogami/models"
 	"crypto/rand"
 	"encoding/base64"
+	"encoding/json"
 	"fmt"
 	"log"
 	"net/http"
+	"net/mail"
 	"os"
+	"strconv"
 	"sync"
 	"time"
 
@@ -196,4 +199,54 @@ func HealthCheck(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(statusCode)
 	fmt.Fprintf(w, `{"status":"%s","db_status":"%s"}`, status, dbStatus)
+}
+
+// Server info
+func GetConfigVariables(w http.ResponseWriter, r *http.Request) {
+	parseIntWithDefault := func(envVar string, defaultVal int) int {
+		if val := os.Getenv(envVar); val != "" {
+			if n, err := strconv.Atoi(val); err == nil && n > 0 {
+				return n
+			}
+		}
+		return defaultVal
+	}
+
+	validateEmail := func(email string) string {
+		if email == "" {
+			return ""
+		}
+		_, err := mail.ParseAddress(email)
+		if err != nil {
+			return "invalid"
+		}
+		return email
+	}
+
+	pasteExpiration := os.Getenv("PASTE_DEFAULT_EXPIRATION")
+	if pasteExpiration == "" {
+		pasteExpiration = "24h"
+	}
+
+	deleteRetention := func() int {
+		v := parseIntWithDefault("DELETE_RETENTION", 90)
+		if v < 1 || v > 99 {
+			return 90
+		}
+		return v
+	}()
+
+	config := map[string]interface{}{
+		"PASTE_DEFAULT_EXPIRATION": pasteExpiration,
+		"MAX_CHAR_CONTENT":         parseIntWithDefault("MAX_CHAR_CONTENT", 50000),
+		"DELETE_RETENTION":         deleteRetention,
+		"ADMIN_CONTACT":            validateEmail(os.Getenv("ADMIN_CONTACT")),
+	}
+
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(http.StatusOK)
+	if err := json.NewEncoder(w).Encode(config); err != nil {
+		http.Error(w, "failed to encode response", http.StatusInternalServerError)
+		return
+	}
 }

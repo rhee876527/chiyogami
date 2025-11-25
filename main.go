@@ -24,6 +24,7 @@ func main() {
 	r.HandleFunc("/delete-account", core.DeleteAccountHandler).Methods("DELETE")
 	r.HandleFunc("/generate-qr", core.GenerateQR).Methods("GET")
 	r.HandleFunc("/health", core.HealthCheck).Methods("GET")
+	r.HandleFunc("/info", core.GetConfigVariables).Methods("GET")
 	r.HandleFunc("/list", func(w http.ResponseWriter, r *http.Request) {
 		http.ServeFile(w, r, "./public/list.html")
 	})
