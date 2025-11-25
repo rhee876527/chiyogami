@@ -60,6 +60,7 @@ Docker. Build it or check [docker-compose](https://github.com/rhee876527/chiyoga
 | DATABASE_PATH  | None  | For local development use. Conflicts with docker volume paths.      |
 | DELETE_RETENTION | 90 | Number of days to keep soft-deleted pastes. Valid values: `1-99` |
 | COMPLEX_PASSWORD | None | Use `1` to activate. Requires complex password on user registration. Valid password: `Minimum 8 characters, including at least 1 lowercase, 1 uppercase, 1 number and 1 symbol.` |
+| ADMIN_CONTACT | None | Accepts email values. May be useful for moderation purposes. |
 
 #### Note about exposing /health to public
 Since v1.4.3 this `healthcheck` endpoint was created to actively monitor state of application's database. It has potential for abuse WHEN exposed publicly. Caution is hereby given to protect endpoint (http://localhost:8000/health) from external access as necessary.
@@ -155,6 +156,13 @@ curl -X DELETE http://localhost:8000/paste/EIKq \
 
 **response:** `{"message":"Paste deleted successfully"}`
 
+#### Get instance configuration
+
+```
+curl http://localhost:8000/info
+```
+
+**response:** `{"ADMIN_CONTACT":"admin@example.com","DELETE_RETENTION":90,"MAX_CHAR_CONTENT":50000,"PASTE_DEFAULT_EXPIRATION":"24h"}`
 
 
 
