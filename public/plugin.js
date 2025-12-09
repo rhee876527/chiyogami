@@ -217,7 +217,7 @@ document.addEventListener('DOMContentLoaded', function() {
                             <button class="btn btn-xs btn-error delete-paste" data-id="${paste.Title}">Delete</button>
                         </div>
                     `;
-                    li.classList.add('dark:hover:bg-slate-600', 'transition-colors', 'duration-200', 'rounded');
+                    li.classList.add('dark:hover:bg-slate-600', 'hover:bg-slate-200', 'transition-colors', 'duration-200', 'rounded');
                     pastesList.appendChild(li);
                 });
             }
