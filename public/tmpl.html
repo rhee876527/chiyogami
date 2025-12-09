@@ -206,7 +206,7 @@
 
             // Less ambiguous Markdown patterns (medium confidence)
             if (/(_{1,2}.*?_{1,2}|\*{1,2}.*?\*{1,2})/.test(content)) score++; // Bold/Italic
-            if (/^(\s*-\s|\s*\*\s|\d+\.\s)/m.test(content) && !/^-\s+\w+:/.test(content)) score++; // Lists (but not YAML)
+            if (/^(\s*-\s|\s*\*\s|\d+\.\s)/m.test(content) && !/^\s*\w+:\s*/m.test(content)) score++; // Lists (but not YAML)
             if (/^(\s*>\s\S+)/m.test(content)) score++; // Blockquote (avoids empty > lines)
             if (/^.+\n:\s+.+/m.test(content)) score++; // Definition lists
             if (/^\s*-\s\[[ x]\]/m.test(content)) score++; // Task lists
