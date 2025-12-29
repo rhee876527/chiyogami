@@ -251,7 +251,7 @@
             { lang: 'csharp', pattern: /^\s*using [\w.]+;|namespace \w+\s*\{/m, score: 1 },
             { lang: 'java', pattern: /(package\s+[a-zA-Z_]\w*(?:\.[a-zA-Z_]\w*)*;|^\s*import\s+[a-zA-Z_]\w*(?:\.[a-zA-Z_]\w*)*(?:\.\*)?;|public\s+(class|interface|enum)\s+\w+|^@\s*[A-Z][A-Za-z_]\w*|public\s+static\s+void\s+main\s*\([^)]*\)|System\.(out|err)\.println|^\s*var\s+\w+\s*=\s*new\s+[A-Z]\w*|\\([^)]*\\)\s*->)/m, score: 1 },
             { lang: 'c', pattern: /^\s*#include\s*<stdio\.h>|#include\s*<stdlib\.h>|printf\s*\(|scanf\s*\(/m, score: 1 },
-            { lang: 'cpp', pattern: /\bnamespace\s+\w+\s*{|::|\btemplate\s*<|#include\s*<\w+\.hpp>|std::|class\s+\w+\s*{|struct\s+\w+\s*{/, score: 1 },
+            { lang: 'cpp', pattern: /^\s*#include\s*<\w+>|\busing\s+namespace\s+\w+;|std::|::\w+|template\s*</m, score: 1 },
             { lang: 'rust', pattern: /^\s*fn main\(\)|let \w+: \w+ =/m, score: 1 },
             { lang: 'haskell', pattern: /^\s*module \w+ where|:: \w+ -> \w+/m, score: 1 },
             { lang: 'lua', pattern: /^\s*function \w+\(.*\)$|local \w+ =/m, score: 1 },
