@@ -7,7 +7,17 @@
     <title>Paste {{.Title}}</title>
     <link rel="stylesheet" href="/output.css">
     <script src="/highlightjs/v11.11.1/highlight.min.js"></script>
-    <link rel="stylesheet" href="/highlightjs/v11.11.1/stackoverflow-dark.min.css">
+    <link
+        rel="stylesheet"
+        href="/highlightjs/v11.11.1/stackoverflow-light.min.css"
+        media="(prefers-color-scheme: light)"
+        >
+
+        <link
+        rel="stylesheet"
+        href="/highlightjs/v11.11.1/stackoverflow-dark.min.css"
+        media="(prefers-color-scheme: dark)"
+        >
     <script src="/marked/v17.0.1/marked.umd.js"></script>
     <script src="/dompurify/v3.3.0/purify.min.js"></script>
 </head>
@@ -402,7 +412,7 @@
                 'p': 'mb-3',
                 'ul': 'list-disc ml-7 mb-3',
                 'ol': 'list-decimal ml-7 mb-3',
-                'pre': 'bg-gray-900 p-3 rounded-md mb-3 text-gray-100 whitespace-pre-wrap break-words max-w-full',
+                'pre': '[background-color:#f5f5f5] dark:[background-color:#111827] p-3 rounded-md mb-3 text-gray-100 whitespace-pre-wrap break-words max-w-full',
                 'pre code': 'p-0 m-0 bg-transparent text-inherit whitespace-pre-wrap break-words max-w-full',
                 'code': 'bg-inherit px-1.5 py-0.5 rounded text-slate-400 text-sm',
                 'strong': 'font-bold',
