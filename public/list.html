@@ -54,15 +54,13 @@
         let currentPage = parseInt(new URLSearchParams(window.location.search).get('page')) || 1;
         let allPastes = [];
 
-        function fetchPastes(query = '', page = 1) {
-            const url = query
-                ? `/pastes?search=${encodeURIComponent(query)}&page=${page}`
-                : `/pastes?page=${page}`;
+        function fetchPastes(query = '') {
+            const url = query ? `/pastes?search=${encodeURIComponent(query)}` : `/pastes`;
             fetch(url)
                 .then(response => response.json())
                 .then(data => {
                     allPastes = data;
-                    displayPastes(page);
+                    displayPastes(currentPage);
                 })
                 .catch(error => console.error('Error fetching pastes:', error));
         }
@@ -102,7 +100,7 @@
             event.preventDefault();
             const query = document.getElementById('search-input').value.trim();
             currentPage = 1;
-            fetchPastes(query, currentPage);
+            fetchPastes(query);
         }
 
         document.getElementById('search-form').addEventListener('submit', handleSearch);
@@ -110,21 +108,21 @@
         document.getElementById('prev-page').addEventListener('click', () => {
             if (currentPage > 1) {
                 currentPage--;
-                fetchPastes(document.getElementById('search-input').value.trim(), currentPage);
+                displayPastes(currentPage);
             }
         });
 
         document.getElementById('next-page').addEventListener('click', () => {
             if (currentPage < Math.ceil(allPastes.length / itemsPerPage)) {
                 currentPage++;
-                fetchPastes(document.getElementById('search-input').value.trim(), currentPage);
+                displayPastes(currentPage);
             }
         });
 
         document.getElementById('back-button').addEventListener('click', () => {
             if (currentPage > 1) {
                 currentPage--;
-                fetchPastes(document.getElementById('search-input').value.trim(), currentPage);
+                displayPastes(currentPage);
             } else {
                 window.location.href = '/';
             }
