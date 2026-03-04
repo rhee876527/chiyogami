@@ -57,7 +57,7 @@
         </div>
     </header>
 
-    <div class="w-full p-4 lg:px-12 py-4">
+    <main class="w-full p-4 lg:px-12 py-4 flex flex-col min-h-[calc(100vh-90px)]">
         <h1 class="text-3xl font-bold text-center mb-4">{{.Title}}</h1>
         <div class="paste-metadata text-center text-sm mb-6">
             <p id="created" class="text-[14px]">Created: {{.CreatedAt}} - Expiry: {{.Expiration}}</p>
@@ -562,7 +562,7 @@
         });
     </script>
 
-    <footer id="page-footer" class="text-gray-600 text-center p-4 mt-8 hidden">
+    <footer id="page-footer" class="text-gray-600 text-center p-4 mt-auto hidden">
         &copy; <span id="present-year"></span> Chiyogami. All rights reserved.
         <a href="/about" class="text-black dark:text-white hover:text-blue-500" aria-label="About">
           <svg class="size-4 inline-block align-middle">
