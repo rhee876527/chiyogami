@@ -210,7 +210,7 @@ document.addEventListener('DOMContentLoaded', function() {
                         <div class="relative">
                             <div class="inline-block group">
                                 <a href="/paste/${paste.Title}" class="btn btn-xs btn-primary">View</a>
-                                <div class="absolute z-10 hidden group-hover:block bg-gray-700 text-white text-md p-2 rounded shadow-lg max-w-[min(36rem,90vw)] text-wrap break-words top-full left-3 -translate-x-1/2 mt-1">
+                                <div class="tooltip absolute z-10 hidden bg-gray-700 text-white text-md p-2 rounded shadow-lg max-w-[min(36rem,90vw)] text-wrap break-words top-full left-3 -translate-x-1/2 mt-1">
                                     ${paste.Content.slice(0, 200).replace(/</g, "&lt;").replace(/>/g, "&gt;")}${paste.Content.length > 200 ? "..." : ""}
                                 </div>
                             </div>
@@ -219,6 +219,12 @@ document.addEventListener('DOMContentLoaded', function() {
                     `;
                     li.classList.add('dark:hover:bg-slate-600', 'hover:bg-slate-200', 'transition-colors', 'duration-200', 'rounded');
                     pastesList.appendChild(li);
+
+                    // Chrome workaround for tooltip flicker bug
+                    const group = li.querySelector('.inline-block');
+                    const tooltip = li.querySelector('.tooltip');
+                    group.addEventListener('mouseenter', () => tooltip.classList.replace('hidden', 'block'));
+                    group.addEventListener('mouseleave', () => setTimeout(() => tooltip.classList.replace('block', 'hidden'), 250));
                 });
             }
 
