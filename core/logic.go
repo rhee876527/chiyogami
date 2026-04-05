@@ -57,7 +57,7 @@ func CreatePasteHandler(w http.ResponseWriter, r *http.Request) {
 	if ok && userID != 0 {
 		sessionIdentifier = fmt.Sprintf("user-%d", userID)
 	}
-	identifier := fmt.Sprintf("%s|%s", sessionIdentifier, ip)
+	identifier := HashedIdentifier(sessionIdentifier, ip)
 
 	// Return rate limit status for request
 	if !RateLimit(w, identifier) {
@@ -234,7 +234,7 @@ func GetPasteHandler(w http.ResponseWriter, r *http.Request) {
 func RegisterHandler(w http.ResponseWriter, r *http.Request) {
 	// Rate limit requests
 	ip := GetIPAddress(r)
-	identifier := "register|" + ip
+	identifier := HashedIdentifier("register", ip)
 	if !RateLimit(w, identifier) {
 		return
 	}
@@ -288,7 +288,7 @@ func RegisterHandler(w http.ResponseWriter, r *http.Request) {
 func LoginHandler(w http.ResponseWriter, r *http.Request) {
 	// Rate limit requests
 	ip := GetIPAddress(r)
-	identifier := "login|" + ip
+	identifier := HashedIdentifier("login", ip)
 	if !RateLimit(w, identifier) {
 		return
 	}
@@ -385,7 +385,7 @@ func ListUserPastesHandler(w http.ResponseWriter, r *http.Request) {
 func DeleteAccountHandler(w http.ResponseWriter, r *http.Request) {
 	// Rate limit requests
 	ip := GetIPAddress(r)
-	identifier := "delete-account|" + ip
+	identifier := HashedIdentifier("delete-account", ip)
 	if !RateLimit(w, identifier) {
 		return
 	}
@@ -466,7 +466,7 @@ func DeleteExpiredPastes() {
 func DeletePasteHandler(w http.ResponseWriter, r *http.Request) {
 	// Rate limit requests
 	ip := GetIPAddress(r)
-	identifier := "delete-pastes|" + ip
+	identifier := HashedIdentifier("delete-pastes", ip)
 	if !RateLimit(w, identifier) {
 		return
 	}

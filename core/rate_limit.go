@@ -1,6 +1,8 @@
 package core
 
 import (
+	"crypto/sha1"
+	"fmt"
 	"net/http"
 	"os"
 	"strconv"
@@ -60,4 +62,9 @@ func GetIPAddress(r *http.Request) string {
 		ip = r.RemoteAddr
 	}
 	return strings.Split(ip, ":")[0]
+}
+
+func HashedIdentifier(prefix, ip string) string {
+	h := sha1.Sum([]byte(ip))
+	return prefix + "|" + fmt.Sprintf("%x", h)
 }
