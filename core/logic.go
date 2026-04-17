@@ -4,6 +4,7 @@ import (
 	"chiyogami/db"
 	"chiyogami/models"
 	"encoding/json"
+	"errors"
 	"fmt"
 	"html/template"
 	"io"
@@ -18,6 +19,7 @@ import (
 	"github.com/gorilla/mux"
 	"github.com/gorilla/sessions"
 	"golang.org/x/crypto/bcrypt"
+	"gorm.io/gorm"
 )
 
 // Init sessions
@@ -192,8 +194,13 @@ func GetPasteHandler(w http.ResponseWriter, r *http.Request) {
 
 	// Return non-deleted & non-expired pastes
 	var paste models.Paste
-	if db.DB.First(&paste, "title = ? AND (expiration IS NULL OR expiration > ?)", title, time.Now()).Error != nil {
-		JsonRespond(w, http.StatusNotFound, "Paste not found or has expired")
+	err := db.DB.First(&paste, "title = ? AND (expiration IS NULL OR expiration > ?)", title, time.Now()).Error
+	if err != nil {
+		if errors.Is(err, gorm.ErrRecordNotFound) {
+			JsonRespond(w, http.StatusNotFound, "Paste not found or has expired")
+			return
+		}
+		JsonRespond(w, http.StatusInternalServerError, "Database error")
 		return
 	}
 
@@ -304,8 +311,13 @@ func LoginHandler(w http.ResponseWriter, r *http.Request) {
 	}
 
 	var user models.User
-	if db.DB.Where("username = ?", loginData.Username).First(&user).Error != nil {
-		JsonRespond(w, http.StatusUnauthorized, "Invalid credentials")
+	err := db.DB.Where("username = ?", loginData.Username).First(&user).Error
+	if err != nil {
+		if errors.Is(err, gorm.ErrRecordNotFound) {
+			JsonRespond(w, http.StatusUnauthorized, "Invalid credentials")
+			return
+		}
+		JsonRespond(w, http.StatusInternalServerError, "Database error")
 		return
 	}
 
@@ -373,7 +385,11 @@ func ListUserPastesHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	var userPastes []models.Paste
-	db.DB.Where("user_id = ? AND is_user_paste = ?", userID, true).Find(&userPastes)
+	err := db.DB.Where("user_id = ? AND is_user_paste = ?", userID, true).Find(&userPastes).Error
+	if err != nil {
+		JsonRespond(w, http.StatusInternalServerError, "Database error")
+		return
+	}
 
 	if err := json.NewEncoder(w).Encode(userPastes); err != nil {
 		JsonRespond(w, http.StatusBadRequest, err.Error())
@@ -405,11 +421,11 @@ func DeleteAccountHandler(w http.ResponseWriter, r *http.Request) {
 	// Check user exists
 	var user models.User
 	if err := db.DB.First(&user, userID).Error; err != nil {
-		if strings.Contains(err.Error(), "record not found") {
+		if errors.Is(err, gorm.ErrRecordNotFound) {
 			JsonRespond(w, http.StatusNotFound, "User not found")
 			return
 		}
-		JsonRespond(w, http.StatusInternalServerError, "Failed to fetch user")
+		JsonRespond(w, http.StatusInternalServerError, "Database error")
 		return
 	}
 
@@ -482,8 +498,13 @@ func DeletePasteHandler(w http.ResponseWriter, r *http.Request) {
 	title := vars["title"]
 
 	var paste models.Paste
-	if db.DB.First(&paste, "title = ?", title).Error != nil {
-		JsonRespond(w, http.StatusNotFound, "Paste not found")
+	err := db.DB.First(&paste, "title = ?", title).Error
+	if err != nil {
+		if errors.Is(err, gorm.ErrRecordNotFound) {
+			JsonRespond(w, http.StatusNotFound, "Paste not found")
+			return
+		}
+		JsonRespond(w, http.StatusInternalServerError, "Database error")
 		return
 	}
 
