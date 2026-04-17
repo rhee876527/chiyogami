@@ -93,8 +93,8 @@ document.addEventListener('DOMContentLoaded', function() {
                 hideModal(deleteAccountModal);
                 showToast('Account deleted successfully', 'info');
             } else {
-                const errorText = await response.json();
-                throw new Error(`Failed to delete account: ${errorText.message}`);
+                const errorData = await response.json();
+                showToast(errorData.message, 'error');
             }
         } catch (error) {
             console.error('Delete account error:', error);
@@ -133,8 +133,8 @@ document.addEventListener('DOMContentLoaded', function() {
                 hideModal(loginModal);
                 showToast('Login successful', 'info');
             } else {
-                const badLogin = await response.json();
-                showToast(`${badLogin.message}`, 'error');
+                const errorData = await response.json();
+                showToast(errorData.message, 'error');
             }
         } catch (error) {
             console.error('Login Error:', error);
@@ -161,7 +161,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 hideModal(registerModal);
             } else {
                 const errorData = await response.json();
-                showToast(errorData.message.includes('UNIQUE constraint failed') ? 'Username already taken' : `${errorData.message}`, 'error');
+                showToast(errorData.message.includes('UNIQUE constraint failed') ? 'Username already taken' : errorData.message, 'error');
             }
         } catch (error) {
             console.error('Registration error:', error);
@@ -192,7 +192,9 @@ document.addEventListener('DOMContentLoaded', function() {
                     showToast("Session expired. Please log in again.", "error");
                     return;
                 }
-                throw new Error("Failed to fetch pastes");
+                const errorData = await response.json();
+                showToast(errorData.message, 'error');
+                return;
             }
 
             const pastes = await response.json();
@@ -250,7 +252,8 @@ document.addEventListener('DOMContentLoaded', function() {
                     if (pasteElement) pasteElement.remove();
                     showToast('Paste deleted successfully', 'info');
                 } else {
-                    throw new Error('Failed to delete paste');
+                    const errorData = await response.json();
+                    showToast(errorData.message, 'error');
                 }
             } catch (error) {
                 console.error('Delete paste error:', error);
@@ -330,8 +333,8 @@ document.addEventListener('DOMContentLoaded', function() {
                 const data = await response.json();
                 window.location.href = `/paste/${data.title}`;
             } else {
-                const errorContent = await response.json();
-                showToast(`${errorContent.message}`, 'error');
+                const errorData = await response.json();
+                showToast(errorData.message, 'error');
             }
         } catch (error) {
             console.error('Create Error:', error);
