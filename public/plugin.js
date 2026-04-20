@@ -84,10 +84,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
     confirmDeleteAccount.addEventListener('click', async () => {
         try {
-            const response = await fetch('/delete-account', {
-                method: 'DELETE',
-                credentials: 'same-origin'
-            });
+            const response = await fetch('/delete-account', { method: 'DELETE' });
             if (response.ok) {
                 updateAuthUI(null);
                 hideModal(deleteAccountModal);
