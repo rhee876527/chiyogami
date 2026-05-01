@@ -14,6 +14,7 @@ import (
 	"regexp"
 	"strconv"
 	"strings"
+	"sync/atomic"
 	"time"
 
 	"github.com/gorilla/mux"
@@ -456,9 +457,20 @@ func DeleteAccountHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 // Delete invalid pastes
-var vacuumCounter int // Track no of deletions to trigger VACUUM
+var vacuumCounter int64 // Track no of deletions to trigger VACUUM
+
 func DeleteExpiredPastes() {
-	db.DB.Where("expiration IS NOT NULL AND expiration < ?", time.Now()).Delete(&models.Paste{})
+	// Gate expensive deletes esp when no-op behind validity checks
+	var exists models.Paste
+	err := db.DB.
+		Where("expiration IS NOT NULL AND expiration < ?", time.Now()).
+		Limit(1).
+		Take(&exists).Error
+	if err == nil {
+		db.DB.
+			Where("expiration IS NOT NULL AND expiration < ?", time.Now()).
+			Delete(&models.Paste{})
+	}
 
 	// purge old soft-deleted pastes
 	go func() {
@@ -467,12 +479,27 @@ func DeleteExpiredPastes() {
 			retention = v
 		}
 		threshold := time.Now().AddDate(0, 0, -retention)
-		result := db.DB.Unscoped().Where("deleted_at IS NOT NULL AND deleted_at < ?", threshold).Delete(&models.Paste{})
+
+		var exists models.Paste
+		err := db.DB.
+			Unscoped().
+			Where("deleted_at IS NOT NULL AND deleted_at < ?", threshold).
+			Limit(1).
+			Take(&exists).Error
+		if err != nil {
+			return
+		}
+
+		result := db.DB.
+			Unscoped().
+			Where("deleted_at IS NOT NULL AND deleted_at < ?", threshold).
+			Delete(&models.Paste{})
+
 		if result.RowsAffected > 0 {
-			vacuumCounter++
-			if vacuumCounter >= 5 { // every 5 deletions
+			atomic.AddInt64(&vacuumCounter, 1)
+			if atomic.LoadInt64(&vacuumCounter) >= 5 { // every 5 deletions
 				db.DB.Exec("VACUUM;")
-				vacuumCounter = 0
+				atomic.StoreInt64(&vacuumCounter, 0)
 			}
 		}
 	}()
