@@ -169,11 +169,34 @@ func HealthCheck(w http.ResponseWriter, r *http.Request) {
 						status = "error"
 						dbStatus = "corrupted"
 					} else {
+						// READ CHECK
 						var result int
 						if err := tmpDB.Raw("SELECT 1").Scan(&result).Error; err != nil || result != 1 {
 							statusCode = http.StatusInternalServerError
 							status = "error"
 							dbStatus = "unreachable"
+						} else {
+
+							// WRITE CHECK
+							sqlDB, err := tmpDB.DB()
+							if err != nil {
+								statusCode = http.StatusInternalServerError
+								status = "error"
+								dbStatus = "corrupted"
+							} else {
+								_, err = sqlDB.Exec(`
+								PRAGMA busy_timeout = 5000;
+								BEGIN;
+								CREATE TABLE IF NOT EXISTS __healthcheck_write_test (id INTEGER);
+								INSERT INTO __healthcheck_write_test (id) VALUES (1);
+								ROLLBACK;
+							`)
+								if err != nil {
+									statusCode = http.StatusInternalServerError
+									status = "error"
+									dbStatus = "unwritable"
+								}
+							}
 						}
 
 						// Close underlying connection pool to avoid memory leaks
