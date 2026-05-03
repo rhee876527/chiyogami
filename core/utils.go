@@ -119,9 +119,12 @@ var (
 	lastDBStatus   string
 	lastModTime    time.Time
 	lastSize       int64
+	lastCheckTime  time.Time
 	cacheMu        sync.RWMutex
 	cacheInit      bool
 )
+
+const cacheTTL = time.Minute
 
 // Application health check
 func HealthCheck(w http.ResponseWriter, r *http.Request) {
@@ -147,7 +150,7 @@ func HealthCheck(w http.ResponseWriter, r *http.Request) {
 		} else {
 			// Only re-check if cache initialized and file unchanged
 			cacheMu.RLock()
-			cached := cacheInit && info.ModTime().Equal(lastModTime) && info.Size() == lastSize
+			cached := cacheInit && time.Since(lastCheckTime) < cacheTTL && info.ModTime().Equal(lastModTime) && info.Size() == lastSize
 			if cached {
 				statusCode = lastStatusCode
 				status = lastStatus
@@ -213,6 +216,7 @@ func HealthCheck(w http.ResponseWriter, r *http.Request) {
 				lastDBStatus = dbStatus
 				lastModTime = info.ModTime()
 				lastSize = info.Size()
+				lastCheckTime = time.Now()
 				cacheInit = true
 				cacheMu.Unlock()
 			}
