@@ -30,12 +30,16 @@
 - 🔗 Easy Sharing — Share paste links or scan a QR code for instant access.
 - 🛡 Built-in Rate Limiting — Protects against spam and abuse with smart request throttling.
 - 🐳 Easy self-host with docker.
-
+- 🌍 Multi-arch multi-platform builds. Support for AMD64, ARM64 on *Windows(*AMD64 only), Linux and MacOS.
+- 📦 `Standalone` binary will run `frontend` (client) if project's `public` folder exists in same directory. Otherwise the `API` just works!
+- 🧰 `Non-standalone` (`chiyogami`) runs the `full-featured` `self-contained` binary.
 
 
 
 ## Installation
 Docker. Build it or check [docker-compose](https://github.com/rhee876527/chiyogami/blob/main/docker-compose.yml) file for example with pre-built images.
+
+Releases contain 2 variants of portable go builds: `chiyogami-*` and `chiyogami-standalone-*` both of which will serve the frontend client and API or just the API respectively.
 
 ### Quick run
 
@@ -61,6 +65,7 @@ Docker. Build it or check [docker-compose](https://github.com/rhee876527/chiyoga
 | DELETE_RETENTION | 90 | Number of days to keep soft-deleted pastes. Valid values: `1-99` |
 | COMPLEX_PASSWORD | None | Use `1` to activate. Requires complex password on user registration. Valid password: `Minimum 8 characters, including at least 1 lowercase, 1 uppercase, 1 number and 1 symbol.` |
 | ADMIN_CONTACT | None | Accepts email values. May be useful for moderation purposes. |
+| PORT | None | Customize default port. Ignored in Docker build. |
 
 #### Note about exposing /health to public
 Since v1.4.3 this `healthcheck` endpoint was created to actively monitor state of application's database. It has potential for abuse WHEN exposed publicly. Caution is hereby given to protect endpoint (http://localhost:8000/health) from external access as necessary.
