@@ -19,6 +19,8 @@
 !docker-compose.yml
 !entrypoint.sh
 !line-numbers.patch
+!main.go.embedded
+!Makefile
 
 # Public assets
 !public
