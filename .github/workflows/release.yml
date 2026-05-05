@@ -1,0 +1,163 @@
+name: Release Binary
+
+on:
+  release:
+    types: [published]
+
+permissions:
+  contents: write
+
+jobs:
+  build-standalone:
+    strategy:
+      matrix:
+        include:
+          - goos: linux
+            goarch: amd64
+            suffix: linux-amd64
+            runner: ubuntu-latest
+          - goos: linux
+            goarch: arm64
+            suffix: linux-arm64
+            runner: ubuntu-latest
+          - goos: darwin
+            goarch: amd64
+            suffix: darwin-amd64
+            runner: macos-latest
+          - goos: darwin
+            goarch: arm64
+            suffix: darwin-arm64
+            runner: macos-latest
+          - goos: windows
+            goarch: amd64
+            suffix: windows-amd64
+            ext: .exe
+            runner: windows-latest
+
+    runs-on: ${{ matrix.runner }}
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v6
+
+      - name: Set up Go
+        uses: actions/setup-go@v6
+        with:
+          go-version: '1.26'
+
+      - name: Set up Node
+        uses: actions/setup-node@v6
+        with:
+          node-version: '22'
+          cache: 'npm'
+          cache-dependency-path: frameworks/package-lock.json
+
+      - name: Install ARM64 toolchain
+        if: matrix.goos == 'linux' && matrix.goarch == 'arm64'
+        run: sudo apt-get update && sudo apt-get install -y gcc-aarch64-linux-gnu
+
+      - name: Build standalone
+        run: make build-standalone
+        env:
+          GOOS: ${{ matrix.goos }}
+          GOARCH: ${{ matrix.goarch }}
+          CGO_ENABLED: 1
+          CC: ${{ matrix.goos == 'linux' && matrix.goarch == 'arm64' && 'aarch64-linux-gnu-gcc' || '' }}
+
+      - name: Get tag
+        id: get_tag
+        run: echo "VERSION=${GITHUB_REF#refs/tags/}" >> $GITHUB_OUTPUT
+
+      - name: Rename binary
+        shell: bash
+        run: |
+          if [ -n "${{ matrix.ext }}" ]; then
+            mv chiyogami-standalone chiyogami-standalone-${{ steps.get_tag.outputs.VERSION }}-${{ matrix.suffix }}${{ matrix.ext }}
+          else
+            mv chiyogami-standalone chiyogami-standalone-${{ steps.get_tag.outputs.VERSION }}-${{ matrix.suffix }}
+          fi
+
+      - name: Upload Release Asset
+        uses: softprops/action-gh-release@v3
+        with:
+          tag_name: ${{ github.ref }}
+          files: chiyogami-standalone-${{ steps.get_tag.outputs.VERSION }}-*
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+  build-embedded:
+    strategy:
+      matrix:
+        include:
+          - goos: linux
+            goarch: amd64
+            suffix: linux-amd64
+            runner: ubuntu-latest
+          - goos: linux
+            goarch: arm64
+            suffix: linux-arm64
+            runner: ubuntu-latest
+          - goos: darwin
+            goarch: amd64
+            suffix: darwin-amd64
+            runner: macos-latest
+          - goos: darwin
+            goarch: arm64
+            suffix: darwin-arm64
+            runner: macos-latest
+          - goos: windows
+            goarch: amd64
+            suffix: windows-amd64
+            ext: .exe
+            runner: windows-latest
+
+    runs-on: ${{ matrix.runner }}
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v6
+
+      - name: Set up Go
+        uses: actions/setup-go@v6
+        with:
+          go-version: '1.26'
+
+      - name: Set up Node
+        uses: actions/setup-node@v6
+        with:
+          node-version: '22'
+          cache: 'npm'
+          cache-dependency-path: frameworks/package-lock.json
+
+      - name: Install ARM64 toolchain
+        if: matrix.goos == 'linux' && matrix.goarch == 'arm64'
+        run: sudo apt-get update && sudo apt-get install -y gcc-aarch64-linux-gnu
+
+      - name: Build embedded
+        run: make build-embedded
+        env:
+          GOOS: ${{ matrix.goos }}
+          GOARCH: ${{ matrix.goarch }}
+          CGO_ENABLED: 1
+          CC: ${{ matrix.goos == 'linux' && matrix.goarch == 'arm64' && 'aarch64-linux-gnu-gcc' || '' }}
+
+      - name: Get tag
+        id: get_tag
+        run: echo "VERSION=${GITHUB_REF#refs/tags/}" >> $GITHUB_OUTPUT
+
+      - name: Rename binary
+        shell: bash
+        run: |
+          if [ -n "${{ matrix.ext }}" ]; then
+            mv chiyogami chiyogami-${{ steps.get_tag.outputs.VERSION }}-${{ matrix.suffix }}${{ matrix.ext }}
+          else
+            mv chiyogami chiyogami-${{ steps.get_tag.outputs.VERSION }}-${{ matrix.suffix }}
+          fi
+
+      - name: Upload Release Asset
+        uses: softprops/action-gh-release@v3
+        with:
+          tag_name: ${{ github.ref }}
+          files: chiyogami-${{ steps.get_tag.outputs.VERSION }}-*
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
