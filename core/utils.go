@@ -4,6 +4,7 @@ import (
 	"chiyogami/db"
 	"chiyogami/models"
 	"crypto/rand"
+	"embed"
 	"encoding/base64"
 	"encoding/json"
 	"fmt"
@@ -275,5 +276,18 @@ func GetConfigVariables(w http.ResponseWriter, r *http.Request) {
 	if err := json.NewEncoder(w).Encode(config); err != nil {
 		http.Error(w, "failed to encode response", http.StatusInternalServerError)
 		return
+	}
+}
+
+// Bundle license in builds
+func ServeLicense(lic embed.FS) http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
+		data, err := lic.ReadFile("LICENSE")
+		if err != nil {
+			http.NotFound(w, r)
+			return
+		}
+		w.Header().Set("Content-Type", "text/plain; charset=utf-8")
+		w.Write(data)
 	}
 }

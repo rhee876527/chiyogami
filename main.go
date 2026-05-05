@@ -3,11 +3,15 @@ package main
 import (
 	"chiyogami/core"
 	"chiyogami/db"
+	"embed"
 	"log"
 	"net/http"
 
 	"github.com/gorilla/mux"
 )
+
+//go:embed LICENSE
+var License embed.FS
 
 func main() {
 	db.Init()
@@ -31,6 +35,7 @@ func main() {
 	r.HandleFunc("/about", func(w http.ResponseWriter, r *http.Request) {
 		http.ServeFile(w, r, "./public/about.html")
 	})
+	r.HandleFunc("/license", core.ServeLicense(License))
 	r.PathPrefix("/").Handler(http.StripPrefix("/", http.FileServer(http.Dir("./public/"))))
 
 	// Apply CSRF protection middleware
