@@ -38,9 +38,6 @@ RUN go build -o chiyogami .
 FROM alpine:3.23
 WORKDIR /app
 
-# Include license
-COPY LICENSE .
-
 # Copy Go binary and assets
 COPY --from=build /app/chiyogami .
 COPY --from=build /app/public ./public
