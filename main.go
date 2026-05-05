@@ -6,6 +6,7 @@ import (
 	"embed"
 	"log"
 	"net/http"
+	"os"
 
 	"github.com/gorilla/mux"
 )
@@ -41,6 +42,18 @@ func main() {
 	// Apply CSRF protection middleware
 	csrfProtectedRouter := (&http.CrossOriginProtection{}).Handler(r)
 
-	log.Println("Server started on port 8000")
-	log.Fatal(http.ListenAndServe(":8000", csrfProtectedRouter))
+	// Set port
+	port := os.Getenv("PORT")
+
+	if _, ok := os.LookupEnv("DOCKER_ENV"); ok {
+		port = "8000"
+	}
+
+	if port == "" {
+		port = "8000"
+	}
+
+	log.Printf("Server started on port %s", port)
+
+	log.Fatal(http.ListenAndServe(":"+port, csrfProtectedRouter))
 }
