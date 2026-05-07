@@ -135,6 +135,19 @@ jobs:
         run: sudo apt-get update && sudo apt-get install -y gcc-aarch64-linux-gnu
 
       - name: Build embedded
+        shell: cmd
+        if: matrix.goos == 'windows'
+        run: |
+          set BUILD_DIR=%RUNNER_TEMP:\=/%/build
+          make build-embedded
+        env:
+          GOOS: ${{ matrix.goos }}
+          GOARCH: ${{ matrix.goarch }}
+          CGO_ENABLED: 1
+          RUNNER_TEMP: ${{ runner.temp }}
+
+      - name: Build embedded (Unix)
+        if: matrix.goos != 'windows'
         run: make build-embedded
         env:
           GOOS: ${{ matrix.goos }}
