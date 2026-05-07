@@ -3,7 +3,9 @@
 PROJECT := $(CURDIR)
 BINARY_STANDALONE := chiyogami-standalone
 BINARY_EMBEDDED := chiyogami
-BUILD_DIR := $(shell mktemp -d)
+BUILD_DIR ?= $(shell mktemp -d)
+BUILD_DIR := $(BUILD_DIR)
+export BUILD_DIR
 
 build-standalone: check-versions
 	# Generate Tailwind CSS output
