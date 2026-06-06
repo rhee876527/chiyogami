@@ -19,6 +19,7 @@ import (
 	"github.com/gorilla/mux"
 	"github.com/gorilla/sessions"
 	"golang.org/x/crypto/bcrypt"
+	"golang.org/x/time/rate"
 	"gorm.io/gorm"
 )
 
@@ -457,6 +458,7 @@ func DeleteAccountHandler(w http.ResponseWriter, r *http.Request) {
 
 // Delete invalid pastes
 var vacuumCounter int // Track no of deletions to trigger VACUUM
+var cleanupLimiter = rate.NewLimiter(rate.Every(time.Minute/3), 1)
 
 func DeleteExpiredPastes() {
 	// Gate expensive deletes esp when no-op behind validity checks
@@ -472,6 +474,10 @@ func DeleteExpiredPastes() {
 	}
 
 	// purge old soft-deleted pastes
+	// max 3 soft-delete cleanups per min
+	if !cleanupLimiter.Allow() {
+		return
+	}
 	go func() {
 		retention := 90 // default 90 days
 		if v, err := strconv.Atoi(os.Getenv("DELETE_RETENTION")); err == nil && v > 0 && v < 100 {
