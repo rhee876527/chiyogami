@@ -14,7 +14,6 @@ import (
 	"regexp"
 	"strconv"
 	"strings"
-	"sync/atomic"
 	"time"
 
 	"github.com/gorilla/mux"
@@ -457,7 +456,7 @@ func DeleteAccountHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 // Delete invalid pastes
-var vacuumCounter int64 // Track no of deletions to trigger VACUUM
+var vacuumCounter int // Track no of deletions to trigger VACUUM
 
 func DeleteExpiredPastes() {
 	// Gate expensive deletes esp when no-op behind validity checks
@@ -496,10 +495,10 @@ func DeleteExpiredPastes() {
 			Delete(&models.Paste{})
 
 		if result.RowsAffected > 0 {
-			atomic.AddInt64(&vacuumCounter, 1)
-			if atomic.LoadInt64(&vacuumCounter) >= 5 { // every 5 deletions
+			vacuumCounter++
+			if vacuumCounter >= 5 { // every 5 deletions
 				db.DB.Exec("VACUUM;")
-				atomic.StoreInt64(&vacuumCounter, 0)
+				vacuumCounter = 0
 			}
 		}
 	}()
