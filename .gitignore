@@ -46,3 +46,7 @@
 !.github/
 !.github/workflows/
 !.github/workflows/*.yml
+
+# Deployment guide
+!deployment/
+!deployment/*.md
