@@ -222,6 +222,7 @@ Requires modules: `proxy`, `proxy_http`, `headers`, `deflate`.
 **Protect `/health` from external access:**
 
 ```apache
+ProxyPass /health !
 Redirect 301 /health /nonexistent-path
 ```
 
