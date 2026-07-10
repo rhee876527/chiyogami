@@ -279,6 +279,17 @@ func GetConfigVariables(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
+// Serve robots.txt based on env var
+func RobotsTxtHandler(w http.ResponseWriter, r *http.Request) {
+	if os.Getenv("ROBOTS_TXT") == "1" {
+		w.Header().Set("Content-Type", "text/plain")
+		w.WriteHeader(http.StatusOK)
+		fmt.Fprint(w, "User-agent: *\nDisallow: /pastes\nDisallow: /list\n")
+	} else {
+		http.NotFound(w, r)
+	}
+}
+
 // Bundle license in builds
 func ServeLicense(lic embed.FS) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {

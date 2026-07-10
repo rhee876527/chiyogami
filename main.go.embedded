@@ -35,6 +35,7 @@ func main() {
 	r.HandleFunc("/list", serveHTML("list.html"))
 	r.HandleFunc("/about", serveHTML("about.html"))
 	r.HandleFunc("/license", core.ServeLicense(public))
+	r.HandleFunc("/robots.txt", core.RobotsTxtHandler)
 
 	publicFS, _ := fs.Sub(public, "public")
 	r.PathPrefix("/").Handler(http.StripPrefix("/", http.FileServer(http.FS(publicFS))))

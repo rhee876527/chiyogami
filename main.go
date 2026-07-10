@@ -37,6 +37,7 @@ func main() {
 		http.ServeFile(w, r, "./public/about.html")
 	})
 	r.HandleFunc("/license", core.ServeLicense(License))
+	r.HandleFunc("/robots.txt", core.RobotsTxtHandler)
 	r.PathPrefix("/").Handler(http.StripPrefix("/", http.FileServer(http.Dir("./public/"))))
 
 	// Apply CSRF protection middleware

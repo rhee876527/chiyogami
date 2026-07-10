@@ -66,6 +66,7 @@ Releases contain 2 variants of portable go builds: `chiyogami-*` and `chiyogami-
 | COMPLEX_PASSWORD | None | Use `1` to activate. Requires complex password on user registration. Valid password: `Minimum 8 characters, including at least 1 lowercase, 1 uppercase, 1 number and 1 symbol.` |
 | ADMIN_CONTACT | None | Accepts email values. May be useful for moderation purposes. |
 | PORT | None | Customize default port. Ignored in Docker build. |
+| ROBOTS_TXT | None | Use `1` to serve a robots.txt that blocks crawlers from search and listing endpoints. |
 
 #### Note about exposing /health to public
 Since v1.4.3 this `healthcheck` endpoint was created to actively monitor state of application's database. It has potential for abuse WHEN exposed publicly. Caution is hereby given to protect endpoint (http://localhost:8000/health) from external access as necessary.
