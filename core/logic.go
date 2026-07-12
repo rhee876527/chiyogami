@@ -26,6 +26,9 @@ import (
 // Init sessions
 var store = sessions.NewCookieStore([]byte(GetSessionKey()))
 
+// Pre-parsed paste template
+var pasteTmpl = template.Must(template.New("paste").ParseFiles("./public/tmpl.html"))
+
 // Json all the client errors
 func JsonRespond(w http.ResponseWriter, statusCode int, message string) {
 	w.Header().Set("Content-Type", "application/json")
@@ -215,12 +218,7 @@ func GetPasteHandler(w http.ResponseWriter, r *http.Request) {
 	}
 
 	// Template paste to frontend
-	tmpl, err := template.New("paste").ParseFiles("./public/tmpl.html")
-	if err != nil {
-		JsonRespond(w, http.StatusInternalServerError, "Internal Server Error")
-		return
-	}
-	if err := tmpl.Execute(w, struct {
+	if err := pasteTmpl.ExecuteTemplate(w, "paste", struct {
 		Title       string
 		Content     template.HTML
 		CreatedAt   string

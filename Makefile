@@ -42,9 +42,8 @@ build-embedded: check-versions
 	# Copy public to core for embed access
 	cp -r $(BUILD_DIR)/public $(BUILD_DIR)/core/public
 
-	# Fix template parsing in logic.go to use ParseFS with Lookup
+	# Fix template parsing in logic.go to use ParseFS
 	perl -pi -e 's|template\.New\("paste"\)\.ParseFiles\("./public/tmpl\.html"\)|template.ParseFS(Assets, "public/tmpl.html")|g' $(BUILD_DIR)/core/logic.go
-	perl -pi -e 's|tmpl\.Execute\(w,|tmpl.Lookup("paste").Execute(w,|g' $(BUILD_DIR)/core/logic.go
 
 	# Build
 	cd $(BUILD_DIR) && go mod tidy && CGO_ENABLED=1 CC=$(CC) GOOS=$(GOOS) GOARCH=$(GOARCH) go build -o $(BINARY_EMBEDDED) . 2>&1
