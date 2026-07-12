@@ -27,7 +27,10 @@ import (
 var store = sessions.NewCookieStore([]byte(GetSessionKey()))
 
 // Pre-parsed paste template
-var pasteTmpl = template.Must(template.New("paste").ParseFiles("./public/tmpl.html"))
+var pasteTmpl = func() *template.Template {
+	t, _ := template.New("paste").ParseFiles("./public/tmpl.html")
+	return t
+}()
 
 // Json all the client errors
 func JsonRespond(w http.ResponseWriter, statusCode int, message string) {
@@ -218,6 +221,10 @@ func GetPasteHandler(w http.ResponseWriter, r *http.Request) {
 	}
 
 	// Template paste to frontend
+	if pasteTmpl == nil {
+		JsonRespond(w, http.StatusInternalServerError, "Paste viewer not available")
+		return
+	}
 	if err := pasteTmpl.ExecuteTemplate(w, "paste", struct {
 		Title       string
 		Content     template.HTML
