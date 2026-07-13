@@ -42,11 +42,10 @@ func CheckAndRecordRateLimit(identifier string) bool {
 	for _, ts := range timestamps {
 		if now-ts <= windowSize {
 			valid = append(valid, ts)
+			if len(valid) >= rateLimitPerMinute {
+				return false
+			}
 		}
-	}
-
-	if len(valid) >= rateLimitPerMinute {
-		return false
 	}
 
 	pasteTimestamps.Store(identifier, append(valid, now))
