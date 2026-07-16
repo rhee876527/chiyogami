@@ -48,7 +48,11 @@ func Init() {
 	}
 
 	// Connect to SQLite
-	DB, err = gorm.Open(sqlite.Open(dbPath), &gorm.Config{})
+	// _txlock=immediate prevents SQLITE_BUSY on concurrent writes by
+	// acquiring the write lock at BEGIN time where busy_timeout is honored.
+	// _busy_timeout=30000 gives headroom for large payloads under burst.
+	dsn := dbPath + "?_txlock=immediate&_busy_timeout=30000"
+	DB, err = gorm.Open(sqlite.Open(dsn), &gorm.Config{})
 	if err != nil {
 		log.Fatal("Failed to connect to SQLite database: ", err)
 	}
