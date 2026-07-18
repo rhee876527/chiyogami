@@ -35,7 +35,7 @@ RUN apk add --no-cache gcc musl-dev
 RUN go build -o chiyogami .
 
 # Stage 3: Run the application
-FROM alpine:3.23
+FROM alpine:3.24
 WORKDIR /app
 
 # Copy Go binary and assets
